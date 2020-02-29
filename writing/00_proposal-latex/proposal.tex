@@ -1,0 +1,140 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{statcourse}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[breaklinks=true,bookmarks=false]{hyperref}
+
+
+\statcoursefinalcopy
+
+
+\setcounter{page}{1}
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DO NOT EDIT ANYTHING ABOVE THIS LINE
+% EXCEPT IF YOU LIKE TO USE ADDITIONAL PACKAGES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%% TITLE
+\title{\LaTeX\ Template for NLP Project Proposal}
+
+\author{First Author\\
+{\tt\small firstauthor@hertie-school.org}
+\and
+Second Author\\
+{\tt\small secondauthor@hertie-school.org}
+\and
+Third Author\\
+{\tt\small thirdauthor@hertie-school.org}
+}
+
+\maketitle
+%\thispagestyle{empty}
+
+
+% MAIN ARTICLE GOES BELOW
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%% BODY TEXT
+
+
+
+\begin{itemize}
+{\color{blue}
+	\item This template is based on the CVPR conference template and Sebastian Raschka's course implementation.  
+	
+	\item The information in this template is very minimal, and this file should serve you as a framework for writing your proposal. I encourage you to use Overleaf (\url{https://www.overleaf.com}) as a more collaboration-friendly LaTeX tool while drafting the report with your teammates. Remember that you should \textbf{submit the report}  via Moodle and \textbf{include in the report the link to accessible GitHub repository that contains the code}. Also, \textbf{only one member per team} needs to submit the project material.
+	
+	\item The project proposal is a {\bf 3 page document (not counting the references), and including maximum 5 references}.\footnote{This means, five references should, of course, be included but do not count towards the 3-page limit.}
+	
+	\item You are encouraged (not required) to use 1-2 figures to illustrate technical concepts.
+	
+	\item The proposal must be formatted and submitted as a PDF document on Moodle (the submission deadline is available in the syllabus).
+	
+		\item You must include a link to your GitHub repository for the project as the first footnote on the first page. \footnote{Here's a link to my GitHub account \url{https://github.com/sjankin} and Hannah's \url{https://github.com/hannahbechara}. Make sure that your repository is accessible to us!}
+		
+		\item Sharing Project: If you are sharing this project between NLP and Python classes, indicate it in a footnote on the first page.
+	
+	\item Before you start writing your project proposal, make sure that you go through Project Tips slides. The notes contain guidelines that will help you understand our expectations for projects, and enable you to write a better project proposal. 
+	
+	\item We will grade your project proposals and provide brief feedback. If there's a problem with your proposed project (e.g. it's not feasible in the given time), we may require you to submit a revised proposal - otherwise, your project is approved. If you want to discuss your proposal before submitting it, you can go to the allocated office hours.
+
+\item The proposal will be graded based on completeness of each section below and *not* be based on how ``exciting'' or ``interesting'' the project is. 
+
+	\item Please check out the text in the sections below for further information.
+}	
+\end{itemize}
+
+
+\newpage
+
+\section{Introduction}
+
+
+In this section, describe what you are planning to do. Also, briefly describe related work.
+
+
+When discussing related work, do not forget to include appropriate references.  This is an example of a citation \cite{kim_convolutional_2014}. To format the citations properly, put the corresponding references into the bibliography.bib file. You can obtain BibTeX-formatted references for the "bib" file from Google Scholar (\url{https://scholar.google.com}), for example, by clicking on the double-quote character under a citation and then selecting \mbox{"BibTeX"} as shown in Figure \ref{fig:google-scholar-1col} and Figure \ref{fig:google-scholar-2col}.
+
+
+\begin{figure}[t]
+\begin{center}
+   \includegraphics[width=0.8\linewidth]{figures/google-scholar.pdf}
+\end{center}
+   \caption{Example illustrating how to get BibTeX references from Google Scholar as a 1-column figure.}
+\label{fig:google-scholar-1col}
+\end{figure}
+
+
+\begin{figure*}
+\begin{center}
+   \includegraphics[width=0.8\linewidth]{figures/google-scholar.pdf}
+\end{center}
+   \caption{Example illustrating how to get BibTeX references from Google Scholar as a 2-column figure.}
+\label{fig:google-scholar-2col}
+\end{figure*}
+
+
+\section{Motivation}
+
+Describe why your project is interesting. E.g., you can describe why your project could have a broader societal impact. Or, you may describe the motivation from a personal learning perspective.
+
+\section{Evaluation}
+
+What would the successful outcome of your project look like? In other words, under which circumstances would you consider your project to be ?successful??
+
+How do you measure success, specific to this project, from a technical standpoint?
+
+\section{Resources}
+
+What resources are you going to use (datasets, computer hardware, computational tools, etc.)?
+
+\section{Contributions}
+
+You are expected to share the workload evenly, and every group member is expected to participate in both the experiments and writing. (As a group, you only need to submit one proposal and one report, though. So you need to work together and coordinate your efforts.)
+
+Clearly indicate what computational and writing task each member of your group will be participating in.
+
+
+{\small
+\bibliographystyle{ieee}
+\bibliography{bibliography.bib}
+}
+
+\end{document}

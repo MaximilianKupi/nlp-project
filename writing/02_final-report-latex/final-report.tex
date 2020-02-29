@@ -1,0 +1,159 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{statcourse}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[breaklinks=true,bookmarks=false]{hyperref}
+
+
+\statcoursefinalcopy
+
+
+\setcounter{page}{1}
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DO NOT EDIT ANYTHING ABOVE THIS LINE
+% EXCEPT IF YOU LIKE TO USE ADDITIONAL PACKAGES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%% TITLE
+\title{\LaTeX\ Template for NLP Final Project Report}
+
+\author{First Author\\
+{\tt\small firstauthor@hertie-school.org}
+\and
+Second Author\\
+{\tt\small secondauthor@hertie-school.org}
+\and
+Third Author\\
+{\tt\small thirdauthor@hertie-school.org}
+}
+
+\maketitle
+%\thispagestyle{empty}
+
+
+
+% MAIN ARTICLE GOES BELOW
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%% ABSTRACT
+\begin{abstract}
+ An abstract should concisely (less than 300 words) motivate the problem, describe your aims, describe your contribution, and highlight your main finding(s). 
+\end{abstract}
+
+
+\begin{itemize}
+{\color{blue}
+
+\item Your final report should be written in the same style as an NLP research paper, and ideally written in a way that a fellow NLP student could understand. It should be a PDF created using this template.
+
+\item Your report should be {\bf 8 pages} (not including references).
+
+\item You must include a link to your GitHub repository for the project as the first footnote on the first page. \footnote{Here's a link to my GitHub account: \url{https://github.com/sjankin} and Hannah's \url{https://github.com/hannahbechara}. Make sure that your repository is accessible to us!}
+
+\item As a reminder, the midterm report template included links to resources to help you improve your technical writing. You can use these, and previous feedback you've received, to improve your technical writing.
+
+\item Your final project report will be graded holistically, taking into account many criteria: originality, performance of your methods, complexity of the techniques you used, thoroughness of your evaluation, amount of work put into the project, analysis quality, writeup quality, demonstrating strong understanding, etc. You will also receive some brief feedback on your report. 
+
+\item All final reports will be posted on the course website. If you do not want your report to be published online, please let us know in a private Piazza post, and we won't upload it.
+
+\item Your final report should contain the following sections (though you can use a different structure if you prefer). Sections with an asterisk (*) were \emph{not} part of the milestone.
+
+}
+\end{itemize}
+
+%%%%%%%%% BODY TEXT
+\section{*Introduction}
+
+The introduction explains the problem, why it's difficult, interesting, or important, how and why current methods succeed/fail at the problem, and explains the key ideas of your approach and results. Though an introduction covers similar material as an abstract, the introduction gives more space for motivation, detail, references to existing work, and to capture the reader's interest.
+
+\section{*Related Work}
+
+This section helps the reader understand the research context of your work, by providing an overview of existing work in the area.
+
+\begin{itemize}
+
+\item You might discuss: papers that inspired your approach, papers that you use as baselines, papers proposing alternative approaches to the problem, papers applying your methods to different tasks, etc.
+
+\item This section shouldn't go into deep detail in any one paper (for example, there probably shouldn't be any equations) -- instead it should explain how the papers relate to each other, and how they relate to your work.
+
+\end{itemize}
+
+\section{Proposed Method}
+
+This section details your approach(es) to the problem. For example, this is where you describe the architecture of your model, and any other key methods or algorithms.
+
+\begin{itemize}
+
+\item You should be specific when describing your main approaches -- you probably want to include equations and figures.
+\item You should also describe your baseline(s). Depending on space constraints, and how standard your baseline is, you might do this in detail, or simply refer the reader to some other paper for the details. 
+\item If any part of your approach is original, make it clear (so we can give you credit!). For models and techniques that aren't yours, provide references.
+\item If you're using any code that you didn't write yourself, make it clear and provide a reference or link. When describing something you coded yourself, make it clear (so we can give you credit!).
+
+\end{itemize}
+
+
+\section{Experiments}
+
+This section contains the following.
+
+\paragraph{Data:}  Describe the dataset(s) you are using (provide references). If it's not already clear, make sure the associated task is clearly described.
+
+\paragraph{Software}: Briefly list (and cite) software software you used.
+
+\paragraph{Hardware}: If relevant, list hardware resources you used.
+
+\paragraph{Evaluation method:} Describe the evaluation metric(s) you used, plus any other details necessary to understand your evaluation.
+
+\paragraph{Experimental details:} How you ran your experiments (e.g. model configurations, learning rate, training time, etc.)
+
+\paragraph{Results:} Report the quantitative results that you have found so far. Use a table or plot to compare multiple results and compare against baselines.
+
+\paragraph{Comment on your quantitative results.} Are they what you expected? Better than you expected? Worse than you expected? Why do you think that is? What does this tell you about what you should do next? Including training curves might be useful to discuss whether things are training effectively.
+
+\section{*Analysis}
+
+Your report should include some qualitative evaluation. That is, try to understand your system (how it works, when it succeeds and when it fails) by measuring or inspecting key characteristics or outputs of your model.
+\begin{itemize}
+\item Types of qualitative evaluation include: commenting on selected examples, error analysis, measuring the performance metric for certain subsets of the data, ablation studies, comparing the behaviors of two systems beyond just the performance metric, and visualizing attention distributions or other activation heatmaps.
+
+\item The Practical Tips lecture notes has a detailed section on qualitative evaluation -- you may find it useful to reread it.
+\end{itemize}
+
+\section{*Conclusions}
+Summarize the main findings of your project, and what you have learnt. Highlight your achievements, and note the primary limitations of your work. If you like, you can describe avenues for future work.
+
+\section{Acknowledgements}
+
+List acknowledgements if any. For example, if someone provided you a dataset, or you used someone else's resources, this is a good place to acknowledge the help or support you received.
+
+\section{Contributions}
+
+Describe the contributions of each team member who worked on this project. You should write a brief summary of what each team member did for the project (about 1 or 2 sentences per person). We will read these descriptions and cross-reference with GitHub contributions in your project repository. For almost all teams, it will have no effect (team members all receive same grade), but for teams with very unequal contribution, we may investigate and/or give different grades to team members.
+
+\section{(Optional) Sharing project}
+If you are sharing your project between IML and another class, indicate it here.
+
+\section{References}
+Your references section should be produced using BibTeX.
+
+\section{*Appendix}
+If you wish, you can include an appendix, which should be part of the main PDF, and does not count towards the 8 page limit. Appendices can be useful to supply extra details, examples, figures, results, visualizations, etc., that you couldn't fit into the main paper. However, your grader does not have to read your appendix, and you should assume that you will be graded based on the content of the main part of your paper only.
+
+
+\end{document}

@@ -1,0 +1,155 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+
+\usepackage{statcourse}
+\usepackage{times}
+\usepackage{epsfig}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Include other packages here, before hyperref.
+
+% If you comment hyperref and then uncomment it, you should delete
+% egpaper.aux before re-running latex.  (Or just hit 'q' on the first latex
+% run, let it finish, and you should be clear).
+\usepackage[breaklinks=true,bookmarks=false]{hyperref}
+
+
+\statcoursefinalcopy
+
+
+\setcounter{page}{1}
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DO NOT EDIT ANYTHING ABOVE THIS LINE
+% EXCEPT IF YOU LIKE TO USE ADDITIONAL PACKAGES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%% TITLE
+\title{\LaTeX\ Template for NLP Midterm Project Report}
+
+\author{First Author\\
+{\tt\small firstauthor@hertie-school.org}
+\and
+Second Author\\
+{\tt\small secondauthor@hertie-school.org}
+\and
+Third Author\\
+{\tt\small thirdauthor@hertie-school.org}
+}
+
+\maketitle
+%\thispagestyle{empty}
+
+
+% MAIN ARTICLE GOES BELOW
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%% ABSTRACT
+\begin{abstract}
+   An abstract should concisely (200-250 words) motivate the problem, describe your aims, describe your contribution, and highlight your main finding(s). Given that your project is still a work-in-progress, it's OK if `your contribution' and `your findings' are things you're still working on.
+\end{abstract}
+
+
+%%%%%%%%% BODY TEXT
+
+\begin{itemize}
+{\color{blue}
+
+\item Remember that you should \textbf{submit the report}  via Moodle and \textbf{include in the report the link to accessible GitHub repository that contains the code}. Also, \textbf{only one member per team} needs to submit the project material. You must include a link to your GitHub repository for the project as the first footnote on the first page. \footnote{Here's a link to my GitHub account \url{https://github.com/sjankin} and Hannah's \url{https://github.com/hannahbechara}. Make sure that your repository is accessible to us!}
+
+\item The midterm project report should be {\bf 4 pages long (not counting references), and a maximum 10 references}. The report should contain the sections that are already provided in this paper. It forms the basis of the final report with the same structure. Please check out the text in these sections for further information.
+
+\item Your midterm milestone will be graded on the following criteria:
+\begin{itemize}
+\item Progress: Has the team made good progress on the project? You should have done approximately half of the work of your project.
+\item As a minimum, your milestone should show that you have setup your data, baseline model code, and evaluation metric, and run experiments to obtain some results (assuming you are doing a typical model-building project). Other than this, `good progress' depends on various factors (e.g., whether your model is implemented from scratch or based on an existing codebase).
+\item Understanding: Does the milestone show a strong understanding of its problem, tasks, methods, metrics, and research context?
+\item Writing quality: Does the milestone clearly communicate what you've done and why, providing the requested information, to an appropriate level of detail (given the page limit)?
+\item You will receive some brief feedback on your milestone. Feedback may contain helpful suggestions for your project (e.g., try a particular method, read a particular paper) and/or warnings about your project plan (e.g., if your plans are too ambitious or not ambitious enough), and how you could improve your technical writing (e.g., adjustments to clarity, level of detail, formatting, use of references).
+\end{itemize}
+
+\item Technical writing is an important skill in this class, in research, and beyond. It's well worth spending time developing your ability to communicate technical concepts clearly. Here are some resources which might help you improve your technical writing:
+\begin{itemize}
+\item Tips for Writing Technical Papers, Jennifer Widom (\url{https://cs.stanford.edu/people/widom/paper-writing.html}).
+\item Write the Paper First, Jason Eisner (\url{https://www.cs.jhu.edu/~jason/advice/write-the-paper-first.html}).
+\end{itemize}
+
+\item Here are some other things you can do to improve your technical writing:
+\begin{itemize}
+\item Look carefully at several ML / NLP papers to understand their typical structure, writing style, and the usual content of the different sections. Model your writing on these examples.
+\item Think about the NLP / ML papers you've read (for example, the one you summarised for your proposal). Which parts did you find easy to understand and why? Which parts did you find difficult to understand and why? Can you identify any good writing practices that you could use in your technical writing?
+\item Ask a friend to read through your writing and tell you if is clear. This can be useful even if the friend does not have the relevant technical knowledge.
+\end{itemize}
+}
+\end{itemize}
+
+\section{Proposed Method}
+
+This section details your approach(es) to the problem. For example, this is where you describe the architecture of your model, and any other key methods or algorithms.
+
+You should be specific when describing your main approaches - you may want to include equations and figures (though it's fine if you want to defer creating time-consuming figures until you write your final report).
+
+This is an example of a mathematical equation:
+
+$$f(\mathbf{x}; \mathbf{w}) = \sum_{i=1}^{n} w_ix_i.$$
+
+This is a mathematical expression, $h(\mathbf{x}) = \hat{y}$ formatted in text. 
+
+You should also describe your baseline(s). Depending on space constraints, and how standard your baseline is, you might do this in detail, or simply refer the reader to some other paper for the details. 
+
+If any part of your approach is original, make it clear (so we can give you credit!). For models and techniques that aren't yours, provide references.
+
+If you're using any code that you didn't write yourself, make it clear and provide a reference or link. When describing something you coded yourself, make it clear (so we can give you credit!).
+
+
+\section{Experiments}
+
+This section contains the following.
+
+\paragraph{Data:}  Describe the dataset(s) you are using (provide references). If it's not already clear, make sure the associated task is clearly described.
+
+\paragraph{Evaluation method:} Describe the evaluation metric(s) you used, plus any other details necessary to understand your evaluation.
+
+\paragraph{Experimental details:} How you ran your experiments (e.g. model configurations, learning rate, training time, etc.)
+
+\paragraph{Results:} Report the quantitative results that you have found so far. Use a table or plot to compare multiple results and compare against baselines.
+
+Table \ref{tab:some-table} shows an example for formatting a table.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|c|}
+\hline
+Method & Accuracy \\
+\hline\hline
+Method 1 & $70 \pm 3$ \% \\
+ Method 2 & $76 \pm 3$ \% \\
+\hline
+\end{tabular}
+\end{center}
+\label{tab:some-table}
+\caption{This is an example of a table.}
+\end{table}
+
+
+\paragraph{Comment on your quantitative results.} Are they what you expected? Better than you expected? Worse than you expected? Why do you think that is? What does this tell you about what you should do next? Including training curves might be useful to discuss whether things are training effectively.
+
+You don't need to report any qualitative results (`analysis') in the milestone, though you can if you like.
+
+
+\section{Future work}
+
+Describe what you plan to do for the rest of the project, and why. You can include stretch goals if you like.
+
+
+{\small
+\bibliographystyle{ieee}
+\bibliography{bibliography.bib}
+}
+
+\end{document}
