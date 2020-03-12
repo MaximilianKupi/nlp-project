@@ -1,11 +1,15 @@
 # splitting datasets into train, evaluation, and test set
 
-def split_data(data_cleaned=None, train_p=0.7, val_p=0.15, test_p=0.15, random_state=42):
-    """This function gets the cleaned dataset and splits it into train, validation and test set.
+def split_data(data_cleaned=None, train_p=0.7, val_p=0.15, test_p=0.15, random_state=42, y='label'):
+    """This function gets the cleaned dataset and splits it into train, validation and test set based on scikit learn's StratifiedShuffleSplit.
 
-    In a pipeline you can specify the input with the variable "data_cleaned". If nothing is specified, it will get the data from our github repository. 
+    The input dataframe can be specified with the variable "data_cleaned". If nothing is specified, the function will get the data from our github repository. 
 
-    Also you can specify proportions for the split with "train" (default set to 0.7), "val" (default set to 0.15), and "test" (default set to 0.15).
+    Also you can specify proportions for the split with "train_p" (default set to 0.7), "val_p" (default set to 0.15), and "test_p" (default set to 0.15).
+
+    Lastly, 'y' (default to 'label') sets the the column in the dataframe, where the labels are stored and which will be used as reference for the stratified sampling method. 
+
+    The function returns the training, validation, and test set (in that order). To assign them put "train_set, val_set, test_set = split_data()". 
     """
     # importing packages
     import pandas as pd
@@ -38,15 +42,17 @@ def split_data(data_cleaned=None, train_p=0.7, val_p=0.15, test_p=0.15, random_s
 
     split2 = StratifiedShuffleSplit(n_splits=10, test_size = val_p_sub, random_state = random_state)
 
-    for train_index, val_index in split2.split(train_val_set, train_val_set['label']):
+    for train_index, val_index in split2.split(train_val_set, train_val_set[y]):
         train_set = data_cleaned.loc[train_index]
         val_set = data_cleaned.loc[val_index]
 
     return train_set, val_set, test_set
 
-split_data()
 
-# saving the dataset
+# assigning the returned dataframes to variables
+train_set, val_set, test_set = split_data()
+
+# saving the dataframes
 train_set.to_csv("/Users/mxm/Google Drive/Masterstudium/Inhalte/4th Semester/NLP/nlp-project/coding/code/exchange_base/train_set.csv")
 val_set.to_csv("/Users/mxm/Google Drive/Masterstudium/Inhalte/4th Semester/NLP/nlp-project/coding/code/exchange_base/val_set.csv")
 test_set.to_csv("/Users/mxm/Google Drive/Masterstudium/Inhalte/4th Semester/NLP/nlp-project/coding/code/exchange_base/test_set.csv")
