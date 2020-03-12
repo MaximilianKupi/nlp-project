@@ -1,5 +1,9 @@
 # loading packages
 import pandas as pd
+import numpy as np
+
+# setting seed for reproducability
+np.random.seed(42)
 
 # loading dataframes and adapting labels and headers
 
