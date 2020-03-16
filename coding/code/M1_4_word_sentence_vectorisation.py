@@ -15,7 +15,7 @@ np.random.seed(42)
 
 # File source possibilities (uncomment what applies to you)
 # 1. download from github
-# input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/data/twitter%20data/davidson%20et%20al./labeled_data.csv"
+# input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/train_set.csv"
 # output_file_name = "exchange_base/train_vec.pt"
 # 2. use exchange_base files
 path = "exchange_base/"
