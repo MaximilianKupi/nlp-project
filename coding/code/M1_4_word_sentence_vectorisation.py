@@ -8,7 +8,7 @@ import torch
 ### Settings
 
 # Maximal length of vector representation of tweet
-maxVectorLength = 10 #<=512
+maxVectorLength = 120 #<=512   #max tweet length 120
 
 # setting seed for reproducability
 np.random.seed(42)
@@ -29,6 +29,9 @@ output_file_name = "exchange_base/train_vec.pt"
 # loading data
 data = pd.read_csv(input_file)
 
+# # TODO limit for demonstration
+# data = data[1:150]
+
 
 # 🤗Transformers (formerly known as pytorch-transformers and 
 # pytorch-pretrained-bert) provides state-of-the-art general-purpose
@@ -41,10 +44,9 @@ data = pd.read_csv(input_file)
 # Load pretrained Tokenizer
 tokenizer = transformers.BertTokenizer.from_pretrained('bert-base-uncased')
 
-# Load pretrained Transformer
-bert_model = transformers.BertModel.from_pretrained('bert-base-uncased')
-
-data1 = data['tweet'][1:5]
+# (not used ?!)
+# # Load pretrained Transformer
+# bert_model = transformers.BertModel.from_pretrained('bert-base-uncased')
 
 # Stats output initialization
 lengthSample = [] 
@@ -72,3 +74,9 @@ matrix = torch.tensor(vectorEmbeddings, dtype=torch.float32)
 # Saving Tensor to file
 # Use torch.save(tensor, 'file.pt') and torch.load('file.pt') to save Tensors to file
 torch.save(matrix,output_file_name)
+
+# TODO tensor with labels (with same format)
+
+# TODO Output two files
+# train_vectorized.pt
+# train_labels.pt
