@@ -3,13 +3,17 @@ import pandas as pd
 import numpy as np
 import transformers
 import torch
+import torch.nn.functional as F
 
-def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label", pretrainedModel="bert-base-uncased", verbose=True, randomSeed=42):
+def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textColumn="tweet", labelColumn="label", pretrainedModel="bert-base-uncased", verbose=True, randomSeed=42):
     """ Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs a two tensors.
     One containing the vectorized entries of the column and one containing the associated labels.
 
     Parameters:
         data (dataframe): The dataset from which the data should be extracted
+        maxVectorLength (int): The length of the vector embedding. Will be padded with zeros if shorter
+        matrixColumns (int): Vector embedding will be reshaped to matrix with this column amount
+        matrixRows (int): Vector embedding will be reshaped to matrix with this row amount
         textColumn (str): The name of the column in the dataframe data containing the tweets
         labelColumn (str): The name of the column in the dataframe data contianing the labels
         pretrainedModel (str): The name of the model to be used from the transformers package
@@ -41,20 +45,39 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
     # Load pretrained Tokenizer
     tokenizer = transformers.BertTokenizer.from_pretrained(pretrainedModel)
 
+
     # Stats output initialization
     lengthSample = [] 
     # Embeddings 
-    vectorEmbeddings = []
+    #vectorEmbeddings = torch.zeros([0,len(data), 2], dtype=torch.int32)
+    vectorEmbeddings = torch.Tensor()
 
-    for tweet in data[textColumn].values:
+    for i,tweetText in enumerate(data[textColumn].values):
         # Encode tweet
-        encoding = tokenizer.encode(tweet, max_length=maxVectorLength)
+        encoding = tokenizer.encode(tweetText, max_length=maxVectorLength)
         # Stats output
         lengthSample.append(len(encoding))
-        # Padding with zeros and adding to output vector
-        amountZeros = maxVectorLength - len(encoding)
         # Add zeros at the end of the vector until maxVectorLength is reached
-        vectorEmbeddings.append(np.pad(encoding, (0,amountZeros), 'constant'))
+        paddedTensor = torch.zeros(1,maxVectorLength)
+        paddedTensor[:,:len(encoding)] = torch.tensor(encoding) 
+        # convert to matrix/tensor for CNN
+        reshapedTensor = paddedTensor.view((matrixColumns, matrixRows))
+        # without unsqueezing all the tensors will be concatenated into one big matrix instead of multiple small ones
+        unequeezedTensor = reshapedTensor.unsqueeze(0)
+        # save into tensor
+        vectorEmbeddings = torch.cat((vectorEmbeddings,unequeezedTensor),dim=0)
+        
+        #print("#"+str(i)+" check: "+str(i % 1000))
+        # Progress bar 
+        if(i % 30 == 0):
+            print("Progress: "+str(round(i/len(data),3)), end ="\r")
+
+
+        # vectorEmbeddings.append(paddedEncodingMatrix)
+
+    # Progress bar    
+    print("")
+
 
     # convert Stats helper vector to DataFrame for stats function usage
     lengthSample = pd.DataFrame(lengthSample) 
@@ -64,31 +87,39 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
         print("Tweets: "+str(len(vectorEmbeddings))+" mean-length: "+str(lengthSample.mean()[0])+" median-length: "+str(lengthSample.median()[0])+" min: "+str(lengthSample.min()[0])+" max: "+str(lengthSample.max()[0]))
 
     # Convert vector of vectors to tensor
-    matrix = torch.tensor(vectorEmbeddings, dtype=torch.float32)
+    #matrix = torch.tensor(vectorEmbeddings, dtype=torch.float32)
     labels = torch.tensor(data[labelColumn].values)
 
-    return matrix, labels
+    return vectorEmbeddings, labels
 
 
-# part to run only if the py file is run directly
-if __name__ == "__main__":
-    ### Preparing input data
-    # File source possibilities (uncomment what applies to you)
-    # 1. download from github
-    input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/train_set.csv"
-    # output_file_name = "exchange_base/train_vec.pt"
-    # 2. use exchange_base files
-    path = "exchange_base/"
-    stage = "train"
-    # input_file = path + stage + "_set.csv"
+### Preparing input data
+# File source possibilities (uncomment what applies to you)
+# 1. download from github
+# input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/train_set.csv"
+# output_file_name = "exchange_base/train_vec.pt"
+# 2. use exchange_base files
+
+def createTensors(path,stage):
+    """ Opens the file:
+    - path + stage + "_set.csv"
+    vectorizes the data and saves the labels separate as
+    - path + stage +  "_vectorized.pt"
+    - path + stage +  "_labels.pt"
+
+    Parameters:
+        path (str): the path wheere the dataset is and the tensors will be saved to
+        stage (str): prefix of the file
+
+    """
+    input_file = path + stage + "_set.csv"
     output_file_name_vectorized = path + stage +  "_vectorized.pt"
     output_file_name_labels = path + stage +  "_labels.pt"
-
     # loading data
     data = pd.read_csv(input_file)
 
     ### Executing the function
-    matrix, labels = vectorize(data)
+    matrix, labels = vectorize(data, verbose=True)
 
     ### Saving the data
     # Saving the vectorized tweets tensor
@@ -97,3 +128,9 @@ if __name__ == "__main__":
     torch.save(labels,output_file_name_labels)
 
     # Use torch.save(tensor, 'file.pt') and torch.load('file.pt') to save Tensors to file
+
+if __name__ == "__main__":
+    path = "exchange_base/"
+
+    createTensors(path,"train")
+    createTensors(path,"val")
