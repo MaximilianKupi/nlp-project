@@ -15,8 +15,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchviz import make_dot, make_dot_from_trace
-import trace
-from numpy.core.fromnumeric import trace
 
 
 ######################
