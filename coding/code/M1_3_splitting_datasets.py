@@ -3,7 +3,7 @@
 def split_data(data_cleaned=None, train_p=0.7, val_p=0.15, test_p=0.15, random_state=42, y='label'):
     """This function gets the cleaned dataset and splits it into train, validation and test set based on scikit learn's StratifiedShuffleSplit.
 
-    The input dataframe can be specified with the variable "data_cleaned". If nothing is specified, the function will get the data from our github repository. 
+    The input dataframe can be specified with the argument "data_cleaned". If nothing is specified, the function will get the data from our github repository. 
 
     Also you can specify proportions for the split with "train_p" (default set to 0.7), "val_p" (default set to 0.15), and "test_p" (default set to 0.15).
 
@@ -26,7 +26,7 @@ def split_data(data_cleaned=None, train_p=0.7, val_p=0.15, test_p=0.15, random_s
 
     # reading the data in case it is not here already (since it will later all be applied in one pipeline)
     if data_cleaned is None:
-        data_cleaned = pd.read_csv(url_data_cleaned)
+        data_cleaned = pd.read_csv(url_data_cleaned, index_col='id')
         print('INFO: Reading data_cleaned anew from github since no input was provided')
 
     # instatiating the class for the shuffle split of training and test/validation set
