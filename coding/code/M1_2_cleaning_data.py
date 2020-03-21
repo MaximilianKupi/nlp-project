@@ -63,6 +63,17 @@ def data_cleaning(data = None, standard_twitter_cleaning = True, lower_casing = 
 
     return data_cleaned
 
-# Saving the cleaned dataset
 
-data_cleaning().to_csv("C:\\Users\\cepos\\Dropbox\\Hertie School\\Natural Language Processing\\Project\\github\\nlp-project\\coding\\code\\exchange_base\\data_cleaned.csv")
+
+# part to run only if the py file is run directly
+if __name__ == "__main__":
+    data_cleaned = data_cleaning()
+
+
+    # output_file_name = "exchange_base/data_cleaned.csv"
+    # 2. use exchange_base files
+    path = "exchange_base/"
+    output_file_path = path +  "data_cleaned.csv"
+
+    # Saving the cleaned dataset
+    data_cleaned.to_csv(output_file_path)
