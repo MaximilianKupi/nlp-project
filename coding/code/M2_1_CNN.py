@@ -152,7 +152,7 @@ for epoch in range(num_epochs):
                    .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
 
 # Save model checkpoint
-torch.save(model.state_dict(), path +"model" + "_epochs" + num_epochs + ".ckpt")
+torch.save(model.state_dict(), path +"model" + "_epochs" + str(num_epochs) + ".ckpt")
 
 
 
