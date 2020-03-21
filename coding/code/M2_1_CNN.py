@@ -101,7 +101,7 @@ else:
 # Convolutional neural network (two convolutional layers)
 class CNN(nn.Module):
     def __init__(self, num_classes=3):
-        super(ConvNet, self).__init__()
+        super(CNN, self).__init__()
         self.layer1 = nn.Sequential(
             nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=2),
             nn.BatchNorm2d(16),
