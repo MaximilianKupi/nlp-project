@@ -88,9 +88,9 @@ def apply_dict(data = None):
 
     # Building a tensor out of the additional columns
 
-    HateFrequency = torch.tensor(data['Hatefreq'])
+    HateFrequency = torch.tensor(data['Hatefreq'].values)
 
-    HateIntensity = torch.tensor(data['Hatefulness'])
+    HateIntensity = torch.tensor(data['Hatefulness'].values)
 
     dataset_with_hatebasecount = data
 

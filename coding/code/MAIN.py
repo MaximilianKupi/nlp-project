@@ -3,7 +3,6 @@
 ## packages used in the MAIN file
 import pandas as pd
 
-
 ## Packages used in our modules:
 
 # packages used in M1_2_cleaning_data
@@ -69,3 +68,4 @@ test_matrix, test_labels = vectorize(test_set)
 
 # applying dictionary approach
 HateFrequency, HateIntensity, dataset_with_hatebasecount = apply_dict(data=data)
+
