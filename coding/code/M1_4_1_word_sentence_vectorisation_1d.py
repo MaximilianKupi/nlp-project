@@ -77,29 +77,29 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
 
     return matrix, labels
 
+if __name__ == "__main__":
+    ### Preparing input data
+    # File source possibilities (uncomment what applies to you)
+    # 1. download from github
+    # input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/train_set.csv"
+    # output_file_name = "exchange_base/train_vec.pt"
+    # 2. use exchange_base files
+    path = "coding/code/exchange_base/"
+    stage = "train"
+    input_file = path + stage + "_set.csv"
+    output_file_name_vectorized = path + stage +  "_vectorized_1d.pt"
+    output_file_name_labels = path + stage +  "_labels_1d.pt"
 
-### Preparing input data
-# File source possibilities (uncomment what applies to you)
-# 1. download from github
-# input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/train_set.csv"
-# output_file_name = "exchange_base/train_vec.pt"
-# 2. use exchange_base files
-path = "coding/code/exchange_base/"
-stage = "train"
-input_file = path + stage + "_set.csv"
-output_file_name_vectorized = path + stage +  "_vectorized_1d.pt"
-output_file_name_labels = path + stage +  "_labels_1d.pt"
+    # loading data
+    data = pd.read_csv(input_file)
 
-# loading data
-data = pd.read_csv(input_file)
+    ### Executing the function
+    matrix, labels = vectorize(data)
 
-### Executing the function
-matrix, labels = vectorize(data)
+    ### Saving the data
+    # Saving the vectorized tweets tensor
+    torch.save(matrix,output_file_name_vectorized)
+    # Saving the label tensor
+    torch.save(labels,output_file_name_labels)
 
-### Saving the data
-# Saving the vectorized tweets tensor
-torch.save(matrix,output_file_name_vectorized)
-# Saving the label tensor
-torch.save(labels,output_file_name_labels)
-
-# Use torch.save(tensor, 'file.pt') and torch.load('file.pt') to save Tensors to file
+    # Use torch.save(tensor, 'file.pt') and torch.load('file.pt') to save Tensors to file
