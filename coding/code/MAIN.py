@@ -27,9 +27,9 @@ import pandas as pd
 # additional packages used in M1_5_dictionary_approach       
     # import torch                              #   has to be installed
     # import spacy                              #   has to be installed
-    # from pandarallel import pandarallel      #   has to be installed using pip               
+    # from pandarallel import pandarallel       #   has to be installed using pip               
     # language model for spacy has to be loaded using 'python -m spacy download en_core_web_sm' in the terminal
-
+    # import numpy as np                        #   normally preinstalled
 
 
 ## loading our own created functions 
