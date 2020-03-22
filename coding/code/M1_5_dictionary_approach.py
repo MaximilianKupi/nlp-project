@@ -14,21 +14,21 @@ def apply_dict(data = None, dictionary = None):
     # Loading the data
 
     # loading Hatebase dictionary
-    hatebase_url = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/data/dictionary/hatebase/full_dictionary.csv"
+    hatebase_path = "coding/data/dictionary/hatebase/full_dictionary.csv"
     
     if dictionary is None:
-        hatebase_dic = pd.read_csv(hatebase_url, index_col = 'vocabulary_id')
-        print('INFO: Reading dictionary anew from GitHub since no input was provided')
+        hatebase_dic = pd.read_csv(hatebase_path, index_col = 'vocabulary_id')
+        print('INFO: Reading dictionary anew from exchange_base since no input was provided')
     else:
         hatebase_dic = dictionary
 
-    # github url for loading the tweets in case they are not provided
-    data_url = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/data.csv"
+    # exchange_base path for loading the tweets in case they are not provided
+    data_path = "coding/code/exchange_base/data.csv"
 
     # reading the data in case it is not here already (since it will later all be applied in one pipeline)
     if data is None:
-        data = pd.read_csv(data_url, index_col = 'id')
-        print('INFO: Reading data anew from GitHub since no input was provided')
+        data = pd.read_csv(data_path, index_col = 'id')
+        print('INFO: Reading data anew from exchange_base since no input was provided')
 
     # Lemmatizing both the dictionary and the tweets
     

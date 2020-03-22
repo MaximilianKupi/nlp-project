@@ -7,13 +7,13 @@ np.random.seed(42)
 
 # loading dataframes and adapting labels and headers
 
-# setting the urls where to get the data from github
-url_davidson = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/data/twitter%20data/davidson%20et%20al./labeled_data.csv"
-url_founta = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/data/twitter%20data/founta%20et%20al./hatespeech_text_label_vote.csv"
+# setting the paths where to get the data from exchange_base
+path_davidson = "coding/data/twitter data/davidson et al/labeled_data.csv"
+path_founta = "coding/data/twitter data/founta et al/hatespeech_text_label_vote.csv"
 
 
-data_davidson = pd.read_csv(url_davidson, names=["count", "hate_speech", "offensive_language", "neither", "label", "tweet"], header=1)
-data_founta = pd.read_csv(url_founta, sep='\t', names=["tweet", "label_text", "count"])
+data_davidson = pd.read_csv(path_davidson, names=["count", "hate_speech", "offensive_language", "neither", "label", "tweet"], header=1)
+data_founta = pd.read_csv(path_founta, sep='\t', names=["tweet", "label_text", "count"])
 
 data_founta = data_founta[~data_founta.label_text.str.contains("spam")]
 data_founta['label'] = data_founta.label_text.replace({'hateful': '0', 'abusive': '1', 'normal': '2'}).astype('int')
