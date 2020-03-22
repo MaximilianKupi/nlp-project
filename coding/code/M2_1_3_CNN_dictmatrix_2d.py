@@ -65,7 +65,7 @@ def createDataLoader(vectors, labels):
 
 def dataloaderFromFiles(input_file_name_vectorized,input_file_name_labels):
     vectors, labels = loadData(input_file_name_vectorized, input_file_name_labels)
-    dataset_loader = dataset_loader(vectors,labels)
+    dataset_loader = createDataLoader(vectors,labels)
     return dataset_loader
 
 # Convolutional neural network (two convolutional layers)
