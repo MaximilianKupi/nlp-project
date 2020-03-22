@@ -81,14 +81,14 @@ def apply_dict(data = None, dictionary = None):
         #print(row)
         frequency = 0
         hatefulness_sum = 0
-        for term_lemma in hatebase_dic['term_lemma']:
-            if term_lemma in row['tweet_lemma']:
+        for hateterm in hatebase_dic['term_lemma']:
+            if hateterm in row['tweet_lemma']:
                 frequency += 1
-                row_hatebase_dict_term_lemma = hatebase_dic[hatebase_dic['term_lemma'] == term_lemma]
-                if np.isnan(hatebase_dic.at(hatebase_dic.term_lemma==term_lemma,'average_offensiveness')):
+                row_hatebase_dict_term_lemma = hatebase_dic.loc[hatebase_dic['term_lemma'] == hateterm, 'average_offensiveness'].iloc[0]
+                if np.isnan(row_hatebase_dict_term_lemma):
                     hatefulness_term = 77.27734806629834
                 else: 
-                    hatefulness_term = hatebase_dic.at(hatebase_dic.term_lemma==term_lemma,'average_offensiveness')
+                    hatefulness_term = row_hatebase_dict_term_lemma
                 hatefulness_sum += hatefulness_term
         row['Hatefreq'] = frequency
         row['Hatefulness'] = (hatefulness_sum / frequency)
