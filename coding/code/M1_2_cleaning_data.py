@@ -13,15 +13,15 @@ def data_cleaning(data = None, standard_twitter_cleaning = True, lower_casing = 
         The data cleaning can be customized by setting the respective methods to False:
     standard_twitter_cleaning = True, lower_casing = True, digits_removal = True, punct_removal = True, whitespace_removal = True"""
     
-    # Setting the GitHub url from where to get the data
+    # Setting the exchange_base link from where to get the data
 
-    merged_data_url = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/data.csv"
+    merged_data_path = "coding/code/exchange_base/data.csv"
 
     # Reading the data in case it is not here already (since it will later all be applied in one pipeline)
     
     if data is None:
-        data = pd.read_csv(merged_data_url, index_col = "id")
-        print('INFO: Reading data anew from GitHub since no input was provided')
+        data = pd.read_csv(merged_data_path, index_col = "id")
+        print('INFO: Reading data anew from exchange_base since no input was provided')
     
     # Creating the cleaning function
 
