@@ -20,81 +20,53 @@ from torchviz import make_dot, make_dot_from_trace
 ######################
 ## Data loading     ##
 ######################
-path = "coding/code/exchange_base/"
-
-stage = "train"
-input_file_name_vectorized = path + stage +  "_vectorized.pt"
-input_file_name_labels = path + stage +  "_labels.pt"
-vectors = torch.load(input_file_name_vectorized)
-# Loading the label tensor
-labels = torch.load(input_file_name_labels)
-
-stage = "val"
-input_file_name_vectorized_val = path + stage +  "_vectorized.pt"
-input_file_name_labels_val = path + stage +  "_labels.pt"
-vectors_val = torch.load(input_file_name_vectorized_val)
-# Loading the label tensor
-labels_val = torch.load(input_file_name_labels_val)
+# path = "coding/code/exchange_base/"
+# stage = "train"
+# input_file_name_vectorized = path + stage +  "_vectorized.pt"
+# input_file_name_labels = path + stage +  "_labels.pt"
 
 
-######################
-## Configuration    ##
-######################
-# Batch Size for DataLoader
-batch_size = 1
-num_epochs = 5
-num_classes = 3
-learning_rate = 0.001
+def setupGPU():
+    ######################
+    ## CUDA config      ##
+    ######################
+    # If there's a GPU available...
+    if torch.cuda.is_available():    
 
+        # Tell PyTorch to use the GPU.    
+        device = torch.device("cuda")
 
-######################
-## Setup for CNN    ##
-######################
-# Output Input Data information
-print("Matrix length: {:>5,}".format(len(vectors)))
-print("labels length: {:>5,}".format(len(labels)))
+        print('There are %d GPU(s) available.' % torch.cuda.device_count())
 
-# Combine Vectorizations with labels in TensorDataset
-dataset = TensorDataset(vectors,labels)
-# Setup PyTorch Dataloader
-dataset_loader = DataLoader(dataset,
-                #sampler = RandomSampler(dataset),
-                batch_size = batch_size)
+        print('We will use the GPU:', torch.cuda.get_device_name(0))
 
+    # If not...
+    else:
+        print('No GPU available, using the CPU instead.')
+        device = torch.device("cpu")
+    return device
 
-# Combine Vectorizations with labels in TensorDataset
-dataset_val = TensorDataset(vectors_val,labels_val)
-# Setup PyTorch Dataloader
-dataset_loader_val = DataLoader(dataset_val,
-                #sampler = RandomSampler(dataset),
-                batch_size = batch_size)
+def loadData(input_file_name_vectorized, input_file_name_labels):
+    vectors = torch.load(input_file_name_vectorized)
+    # Loading the label tensor
+    labels = torch.load(input_file_name_labels)
+    print("Matrix length: {:>5,}".format(len(vectors)))
+    print("labels length: {:>5,}".format(len(labels)))
+    return vectors, labels
 
-classes = (0, 1, 2) #'hateful': '0', 'abusive': '1', 'normal': '2'
+def createDataLoader(vectors, labels):
+    # Combine Vectorizations with labels in TensorDataset
+    dataset = TensorDataset(vectors,labels)
+    # Setup PyTorch Dataloader
+    dataset_loader = DataLoader(dataset,
+                    #sampler = RandomSampler(dataset),
+                    batch_size = batch_size)
+    return dataset_loader
 
-
-######################
-## CUDA config      ##
-######################
-# If there's a GPU available...
-if torch.cuda.is_available():    
-
-    # Tell PyTorch to use the GPU.    
-    device = torch.device("cuda")
-
-    print('There are %d GPU(s) available.' % torch.cuda.device_count())
-
-    print('We will use the GPU:', torch.cuda.get_device_name(0))
-
-# If not...
-else:
-    print('No GPU available, using the CPU instead.')
-    device = torch.device("cpu")
-
-# #### Test
-# # import single data point
-# vec = vectors[0]
-# label = labels[0]
-
+def dataloaderFromFiles(input_file_name_vectorized,input_file_name_labels):
+    vectors, labels = loadData(input_file_name_vectorized, input_file_name_labels)
+    dataset_loader = dataset_loader(vectors,labels)
+    return dataset_loader
 
 # Convolutional neural network (two convolutional layers)
 class CNN(nn.Module):
@@ -119,53 +91,78 @@ class CNN(nn.Module):
         out = self.fc(out)
         return out
 
-model = CNN(num_classes).to(device)
+
 
 # Output model graphviz
 #graph = make_dot(model(tweetBertTensor.unsqueeze(0)), params=dict(model.named_parameters()))
 
+def Training(): #copy this to jupyter for controlled execution
+    device = setupGPU()
+    ######################
+    ## Configuration    ##
+    ######################
+    # Batch Size for DataLoader
+    batch_size = 1
+    num_epochs = 5
+    num_classes = 3
+    learning_rate = 0.001
 
-# Loss and optimizer
-criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    path = "coding/code/exchange_base/"
+    stage = "train"
+    input_file_name_vectorized = path + stage +  "_vectorized.pt"
+    input_file_name_labels = path + stage +  "_labels.pt"
 
-# Train the model
-total_step = len(dataset_loader)
-for epoch in range(num_epochs):
-    for i, (tweetBertTensor, labels) in enumerate(dataset_loader):
-        tweetBertTensor = tweetBertTensor.to(device)
-        labels = labels.to(device)
-        
-        # Forward pass
-        outputs = model(tweetBertTensor.unsqueeze(0))
-        loss = criterion(outputs, labels)
-        
-        # Backward and optimize
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        
-        if (i+1) % 100 == 0:
-            print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
-                   .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+    dataset_loader = dataloaderFromFiles(input_file_name_vectorized, input_file_name_labels)
 
-# Save model checkpoint
-torch.save(model.state_dict(), path +"model" + "_epochs" + str(num_epochs) + ".ckpt")
+    model = CNN(num_classes).to(device)
 
+    # Loss and optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
+    # Train the model
+    total_step = len(dataset_loader)
+    for epoch in range(num_epochs):
+        for i, (tweetBertTensor, labels) in enumerate(dataset_loader):
+            tweetBertTensor = tweetBertTensor.to(device)
+            labels = labels.to(device)
+            
+            # Forward pass
+            outputs = model(tweetBertTensor.unsqueeze(0))
+            loss = criterion(outputs, labels)
+            
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            
+            if (i+1) % 100 == 0:
+                print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
+                    .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+    # Save model checkpoint
+    torch.save(model.state_dict(), path +"model" + "_epochs" + str(num_epochs) + ".ckpt")
 
-# Test the model
-model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
-with torch.no_grad():
-    correct = 0
-    total = 0
-    for tweetBertTensor, labels in dataset_loader_val:
-        
-        tweetBertTensor = tweetBertTensor.to(device)
-        labels = labels.to(device)
-        outputs = model(tweetBertTensor.unsqueeze(0))
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
+def evaluation(model): #copy this to jupyter notebook after training for controlled evaluation
+    device = setupGPU()
+    path = "coding/code/exchange_base/"
+    stage = "val"
+    input_file_name_vectorized_val = path + stage +  "_vectorized.pt"
+    input_file_name_labels_val = path + stage +  "_labels.pt"
 
-    print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
+    dataset_loader = dataloaderFromFiles(input_file_name_vectorized_val, input_file_name_labels_val)
+
+    # Test the model
+    model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
+    with torch.no_grad():
+        correct = 0
+        total = 0
+        for tweetBertTensor, labels in dataset_loader:
+            
+            tweetBertTensor = tweetBertTensor.to(device)
+            labels = labels.to(device)
+            outputs = model(tweetBertTensor.unsqueeze(0))
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+        print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
