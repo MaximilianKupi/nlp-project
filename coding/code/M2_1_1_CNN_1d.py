@@ -1,3 +1,4 @@
+# %%
 import torch
 import numpy as np
 from torch.utils.data.dataset import TensorDataset
@@ -18,11 +19,9 @@ from torchviz import make_dot, make_dot_from_trace
 from torch.utils.data.dataloader import DataLoader
 
 
-
+# %% Data loading     ##
 ######################
-## Data loading     ##
-######################
-path = "exchange_base/"
+path = "coding/code/exchange_base/"
 
 stage = "train"
 input_file_name_vectorized = path + stage +  "_vectorized_1d.pt"
@@ -38,9 +37,7 @@ vectors_val = torch.load(input_file_name_vectorized_val)
 # Loading the label tensor
 labels_val = torch.load(input_file_name_labels_val)
 
-
-######################
-## Configuration    ##
+# %% Configuration
 ######################
 # Batch Size for DataLoader
 batch_size = 1
@@ -48,9 +45,7 @@ num_epochs = 5
 num_classes = 3
 learning_rate = 0.001
 
-
-######################
-## Setup for CNN    ##
+# %% Setup for CNN    ##
 ######################
 # Output Input Data information
 print("Matrix length: {:>5,}".format(len(vectors)))
@@ -73,7 +68,7 @@ dataset_loader_val = DataLoader(dataset_val,
 
 classes = (0, 1, 2) #'hateful': '0', 'abusive': '1', 'normal': '2'
 
-
+# %%
 ######################
 ## CUDA config      ##
 ######################
@@ -97,7 +92,7 @@ else:
 # vec = vectors[0]
 # label = labels[0]
 
-
+# %%
 # Convolutional neural network (two convolutional layers)
 class CNN(nn.Module):
     def __init__(self, num_classes=3):
@@ -126,11 +121,12 @@ model = CNN(num_classes).to(device)
 # Output model graphviz
 #graph = make_dot(model(tweetBertTensor.unsqueeze(0)), params=dict(model.named_parameters()))
 
-
+# %%
 # Loss and optimizer
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
+# %%
 # Train the model
 total_step = len(dataset_loader)
 for epoch in range(num_epochs):
@@ -151,11 +147,12 @@ for epoch in range(num_epochs):
             print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
                    .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
 
+# %%
 # Save model checkpoint
 torch.save(model.state_dict(), path +"model" + "_epochs" + str(num_epochs) + ".ckpt")
 
 
-
+# %%
 # Test the model
 model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
 with torch.no_grad():
