@@ -82,7 +82,7 @@ class CNN(nn.Module):
             nn.BatchNorm2d(32),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = nn.Linear(288, num_classes) #7*7*32
+        self.fc = nn.Linear(192, num_classes) #7*7*32
         
     def forward(self, x):
         out = self.layer1(x)
@@ -112,7 +112,7 @@ def Training(): #copy this to jupyter for controlled execution
     input_file_name_vectorized = path + stage +  "_vectorized.pt"
     input_file_name_labels = path + stage +  "_labels.pt"
 
-    dataset_loader = dataloaderFromFiles(input_file_name_vectorized, input_file_name_labels)
+    dataset_loader = dataloaderFromFiles(input_file_name_vectorized, input_file_name_labels, batch_size)
 
     model = CNN(num_classes).to(device)
 
@@ -139,8 +139,8 @@ def Training(): #copy this to jupyter for controlled execution
             if (i+1) % 100 == 0:
                 print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
                     .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
-    # Save model checkpoint
-    torch.save(model.state_dict(), path +"model" + "_epochs" + str(num_epochs) + ".ckpt")
+    return model
+
 
 def evaluation(model): #copy this to jupyter notebook after training for controlled evaluation
     device = setupGPU()
@@ -166,3 +166,11 @@ def evaluation(model): #copy this to jupyter notebook after training for control
             correct += (predicted == labels).sum().item()
 
         print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
+
+
+if __name__ == "__main__":
+    # Running the function
+    Training()
+    
+    # Save model checkpoint
+    torch.save(model.state_dict(), path +"model" + "_epochs" + str(num_epochs) + ".ckpt")
