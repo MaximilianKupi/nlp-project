@@ -20,7 +20,7 @@ from torchviz import make_dot, make_dot_from_trace
 ######################
 ## Data loading     ##
 ######################
-path = "exchange_base/"
+path = "coding/code/exchange_base/"
 
 stage = "train"
 input_file_name_vectorized = path + stage +  "_vectorized.pt"

@@ -21,7 +21,7 @@ from torch.utils.data.dataloader import DataLoader
 
 # %% Data loading     ##
 ######################
-path = "exchange_base/"
+path = "coding/code/exchange_base/"
 
 stage = "train"
 input_file_name_vectorized = path + stage +  "_vectorized_1d.pt"
