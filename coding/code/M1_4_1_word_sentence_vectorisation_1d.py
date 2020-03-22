@@ -1,9 +1,12 @@
+# %%
 # loading packages
 import pandas as pd
 import numpy as np
 import transformers
 import torch
+import tqdm
 
+# %%
 def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label", pretrainedModel="bert-base-uncased", verbose=True, randomSeed=42):
     """ Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs a two tensors.
     One containing the vectorized entries of the column and one containing the associated labels.
@@ -46,7 +49,9 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
     # Embeddings 
     vectorEmbeddings = []
 
-    for tweet in data[textColumn].values:
+    tweetAmount = data["tweet"].values.size
+
+    for i,tweet in enumerate(data[textColumn].values):
         # Encode tweet
         encoding = tokenizer.encode(tweet, max_length=maxVectorLength)
         # Stats output
@@ -56,6 +61,8 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
         # Add zeros at the end of the vector until maxVectorLength is reached
         vectorEmbeddings.append(np.pad(encoding, (0,amountZeros), 'constant'))
 
+        print("Progress " + str(round(i/tweetAmount,3)))
+
     # convert Stats helper vector to DataFrame for stats function usage
     lengthSample = pd.DataFrame(lengthSample) 
 
@@ -64,8 +71,9 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
         print("Tweets: "+str(len(vectorEmbeddings))+" mean-length: "+str(lengthSample.mean()[0])+" median-length: "+str(lengthSample.median()[0])+" min: "+str(lengthSample.min()[0])+" max: "+str(lengthSample.max()[0]))
 
     # Convert vector of vectors to tensor
-    matrix = torch.tensor(vectorEmbeddings, dtype=torch.float32)
-    labels = torch.tensor(data[labelColumn].values)
+    matrix = torch.tensor(vectorEmbeddings, dtype=torch.int)
+    labels = torch.tensor(data[labelColumn].values, dtype=torch.int)
+
 
     return matrix, labels
 
@@ -73,12 +81,12 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
 ### Preparing input data
 # File source possibilities (uncomment what applies to you)
 # 1. download from github
-input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/train_set.csv"
+# input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/train_set.csv"
 # output_file_name = "exchange_base/train_vec.pt"
 # 2. use exchange_base files
 path = "coding/code/exchange_base/"
 stage = "train"
-# input_file = path + stage + "_set.csv"
+input_file = path + stage + "_set.csv"
 output_file_name_vectorized = path + stage +  "_vectorized_1d.pt"
 output_file_name_labels = path + stage +  "_labels_1d.pt"
 
