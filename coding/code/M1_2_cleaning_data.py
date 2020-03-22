@@ -72,7 +72,7 @@ if __name__ == "__main__":
 
     # output_file_name = "exchange_base/data_cleaned.csv"
     # 2. use exchange_base files
-    path = "exchange_base/"
+    path = "coding/code/exchange_base/"
     output_file_path = path +  "data_cleaned.csv"
 
     # Saving the cleaned dataset

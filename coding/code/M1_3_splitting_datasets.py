@@ -56,6 +56,6 @@ if __name__ == "__main__":
     train_set, val_set, test_set = split_data()
 
     # saving the dataframes
-    train_set.to_csv("exchange_base/train_set.csv")
-    val_set.to_csv("exchange_base/val_set.csv")
-    test_set.to_csv("exchange_base/test_set.csv")
+    train_set.to_csv("coding/code/exchange_base/train_set.csv")
+    val_set.to_csv("coding/code/exchange_base/val_set.csv")
+    test_set.to_csv("coding/code/exchange_base/test_set.csv")

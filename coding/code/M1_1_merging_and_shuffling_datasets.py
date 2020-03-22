@@ -36,4 +36,4 @@ data.index.names = ['id']
 data = data[['label', 'count', 'tweet']]
 
 # saving the dataset
-data.to_csv("/Users/mxm/Google Drive/Masterstudium/Inhalte/4th Semester/NLP/nlp-project/coding/code/exchange_base/data.csv")
+data.to_csv("coding/code/exchange_base/data.csv")

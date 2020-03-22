@@ -76,7 +76,7 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
 input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/train_set.csv"
 # output_file_name = "exchange_base/train_vec.pt"
 # 2. use exchange_base files
-path = "exchange_base/"
+path = "coding/code/exchange_base/"
 stage = "train"
 # input_file = path + stage + "_set.csv"
 output_file_name_vectorized = path + stage +  "_vectorized_1d.pt"

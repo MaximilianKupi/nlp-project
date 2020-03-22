@@ -91,7 +91,10 @@ def apply_dict(data = None, dictionary = None):
                     hatefulness_term = row_hatebase_dict_term_lemma
                 hatefulness_sum += hatefulness_term
         row['Hatefreq'] = frequency
-        row['Hatefulness'] = (hatefulness_sum / frequency)
+        if frequency != 0:
+            row['Hatefulness'] = (hatefulness_sum / frequency)
+        else:
+            row['Hatefulness'] = 0
         return row
 
 
