@@ -61,7 +61,8 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
         # Add zeros at the end of the vector until maxVectorLength is reached
         vectorEmbeddings.append(np.pad(encoding, (0,amountZeros), 'constant'))
 
-        print("Progress " + str(round(i/tweetAmount,3)))
+        if(i % 1000 = 0):
+            print("Progress " + str(round(i/tweetAmount,3)))
 
     # convert Stats helper vector to DataFrame for stats function usage
     lengthSample = pd.DataFrame(lengthSample) 
