@@ -130,7 +130,7 @@ def createTensors(path,stage):
     # Use torch.save(tensor, 'file.pt') and torch.load('file.pt') to save Tensors to file
 
 if __name__ == "__main__":
-    path = "exchange_base/"
+    path = "coding/code/exchange_base/"
 
     createTensors(path,"train")
     createTensors(path,"val")
