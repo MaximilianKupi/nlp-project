@@ -52,6 +52,7 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
     tweetAmount = data["tweet"].values.size
 
     for i,tweet in enumerate(data[textColumn].values):
+        tweet = str(tweet) #empty tweets were interpreted as float 
         # Encode tweet
         encoding = tokenizer.encode(tweet, max_length=maxVectorLength)
         # Stats output
@@ -61,7 +62,7 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
         # Add zeros at the end of the vector until maxVectorLength is reached
         vectorEmbeddings.append(np.pad(encoding, (0,amountZeros), 'constant'))
 
-        if(i % 1000 = 0):
+        if(i % 1000 == 0):
             print("Progress " + str(round(i/tweetAmount,3)))
 
     # convert Stats helper vector to DataFrame for stats function usage
@@ -86,7 +87,7 @@ if __name__ == "__main__":
     # output_file_name = "exchange_base/train_vec.pt"
     # 2. use exchange_base files
     path = "coding/code/exchange_base/"
-    stage = "train"
+    stage = "val"
     input_file = path + stage + "_set.csv"
     output_file_name_vectorized = path + stage +  "_vectorized_1d.pt"
     output_file_name_labels = path + stage +  "_labels_1d.pt"
