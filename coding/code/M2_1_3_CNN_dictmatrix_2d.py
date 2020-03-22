@@ -54,7 +54,7 @@ def loadData(input_file_name_vectorized, input_file_name_labels):
     print("labels length: {:>5,}".format(len(labels)))
     return vectors, labels
 
-def createDataLoader(vectors, labels):
+def createDataLoader(vectors, labels, batch_size):
     # Combine Vectorizations with labels in TensorDataset
     dataset = TensorDataset(vectors,labels)
     # Setup PyTorch Dataloader
@@ -63,9 +63,9 @@ def createDataLoader(vectors, labels):
                     batch_size = batch_size)
     return dataset_loader
 
-def dataloaderFromFiles(input_file_name_vectorized,input_file_name_labels):
+def dataloaderFromFiles(input_file_name_vectorized,input_file_name_labels,batch_size):
     vectors, labels = loadData(input_file_name_vectorized, input_file_name_labels)
-    dataset_loader = createDataLoader(vectors,labels)
+    dataset_loader = createDataLoader(vectors,labels,batch_size)
     return dataset_loader
 
 # Convolutional neural network (two convolutional layers)
@@ -149,7 +149,7 @@ def evaluation(model): #copy this to jupyter notebook after training for control
     input_file_name_vectorized_val = path + stage +  "_vectorized.pt"
     input_file_name_labels_val = path + stage +  "_labels.pt"
 
-    dataset_loader = dataloaderFromFiles(input_file_name_vectorized_val, input_file_name_labels_val)
+    dataset_loader = dataloaderFromFiles(input_file_name_vectorized_val, input_file_name_labels_val,batch_size)
 
     # Test the model
     model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
