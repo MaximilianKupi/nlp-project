@@ -136,7 +136,7 @@ def Training(): #copy this to jupyter for controlled execution
             loss.backward()
             optimizer.step()
             
-            if (i+1) % 100 == 0:
+            if (i+1) % 1000 == 0:
                 print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
                     .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
     return model
