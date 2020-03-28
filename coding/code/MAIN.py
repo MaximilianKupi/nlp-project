@@ -49,14 +49,23 @@ from M1_5_dictionary_approach import apply_dict
 ##### OUR PIPELINE #####
 ########################
 
-# getting the data from our exchange base
-data = pd.read_csv("exchange_base/data.csv")
+# ## only done once at the beginning ##
+# # getting the data from our exchange base
+# data = pd.read_csv("exchange_base/data.csv")
 
-# cleaning the data
-data_cleaned = data_cleaning(data=data)
+# # cleaning the data
+# data_cleaned = data_cleaning(data=data)
 
-# splitting the data 
-train_set, val_set, test_set = split_data(data=data_cleaned)
+# # splitting the data 
+# train_set, val_set, test_set = split_data(data=data_cleaned)
+
+
+## reading the train, val, and test set
+train_set = pd.read_csv("exchange_base/train_set.csv")
+val_set = pd.read_csv("exchange_base/val_set.csv")
+test_set = pd.read_csv("exchange_base/test_set.csv")
+
+
 
 # applying BERT vectorizer on train, validation and test set
 # train set
