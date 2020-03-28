@@ -15,6 +15,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchviz import make_dot, make_dot_from_trace
+import json
 
 
 ######################
@@ -183,22 +184,39 @@ class CNNSetup:
                 correct += (predicted == labels).sum().item()
 
             print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
+        
+            result = {
+                "correct" : correct,
+                "total" : total,
+                "accuracy" : 100*correct/total
+            }
+
+            return result
+    
+    def saveEvaluation(self,result,id):
+        filenpath = self.variables["validation"]["input"]["result"] + id + ".json"
+        with open(filenpath, 'w') as fp:
+                json.dump(result, fp)
 
 
-if __name__ == "__main__":     
+if __name__ == "__main__":
+    # prefix to test different setups
+    uniqueInputPrefix = ""
+    uniqueOutputPrefix = "test1_"
     path = "coding/code/exchange_base/"
     # Training input
     stage = "train"
-    train_filpath_vectors = path + stage +  "_vectorized.pt"
-    train_filepath_labels = path + stage +  "_labels.pt"
+    train_filpath_vectors = path + uniqueInputPrefix + stage +  "_vectorized.pt"
+    train_filepath_labels = path + uniqueInputPrefix + stage +  "_labels.pt"
     # Model Training
-    epochs = 1
+    epochs = 3
     # Model Output
-    output_filepath_model = path + stage + "_model_epochs" + str(epochs) + ".ckpt"
+    output_filepath_model = path + uniqueOutputPrefix + stage + "_model_epochs" + str(epochs) + ".ckpt"
     # Evaluation
     stage = "val"
-    val_filepath_vectors = path + stage +  "_vectorized.pt"
-    val_filepath_labels = path + stage +  "_labels.pt"
+    val_filepath_vectors = path + uniqueInputPrefix + stage +  "_vectorized.pt"
+    val_filepath_labels = path + uniqueInputPrefix + stage +  "_labels.pt"
+    val_filepath_result_prefix = path + uniqueOutputPrefix + stage +  "_result_"
 
     variables =	{
         "global" : {
@@ -261,6 +279,7 @@ if __name__ == "__main__":
         "validation" : {
             "input" : {
                 "model" : output_filepath_model,
+                "result" : val_filepath_result_prefix,
                 "batch_size": 1,
                 "vectors": val_filepath_vectors,
                 "labels": val_filepath_labels
@@ -278,4 +297,44 @@ if __name__ == "__main__":
     setup.saveModel()
     # setup.loadModel() # only necessary when just evaluation models
     setup.loadData("validation")
-    setup.evaluate()
+    setup.saveEvaluation(setup.evaluate(),"final")
+
+
+    # class betterCNNSetup(CNNSetup):
+    #     def __init__(self,variables):
+    #         CNNSetup.__init__(self,variables)
+        
+    #     def train(self,demoLimit=0):
+    #         """ Training of the model
+    #         """ 
+    #         total_step = len(self.dataset_loader)
+    #         for epoch in range(self.variables["training"]["epochs"]):
+    #             for i, (tweetBertTensor, labels) in enumerate(self.dataset_loader):
+    #                 if (demoLimit>0) and (i>demoLimit):
+    #                     break
+    #                 tweetBertTensor = tweetBertTensor.to(self.device)
+    #                 labels = labels.to(self.device)
+                    
+    #                 # Forward pass
+    #                 outputs = self.model(tweetBertTensor.unsqueeze(0))
+    #                 loss = self.criterion(outputs, labels)
+                    
+    #                 # Backward and optimize
+    #                 self.optimizer.zero_grad()
+    #                 loss.backward()
+    #                 self.optimizer.step()
+                    
+    #                 if (i+1) % 1000 == 0:
+    #                     print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
+    #                         .format(epoch+1, self.variables["training"]["epochs"], i+1, total_step, loss.item()))
+    #             self.saveEvaluation(self.evaluate(),"epoch"+str(epoch))
+
+    # setup2 = betterCNNSetup(variables)
+    # setup2.loadData("training")
+    # setup2.loadData("validation")
+    # setup2.creatCNN()
+    # setup2.setCriterion()
+    # setup2.setOptimizer()
+    # setup2.train(demoLimit=3000)
+    # setup2.saveModel()
+    # # setup.loadModel() # only necessary when just evaluation models
