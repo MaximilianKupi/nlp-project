@@ -18,15 +18,6 @@ from torchviz import make_dot, make_dot_from_trace
 import json
 
 
-######################
-## Data loading     ##
-######################
-# path = "coding/code/exchange_base/"
-# stage = "train"
-# input_file_name_vectorized = path + stage +  "_vectorized.pt"
-# input_file_name_labels = path + stage +  "_labels.pt"
-
-
 class CNN(nn.Module):
     # Convolutional neural network (two convolutional layers)
     def __init__(self,variables):
@@ -109,7 +100,7 @@ class CNNSetup:
             self.val_dataset = dataset
             self.val_dataset_loader = dataset_loader
 
-    def creatCNN(self):
+    def createCNN(self): # addNN(model)
         """ CNN itself is another class that has to be instanciated into a class variable
         """ 
         self.model = CNN(self.variables).to(self.device)
@@ -184,7 +175,9 @@ class CNNSetup:
                 correct += (predicted == labels).sum().item()
 
             print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
-        
+
+            # TODO F1 score pro class
+            # TODO F1 macro score (average for all classes)
             result = {
                 "correct" : correct,
                 "total" : total,
@@ -287,54 +280,88 @@ if __name__ == "__main__":
         }
     }
 
-
-    setup = CNNSetup(variables)
-    setup.loadData("training")
-    setup.creatCNN()
-    setup.setCriterion()
-    setup.setOptimizer()
-    setup.train(demoLimit=1000)
-    setup.saveModel()
-    # setup.loadModel() # only necessary when just evaluation models
-    setup.loadData("validation")
-    setup.saveEvaluation(setup.evaluate(),"final")
-
-
-    # class betterCNNSetup(CNNSetup):
-    #     def __init__(self,variables):
-    #         CNNSetup.__init__(self,variables)
-        
-    #     def train(self,demoLimit=0):
-    #         """ Training of the model
-    #         """ 
-    #         total_step = len(self.dataset_loader)
-    #         for epoch in range(self.variables["training"]["epochs"]):
-    #             for i, (tweetBertTensor, labels) in enumerate(self.dataset_loader):
-    #                 if (demoLimit>0) and (i>demoLimit):
-    #                     break
-    #                 tweetBertTensor = tweetBertTensor.to(self.device)
-    #                 labels = labels.to(self.device)
-                    
-    #                 # Forward pass
-    #                 outputs = self.model(tweetBertTensor.unsqueeze(0))
-    #                 loss = self.criterion(outputs, labels)
-                    
-    #                 # Backward and optimize
-    #                 self.optimizer.zero_grad()
-    #                 loss.backward()
-    #                 self.optimizer.step()
-                    
-    #                 if (i+1) % 1000 == 0:
-    #                     print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
-    #                         .format(epoch+1, self.variables["training"]["epochs"], i+1, total_step, loss.item()))
-    #             self.saveEvaluation(self.evaluate(),"epoch"+str(epoch))
-
-    # setup2 = betterCNNSetup(variables)
-    # setup2.loadData("training")
-    # setup2.loadData("validation")
-    # setup2.creatCNN()
-    # setup2.setCriterion()
-    # setup2.setOptimizer()
-    # setup2.train(demoLimit=3000)
-    # setup2.saveModel()
+    # setup = CNNSetup(variables)
+    # setup.loadData("training")
+    # setup.createCNN()
+    # setup.setCriterion()
+    # setup.setOptimizer()
+    # setup.train(demoLimit=1000)
+    # setup.saveModel()
     # # setup.loadModel() # only necessary when just evaluation models
+    # setup.loadData("validation")
+    # setup.saveEvaluation(setup.evaluate(),"final")
+
+
+    class betterCNNSetup(CNNSetup):
+        def __init__(self,variables):
+            CNNSetup.__init__(self,variables)
+        
+        def train(self,demoLimit=0):
+            """ Training of the model
+            """ 
+            total_step = len(self.dataset_loader)
+            for epoch in range(self.variables["training"]["epochs"]):
+                for i, (tweetBertTensor, labels) in enumerate(self.dataset_loader):
+                    if (demoLimit>0) and (i>demoLimit):
+                        break
+                    tweetBertTensor = tweetBertTensor.to(self.device)
+                    labels = labels.to(self.device)
+                    
+                    # Forward pass
+                    outputs = self.model(tweetBertTensor.unsqueeze(0))
+                    loss = self.criterion(outputs, labels)
+                    
+                    # Backward and optimize
+                    self.optimizer.zero_grad()
+                    loss.backward()
+                    self.optimizer.step()
+                    
+                    if (i+1) % 1000 == 0:
+                        print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
+                            .format(epoch+1, self.variables["training"]["epochs"], i+1, total_step, loss.item()))
+                self.saveEvaluation(self.evaluate(),"epoch"+str(epoch))
+        
+        def evaluate(self):
+            """ uses another dataset to calculate accuracy of model
+            """ 
+            # gets executed after each epoch
+            self.model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
+            with torch.no_grad():
+                # full validation data set
+                correct = 0
+                total = 0
+                for tweetBertTensor, labels in self.val_dataset_loader:
+                    # Batch with one tweet
+                    tweetBertTensor = tweetBertTensor.to(self.device)
+                    labels = labels.to(self.device)
+                    outputs = self.model(tweetBertTensor.unsqueeze(0))
+                    _, predicted = torch.max(outputs.data, 1)
+                    total += labels.size(0)
+                    correct += (predicted == labels).sum().item()
+                    
+
+                print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
+
+                # TODO F1 score pro class
+                # TODO F1 macro score (average for all classes)
+                print("F1 score here")
+                result = {
+                    "correct" : correct,
+                    "total" : total,
+                    "accuracy" : 100*correct/total
+                }
+
+                return result
+
+    #variables_current = variables
+    #variables_current["optimizer"]["learning_rate"] = 0.002
+
+    setup2 = betterCNNSetup(variables)
+    setup2.loadData("training")
+    setup2.loadData("validation")
+    setup2.createCNN()
+    setup2.setCriterion()
+    setup2.setOptimizer()
+    setup2.train(demoLimit=3000)
+    setup2.saveModel()
+    # setup.loadModel() # only necessary when just evaluation models
