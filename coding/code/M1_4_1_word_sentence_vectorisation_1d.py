@@ -32,14 +32,6 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
 
     ### Algorithm
 
-    # Summary of the used transformers Package:
-    # 🤗Transformers (formerly known as pytorch-transformers and 
-    # pytorch-pretrained-bert) provides state-of-the-art general-purpose
-    # architectures (BERT, GPT-2, RoBERTa, XLM, DistilBert, XLNet, 
-    # CTRL...) for Natural Language Understanding (NLU) and Natural
-    # Language Generation (NLG) with over 32+ pretrained models in
-    # 100+ languages and deep interoperability between TensorFlow 2.0
-    # and PyTorch.
 
     # Load pretrained Tokenizer
     tokenizer = transformers.BertTokenizer.from_pretrained(pretrainedModel)
@@ -79,24 +71,27 @@ def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label"
 
     return matrix, labels
 
-if __name__ == "__main__":
-    ### Preparing input data
-    # File source possibilities (uncomment what applies to you)
-    # 1. download from github
-    # input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/train_set.csv"
-    # output_file_name = "exchange_base/train_vec.pt"
-    # 2. use exchange_base files
-    path = "coding/code/exchange_base/"
-    stage = "val"
-    input_file = path + stage + "_set.csv"
-    output_file_name_vectorized = path + stage +  "_vectorized_1d.pt"
-    output_file_name_labels = path + stage +  "_labels_1d.pt"
 
+def createTensors(path,stage):
+    """ Opens the file:
+    - path + stage + "_set.csv"
+    vectorizes the data and saves the labels separate as
+    - path + stage +  "_vectorized.pt"
+    - path + stage +  "_labels.pt"
+
+    Parameters:
+        path (str): the path wheere the dataset is and the tensors will be saved to
+        stage (str): prefix of the file
+
+    """
+    input_file = path + stage + "_set.csv"
+    output_file_name_vectorized = path + stage +  "_vectorized_2d.pt"
+    output_file_name_labels = path + stage +  "_labels_2d.pt"
     # loading data
     data = pd.read_csv(input_file)
 
     ### Executing the function
-    matrix, labels = vectorize(data)
+    matrix, labels = vectorize(data, verbose=True)
 
     ### Saving the data
     # Saving the vectorized tweets tensor
@@ -105,3 +100,10 @@ if __name__ == "__main__":
     torch.save(labels,output_file_name_labels)
 
     # Use torch.save(tensor, 'file.pt') and torch.load('file.pt') to save Tensors to file
+
+if __name__ == "__main__":
+    path = "coding/code/exchange_base/"
+
+    createTensors(path,"train")
+    createTensors(path,"val")
+    createTensors(path,"test")
