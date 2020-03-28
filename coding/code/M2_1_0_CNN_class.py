@@ -187,8 +187,8 @@ class CNNSetup:
             return result
     
     def saveEvaluation(self,result,id):
-        filenpath = self.variables["validation"]["input"]["result"] + id + ".json"
-        with open(filenpath, 'w') as fp:
+        filenpath = self.variables["validation"]["input"]["result"]
+        with open(filenpath, 'a+') as fp:
                 json.dump(result, fp)
 
 
@@ -209,7 +209,7 @@ if __name__ == "__main__":
     stage = "val"
     val_filepath_vectors = path + uniqueInputPrefix + stage +  "_vectorized.pt"
     val_filepath_labels = path + uniqueInputPrefix + stage +  "_labels.pt"
-    val_filepath_result_prefix = path + uniqueOutputPrefix + stage +  "_result_"
+    val_filepath_result_prefix = path + uniqueOutputPrefix + stage +  "_result.json"
 
     variables =	{
         "global" : {
