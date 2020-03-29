@@ -161,26 +161,39 @@ class CNNSetup:
 
 
     def evaluate(self):
-        """ uses validation dataset to calculate accuracy of model
+        """ uses another dataset to calculate accuracy of model
         """ 
+        # gets executed after each epoch
         self.model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
         with torch.no_grad():
+            # full validation data set
             correct = 0
             total = 0
             for tweetBertTensor, labels in self.val_dataset_loader:
-                
+                # Batch with one tweet
                 tweetBertTensor = tweetBertTensor.to(self.device)
                 labels = labels.to(self.device)
                 outputs = self.model(tweetBertTensor.unsqueeze(0))
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
+                loss = self.criterion(outputs, labels).item()
 
             print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
 
-            # TODO F1 score pro class
-            # TODO F1 macro score (average for all classes)
-            result = { "correct" : correct, "total" : total, "accuracy" : 100*correct/total}
+            result = {
+                # on training
+                "correct_train" : 0,
+                "total_train" : 0,
+                "accuracy_train" : 0,
+                "loss_train" : 0,
+                # on validation
+                "correct_val" : correct,
+                "total_val" : total,
+                "accuracy_val" : 100*correct/total,
+                "loss_val" : loss                
+            }
+
             return result
     
     def saveEvaluation(self,result,id):
@@ -323,37 +336,44 @@ if __name__ == "__main__":
                             .format(epoch+1, self.variables["training"]["epochs"], i+1, total_step, loss.item()))
                 self.saveEvaluation(self.evaluate(),"epoch"+str(epoch))
         
-        def evaluate(self):
-            """ uses another dataset to calculate accuracy of model
-            """ 
-            # gets executed after each epoch
-            self.model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
-            with torch.no_grad():
-                # full validation data set
-                correct = 0
-                total = 0
-                for tweetBertTensor, labels in self.val_dataset_loader:
-                    # Batch with one tweet
-                    tweetBertTensor = tweetBertTensor.to(self.device)
-                    labels = labels.to(self.device)
-                    outputs = self.model(tweetBertTensor.unsqueeze(0))
-                    _, predicted = torch.max(outputs.data, 1)
-                    total += labels.size(0)
-                    correct += (predicted == labels).sum().item()
-                    
+    def evaluate(self):
+        """ uses another dataset to calculate accuracy of model
+        """ 
+        # gets executed after each epoch
+        self.model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
+        with torch.no_grad():
+            # full validation data set
+            correct = 0
+            total = 0
+            for tweetBertTensor, labels in self.val_dataset_loader:
+                # Batch with one tweet
+                tweetBertTensor = tweetBertTensor.to(self.device)
+                labels = labels.to(self.device)
+                outputs = self.model(tweetBertTensor.unsqueeze(0))
+                _, predicted = torch.max(outputs.data, 1)
+                total += labels.size(0)
+                correct += (predicted == labels).sum().item()
+                loss = self.criterion(outputs, labels).item()
 
-                print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
+            print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
 
-                # TODO F1 score pro class
-                # TODO F1 macro score (average for all classes)
-                print("F1 score here")
-                result = {
-                    "correct" : correct,
-                    "total" : total,
-                    "accuracy" : 100*correct/total
-                }
+            # TODO F1 score pro class
+            # TODO F1 macro score (average for all classes)
+            print("F1 score here")
+            result = {
+                # on training
+                "correct_train" : 0,
+                "total_train" : 0,
+                "accuracy_train" : 0,
+                "loss_train" : 0,
+                # on validation
+                "correct_val" : correct,
+                "total_val" : total,
+                "accuracy_val" : 100*correct/total,
+                "loss_val" : loss                
+            }
 
-                return result
+            return result
 
     #variables_current = variables
     #variables_current["optimizer"]["learning_rate"] = 0.002
