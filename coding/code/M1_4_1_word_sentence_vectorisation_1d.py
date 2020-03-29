@@ -85,8 +85,8 @@ def createTensors(path,stage):
 
     """
     input_file = path + stage + "_set.csv"
-    output_file_name_vectorized = path + stage +  "_vectorized_2d.pt"
-    output_file_name_labels = path + stage +  "_labels_2d.pt"
+    output_file_name_vectorized = path + stage +  "_vectorized_1d.pt"
+    output_file_name_labels = path + stage +  "_labels_1d.pt"
     # loading data
     data = pd.read_csv(input_file)
 

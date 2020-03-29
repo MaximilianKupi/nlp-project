@@ -52,6 +52,7 @@ class NNSetup:
         """ 
         # Combine Vectorizations with labels in TensorDataset
         dataset = TensorDataset(vectors,labels)
+
         # Setup PyTorch Dataloader
         dataset_loader = DataLoader(dataset,
                         #sampler = RandomSampler(dataset),
@@ -59,6 +60,13 @@ class NNSetup:
         return dataset, dataset_loader
 
     def saveDataToVariables(self,stage,vectors,labels):
+        vectors = vectors.float()
+        labels = labels.type(torch.LongTensor)
+        #labels = labels.float()
+        print("Demo Vector entry")
+        print(vectors[0])
+        print("Demo Label entry")
+        print(labels[0])
         dataset, dataset_loader = self.createDataLoader(stage, vectors, labels)
         if stage == "training":
             self.dataset = dataset
@@ -119,7 +127,8 @@ class NNSetup:
                 labels = labels.to(self.device)
                 
                 # Forward pass
-                outputs = self.model(tweetBertTensor.unsqueeze(0))
+                outputs = self.model(self.prepareVectorForNN(tweetBertTensor))               
+
                 loss = self.criterion(outputs, labels)
                 
                 # Backward and optimize
@@ -151,6 +160,8 @@ class NNSetup:
         """ 
         self.model.load_state_dict(torch.load(self.variables["validation"]["input"]["model"]))
 
+    def prepareVectorForNN(self,vector):
+        return vector.unsqueeze(2)
 
     def evaluate(self):
         """ uses another dataset to calculate accuracy of model
@@ -164,12 +175,13 @@ class NNSetup:
                 
                 tweetBertTensor = tweetBertTensor.to(self.device)
                 labels = labels.to(self.device)
-                outputs = self.model(tweetBertTensor.unsqueeze(0))
+                
+                outputs = self.model(self.prepareVectorForNN(tweetBertTensor))
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
 
-            print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
+            print('Test Accuracy of the model: {} %'.format(100 * correct / total))
 
             # TODO F1 score pro class
             # TODO F1 macro score (average for all classes)
