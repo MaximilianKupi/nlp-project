@@ -89,7 +89,11 @@ def apply_dict(data = None, dictionary = None):
                     hatefulness_term = 77.27734806629834
                 else: 
                     hatefulness_term = row_hatebase_dict_term_lemma
-                hatefulness_sum += hatefulness_term
+                if hatebase_dic.loc[hatebase_dic['term_lemma'] == hateterm, 'is_unambiguous'].iloc[0] == False:
+                    hatefulness_term_weighted = hatefulness_term
+                else:
+                    hatefulness_term_weighted = hatefulness_term*2
+                hatefulness_sum += hatefulness_term_weighted
         row['Hatefreq'] = frequency
         if frequency != 0:
             row['Hatefulness'] = (hatefulness_sum / frequency)
