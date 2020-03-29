@@ -3,6 +3,8 @@
 ## packages used in the MAIN file
 import pandas as pd
 from M2_0_NNSetup import *
+from M2_1_CNN_1d import CNN_1d
+from M2_1_CNN_1d_experiment import CNN_1d_experiment
 import json
 
 ## Packages used in our modules:
@@ -67,20 +69,20 @@ import json
 # val_set = pd.read_csv("exchange_base/val_set.csv")
 # test_set = pd.read_csv("exchange_base/test_set.csv")
 
-
+# TODO vectorize three sets again with cleaned input and save as file
 
 # applying BERT vectorizer on train, validation and test set
 # train set
 # TODO is it really necessary to do this ever time the application runs?
 # train_matrix, train_labels = vectorize(train_set)
-train_vectors = torch.load("exchange_base/train_vectorized.pt")
-train_labels = torch.load("exchange_base/train_labels.pt")
+train_vectors = torch.load("exchange_base/train_vectorized_1d.pt")
+train_labels = torch.load("exchange_base/train_labels_1d.pt")
 
 # TODO is it really necessary to do this ever time the application runs?
 # val set
 # train_vectors, val_labels = vectorize(val_set)
-val_vectors = torch.load("exchange_base/val_vectorized.pt")
-val_labels = torch.load("exchange_base/val_labels.pt")
+val_vectors = torch.load("exchange_base/val_vectorized_1d.pt")
+val_labels = torch.load("exchange_base/val_labels_1d.pt")
 
 # TODO is it really necessary to do this ever time the application runs?
 # test set
@@ -118,14 +120,12 @@ variables =	{
     "CNN" : {
         "layers" : {
             "1" : {
-                "Conv2d" : {
-                    "in_channels" : 1,
+                "Conv1d" : {
+                    "in_channels" : 120,
                     "out_channels" : 16,
-                    "kernel_size" : 3,
-                    "stride" : 1,
-                    "padding" : 2,
+                    "kernel_size" : 3
                 },
-                "BatchNorm2d" : {
+                "BatchNorm1d" : {
                     "num_features" : 16
                 },
                 "MaxPool2d" : {
@@ -134,14 +134,12 @@ variables =	{
                 }
             },
             "2" : {
-                "Conv2d" : {
+                "Conv1d" : {
                     "in_channels" : 16,
                     "out_channels" : 32,
-                    "kernel_size" : 5,
-                    "stride" : 1,
-                    "padding" : 2
+                    "kernel_size" : 3,
                 },
-                "BatchNorm2d" : {
+                "BatchNorm1d" : {
                     "num_features" : 32
                 },
                 "MaxPool2d" : {
@@ -151,7 +149,7 @@ variables =	{
             }
         },
         "fc.Linear" : {
-            "in_features" : 288,
+            "in_features" : 32,
             "out_features" : 3
         }
     },
@@ -161,7 +159,7 @@ variables =	{
     "training" : {
         "epochs" : epochs,
         "input" : {
-            "batch_size": 1,
+            "batch_size": 16,
             "vectors": train_filpath_vectors, # only used with loadData function
             "labels": train_filepath_labels # only used with loadData function
         },
@@ -186,56 +184,34 @@ variables =	{
 
 # run NN
 
+# This Main Python file uses these classes:
+# - NNSetup class to setup the dataloading, the training and the evaluation    
+# - CNN_1d_experiment class as the actual Neural Network
+#
+# If you want to edit the Neural network, edit it in the file: M2_1_CNN_1d_experiment.py
 
 
-# class derivedNNSetup(NNSetup):
-#     def __init__(self,variables):
-#         NNSetup.__init__(self,variables)
-    
-#     def evaluate(self):
-#         """ uses another dataset to calculate accuracy of model
-#         """ 
-#         # gets executed after each epoch
-#         self.model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
-#         with torch.no_grad():
-#             # full validation data set
-#             correct = 0
-#             total = 0
-#             for tweetBertTensor, labels in self.val_dataset_loader:
-#                 # Batch with one tweet
-#                 tweetBertTensor = tweetBertTensor.to(self.device)
-#                 labels = labels.to(self.device)
-#                 outputs = self.model(tweetBertTensor.unsqueeze(0))
-#                 _, predicted = torch.max(outputs.data, 1)
-#                 total += labels.size(0)
-#                 correct += (predicted == labels).sum().item()
-                
 
-#             print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
+class NNSetup_betterOptimizer(NNSetup):
+    def __init__(self,variables):
+         NNSetup.__init__(self,variables)
 
-#             # TODO F1 score pro class
-#             # TODO F1 macro score (average for all classes)
-#             print("F1 score here")
-#             result = {
-#                 "correct" : correct,
-#                 "total" : total,
-#                 "accuracy" : 100*correct/total
-#             }
-
-#             return result
-
-
+    def setCriterion(self):
+        """ ??
+        """ 
+        self.criterion = nn.CrossEntropyLoss()
+        print("criterion applied")
 
 
 # Create new object of NNSetup class
-setup = NNSetup(variables)
+setup = NNSetup_betterOptimizer(variables)
 
 # load Data into the object NNSetup
 setup.loadDataFromVariable("training",train_vectors,train_labels)
 setup.loadDataFromVariable("validation",val_vectors,val_labels)
 
 # Create Neural Network object from class nn.module
-model = CNN(variables)
+model = CNN_1d_experiment(variables)
 
 # add model to NNSetup object
 setup.addNN(model)
@@ -246,7 +222,7 @@ setup.setCriterion()
 # define Optimizer
 setup.setOptimizer()
 
-result = setup.train(demoLimit=1000) # result can be saved automatically with dictionary and train(self,saveToFile=True)
+result = setup.train(demoLimit=5000) # result can be saved automatically with dictionary and train(self,saveToFile=True)
 trainedModel = setup.getModel() # model can be saved automatically with dictionary and setup.saveModel()
 
 # demo output
