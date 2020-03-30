@@ -46,7 +46,7 @@ class NNSetup:
         print("labels length: {:>5,}".format(len(labels)))
         return vectors, labels
 
-    def createDataLoader(self,stage,vectors,labels,shuffle=True):
+    def createDataLoader(self,stage,vectors,labels):
         """ creates dataloader that allow efficient extraction
             saves these as variables in the class
         """ 
@@ -55,9 +55,8 @@ class NNSetup:
 
         # Setup PyTorch Dataloader
         dataset_loader = DataLoader(dataset,
-                        shuffle=shuffle,
                         #sampler = RandomSampler(dataset),
-                        batch_size=self.variables[stage]["input"]["batch_size"])
+                        batch_size = self.variables[stage]["input"]["batch_size"])
         return dataset, dataset_loader
 
     def saveDataToVariables(self,stage,vectors,labels):
@@ -68,11 +67,13 @@ class NNSetup:
         print(vectors[0])
         print("Demo Label entry")
         print(labels[0])
+        dataset, dataset_loader = self.createDataLoader(stage, vectors, labels)
         if stage == "training":
-            self.dataset, self.dataset_loader = self.createDataLoader(stage, vectors, labels)
+            self.dataset = dataset
+            self.dataset_loader = dataset_loader
         elif stage == "validation":
-            self.val_dataset, self.val_dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=False)
-
+            self.val_dataset = dataset
+            self.val_dataset_loader = dataset_loader
 
     def loadDataFromVariable(self,stage,vectors,labels):
         """ wrapper for createDataLoader, uses input data and distinguishes between training
@@ -111,9 +112,6 @@ class NNSetup:
             lr=self.variables["optimizer"]["learning_rate"]
         )
 
-    def getAccuracy(self, total, correct):
-        return 100*(correct/total)
-
     def train(self,demoLimit=0,saveToFile=False):
         """ Training of the model
         """ 
@@ -122,9 +120,6 @@ class NNSetup:
 
         total_step = len(self.dataset_loader)
         for epoch in range(self.variables["training"]["epochs"]):
-            correct = 0
-            total = 0
-            #TODO: Shufflen des datasets und der datasets
             for i, (tweetBertTensor, labels) in enumerate(self.dataset_loader):
                 if (demoLimit>0) and (i>demoLimit):
                     break
@@ -133,9 +128,7 @@ class NNSetup:
                 
                 # Forward pass
                 outputs = self.model(self.prepareVectorForNN(tweetBertTensor))               
-                _, predicted = torch.max(outputs.data, 1)
-                total += labels.size(0)
-                correct += (predicted == labels).sum().item()
+
                 loss = self.criterion(outputs, labels)
                 
                 # Backward and optimize
@@ -146,20 +139,7 @@ class NNSetup:
                 if (i+1) % 1000 == 0:
                     print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
                         .format(epoch+1, self.variables["training"]["epochs"], i+1, total_step, loss.item()))
-            
-            result = {
-                "epoch" : epoch,
-                "correct" : correct,
-                "total" : total,
-                "accuracy" : self.getAccuracy(total, correct),
-                "loss" : loss.item(), 
-                "stage" : 'train'
-                }
-            # saving results of evaluation on training set    
-            self.saveEvaluation(result, epoch)
-            # evaluating on validation set and saving results
-            self.saveEvaluation(self.evaluate(epoch), epoch)
-
+            self.saveEvaluation(self.evaluate(),epoch)
         if saveToFile:
             self.writeResultMemoryToFile()
         else:
@@ -183,7 +163,7 @@ class NNSetup:
     def prepareVectorForNN(self,vector):
         return vector.unsqueeze(2)
 
-    def evaluate(self, epoch):
+    def evaluate(self):
         """ uses another dataset to calculate accuracy of model
         """ 
 
@@ -200,19 +180,15 @@ class NNSetup:
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
-                loss = self.criterion(outputs, labels).item()
 
             print('Test Accuracy of the model: {} %'.format(100 * correct / total))
 
             # TODO F1 score pro class
             # TODO F1 macro score (average for all classes)
             result = {
-                "epoch": epoch,
                 "correct" : correct,
                 "total" : total,
-                "accuracy" : 100*(correct/total),
-                "loss" : loss, 
-                "stage" : 'validation'
+                "accuracy" : 100*correct/total
             }
 
             return result
@@ -233,7 +209,7 @@ class NNSetup:
         filenpath = self.variables["validation"]["input"]["result"]
         with open(filenpath, 'w+', encoding='utf-8') as fp:
             print("Save outputfile")
-            json.dump(self.result, fp, separators=(',', ':'), indent=4)
+            json.dump(self.result, fp)
 
 
 # if __name__ == "__main__":

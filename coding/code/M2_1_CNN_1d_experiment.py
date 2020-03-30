@@ -25,9 +25,9 @@ class CNN_1d_experiment(nn.Module):
         super(CNN_1d_experiment, self).__init__()
         self.layer1 = nn.Sequential( # first layer of CNN
             nn.Conv1d(**{
-                    "in_channels" : 120,
+                    "in_channels" : 1,
                     "out_channels" : 16,
-                    "kernel_size" : 1
+                    "kernel_size" : 3
                 }), 
             nn.BatchNorm1d(**{
                     "num_features" : 16
@@ -41,7 +41,7 @@ class CNN_1d_experiment(nn.Module):
             nn.Conv1d(**{
                     "in_channels" : 16,
                     "out_channels" : 32,
-                    "kernel_size" : 1,
+                    "kernel_size" : 3,
                 }), 
             nn.BatchNorm1d(**{
                     "num_features" : 32
@@ -51,8 +51,22 @@ class CNN_1d_experiment(nn.Module):
         )
         print(self.layer2)
 
+        self.layer3 = nn.Sequential( # second layer of CNN
+            nn.Conv1d(**{
+                    "in_channels" : 32,
+                    "out_channels" : 64,
+                    "kernel_size" : 3,
+                }), 
+            nn.BatchNorm1d(**{
+                    "num_features" : 64
+                }),
+            nn.ReLU(),
+            # nn.MaxPool1d(**layer2_arguments["MaxPool2d"])
+        )
+        print(self.layer3)
+
         self.fc = nn.Linear(**{
-            "in_features" : 32,
+            "in_features" : 7296, #3712, 
             "out_features" : 3
         }) # final layer of CNN
         print(self.fc)
@@ -60,6 +74,7 @@ class CNN_1d_experiment(nn.Module):
     def forward(self, x):
         out = self.layer1(x)
         out = self.layer2(out)
+        out = self.layer3(out)
         out = out.reshape(out.size(0), -1)
         out = self.fc(out)
         return out

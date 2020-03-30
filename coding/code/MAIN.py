@@ -75,14 +75,14 @@ import json
 # train set
 # TODO is it really necessary to do this ever time the application runs?
 # train_matrix, train_labels = vectorize(train_set)
-train_vectors = torch.load("exchange_base/train_vectorized_1d.pt")
-train_labels = torch.load("exchange_base/train_labels_1d.pt")
+train_vectors = torch.load("coding/code/exchange_base/train_vectorized_1d.pt")
+train_labels = torch.load("coding/code/exchange_base/train_labels_1d.pt")
 
 # TODO is it really necessary to do this ever time the application runs?
 # val set
 # train_vectors, val_labels = vectorize(val_set)
-val_vectors = torch.load("exchange_base/val_vectorized_1d.pt")
-val_labels = torch.load("exchange_base/val_labels_1d.pt")
+val_vectors = torch.load("coding/code/exchange_base/val_vectorized_1d.pt")
+val_labels = torch.load("coding/code/exchange_base/val_labels_1d.pt")
 
 # TODO is it really necessary to do this ever time the application runs?
 # test set
@@ -97,14 +97,14 @@ val_labels = torch.load("exchange_base/val_labels_1d.pt")
 # Config NN
 # prefix to test different setups
 uniqueInputPrefix = ""
-uniqueOutputPrefix = "test1_"
+uniqueOutputPrefix = "tracking_test_"
 path = "coding/code/exchange_base/"
 # Training input
 stage = "train"
 train_filpath_vectors = path + uniqueInputPrefix + stage +  "_vectorized.pt"
 train_filepath_labels = path + uniqueInputPrefix + stage +  "_labels.pt"
 # Model Training
-epochs = 3
+epochs = 5
 # Model Output
 output_filepath_model = path + uniqueOutputPrefix + stage + "_model_epochs" + str(epochs) + ".ckpt"
 # Evaluation
@@ -191,16 +191,16 @@ variables =	{
 # If you want to edit the Neural network, edit it in the file: M2_1_CNN_1d_experiment.py
 
 
-
+# potential adaptations to the model and training loop
 class NNSetup_betterOptimizer(NNSetup):
     def __init__(self,variables):
          NNSetup.__init__(self,variables)
 
-    def setCriterion(self):
-        """ ??
-        """ 
-        self.criterion = nn.CrossEntropyLoss()
-        print("criterion applied")
+#     def setCriterion(self):
+#         """ ??
+#         """ 
+#         self.criterion = nn.CrossEntropyLoss()
+
 
 
 # Create new object of NNSetup class
@@ -222,8 +222,13 @@ setup.setCriterion()
 # define Optimizer
 setup.setOptimizer()
 
-result = setup.train(demoLimit=5000) # result can be saved automatically with dictionary and train(self,saveToFile=True)
+# run with demo limit
+result = setup.train(demoLimit=5000, saveToFile=True) # result can be saved automatically with dictionary and train(self,saveToFile=True)
+
+# run without demo limit
+#result = setup.train(saveToFile=True) # result can be saved automatically with dictionary and train(self,saveToFile=True)
+
 trainedModel = setup.getModel() # model can be saved automatically with dictionary and setup.saveModel()
 
 # demo output
-print(json.dumps(result['epochs'], indent=2, sort_keys=True))
+#print(json.dumps(result['epochs'], indent=2, sort_keys=True))
