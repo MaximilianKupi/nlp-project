@@ -35,6 +35,7 @@ class CNN_1d_experiment(nn.Module):
             nn.ReLU(), # activation function
             #nn.MaxPool1d(**layer1_arguments["MaxPool2d"])
         )
+        # TODO: Do we need dropout in the convolution layers to make model more stable?
         print(self.layer1)
 
         self.layer2 = nn.Sequential( # second layer of CNN

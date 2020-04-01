@@ -97,14 +97,14 @@ val_labels = torch.load("coding/code/exchange_base/val_labels_1d.pt")
 # Config NN
 # prefix to test different setups
 uniqueInputPrefix = ""
-uniqueOutputPrefix = "tracking_test_"
+uniqueOutputPrefix = "tracking_test3_"
 path = "coding/code/exchange_base/"
 # Training input
 stage = "train"
 train_filpath_vectors = path + uniqueInputPrefix + stage +  "_vectorized.pt"
 train_filepath_labels = path + uniqueInputPrefix + stage +  "_labels.pt"
 # Model Training
-epochs = 5
+epochs = 2
 # Model Output
 output_filepath_model = path + uniqueOutputPrefix + stage + "_model_epochs" + str(epochs) + ".ckpt"
 # Evaluation
@@ -223,10 +223,10 @@ setup.setCriterion()
 setup.setOptimizer()
 
 # run with demo limit
-result = setup.train(demoLimit=5000, saveToFile=True) # result can be saved automatically with dictionary and train(self,saveToFile=True)
+#result = setup.train(demoLimit=5000, saveToFile=True) # result can be saved automatically with dictionary and train(self,saveToFile=True)
 
 # run without demo limit
-#result = setup.train(saveToFile=True) # result can be saved automatically with dictionary and train(self,saveToFile=True)
+result = setup.train(saveToFile=True) # result can be saved automatically with dictionary and train(self,saveToFile=True)
 
 trainedModel = setup.getModel() # model can be saved automatically with dictionary and setup.saveModel()
 

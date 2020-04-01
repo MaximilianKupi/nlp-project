@@ -16,7 +16,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchviz import make_dot, make_dot_from_trace
 import json
-
+from sklearn.metrics import classification_report
 from M2_1_CNN import CNN
 
 
@@ -46,17 +46,18 @@ class NNSetup:
         print("labels length: {:>5,}".format(len(labels)))
         return vectors, labels
 
-    def createDataLoader(self,stage,vectors,labels,shuffle=True):
+    def createDataLoader(self,stage,vectors,labels, shuffle=True):
         """ creates dataloader that allow efficient extraction
             saves these as variables in the class
         """ 
         # Combine Vectorizations with labels in TensorDataset
         dataset = TensorDataset(vectors,labels)
-
+        #print(labels)
         # Setup PyTorch Dataloader
         dataset_loader = DataLoader(dataset,
                         shuffle=shuffle,
-                        # sampler = RandomSampler(dataset),
+                        #sampler=ImbalancedDatasetSampler(dataset, callback_get_label=(dataset)), # add sampler to deal with imbalanced dataset
+                        #sampler = RandomSampler(dataset),
                         batch_size=self.variables[stage]["input"]["batch_size"])
         return dataset, dataset_loader
 
@@ -124,7 +125,10 @@ class NNSetup:
         for epoch in range(self.variables["training"]["epochs"]):
             correct = 0
             total = 0
-            #TODO: Shufflen des datasets und der datasets
+            outputs_epoch = []
+            labels_epoch = []
+            predicted_epoch = []
+
             for i, (tweetBertTensor, labels) in enumerate(self.dataset_loader):
                 if (demoLimit>0) and (i>demoLimit):
                     break
@@ -137,7 +141,12 @@ class NNSetup:
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
                 loss = self.criterion(outputs, labels)
-                
+
+                # appending the overall tensor for the whole epoch to calculate the metrics as lists
+                outputs_epoch.append(outputs)
+                labels_epoch.append(labels)
+                predicted_epoch.append(predicted)
+
                 # Backward and optimize
                 self.optimizer.zero_grad()
                 loss.backward()
@@ -147,14 +156,27 @@ class NNSetup:
                     print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
                         .format(epoch+1, self.variables["training"]["epochs"], i+1, total_step, loss.item()))
             
+            # reconverting lists to tensors
+            outputs_epoch = torch.cat(outputs_epoch)
+            labels_epoch = torch.cat(labels_epoch)
+            predicted_epoch = torch.cat(predicted_epoch)     
+                
+            
+            loss_epoch = self.criterion(outputs_epoch, labels_epoch).item()
+            classifation_report = classification_report(labels_epoch, predicted_epoch, output_dict=True)
+            classifation_report_str = classification_report(labels_epoch, predicted_epoch, output_dict=False)
+                
             result = {
                 "epoch" : epoch,
                 "correct" : correct,
                 "total" : total,
-                "accuracy" : self.getAccuracy(total, correct),
-                "loss" : loss.item(), 
-                "stage" : 'train'
+                "accuracy" : self.getAccuracy(total, correct), 
+                "loss" : loss_epoch, 
+                "stage" : 'training',
+                "classification_report" : classifation_report,
+                "classification_report_str" : classifation_report_str
                 }
+
             # saving results of evaluation on training set    
             self.saveEvaluation(result, epoch)
             # evaluating on validation set and saving results
@@ -194,28 +216,49 @@ class NNSetup:
         with torch.no_grad():
             correct = 0
             total = 0
+            outputs_epoch = []
+            labels_epoch = []
+            predicted_epoch = []
+
             for tweetBertTensor, labels in self.val_dataset_loader:
                 
                 tweetBertTensor = tweetBertTensor.to(self.device)
                 labels = labels.to(self.device)
                 
                 outputs = self.model(self.prepareVectorForNN(tweetBertTensor))
+                #print(outputs.data)
                 _, predicted = torch.max(outputs.data, 1)
+                #print(predicted.item())
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
-                loss = self.criterion(outputs, labels).item()
+
+                # appending the overall tensor for the whole epoch to calculate the metrics as lists
+                outputs_epoch.append(outputs)
+                labels_epoch.append(labels)
+                predicted_epoch.append(predicted)
 
             print('Test Accuracy of the model: {} %'.format(100 * correct / total))
+           
+            # tretransforming the list into tensors
+            outputs_epoch = torch.cat(outputs_epoch)
+            labels_epoch = torch.cat(labels_epoch)
+            predicted_epoch = torch.cat(predicted_epoch)
+            
+            # calculating the overall loss of the model
+            loss_epoch = self.criterion(outputs_epoch, labels_epoch).item()
+            classifation_report = classification_report(labels_epoch, predicted_epoch, output_dict=True)
+            classifation_report_str = classification_report(labels_epoch, predicted_epoch, output_dict=False)
+  
 
-            # TODO F1 score pro class
-            # TODO F1 macro score (average for all classes)
             result = {
-                "epoch": epoch,
+                "epoch" : epoch,
                 "correct" : correct,
                 "total" : total,
-                "accuracy" : 100*(correct/total),
-                "loss" : loss, 
-                "stage" : 'validation'
+                "accuracy" : self.getAccuracy(total, correct),
+                "loss" : loss_epoch, 
+                "stage" : 'validation',
+                "classification_report" : classifation_report,
+                "classification_report_str" : classifation_report_str  
             }
 
             return result
