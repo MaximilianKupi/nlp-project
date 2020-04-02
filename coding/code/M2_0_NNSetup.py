@@ -89,7 +89,7 @@ class NNSetup:
             sampler_object = torch.utils.data.sampler.WeightedRandomSampler(samples_weight, len(samples_weight), replacement=True)
         else:
             sampler_object = None
-            
+
         # Setup PyTorch Dataloader
         dataset_loader = DataLoader(dataset,
                         shuffle=shuffle,
@@ -106,7 +106,7 @@ class NNSetup:
         print("Demo Label entry")
         print(labels[0])
         if stage == "training":
-            self.dataset, self.dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=True, sampler=False)
+            self.dataset, self.dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=False, sampler=True)
         elif stage == "validation":
             self.val_dataset, self.val_dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=False, sampler=False)
 

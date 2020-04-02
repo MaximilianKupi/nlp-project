@@ -97,7 +97,7 @@ val_labels = torch.load("coding/code/exchange_base/val_labels_1d.pt")
 # Config NN
 # prefix to test different setups
 uniqueInputPrefix = ""
-uniqueOutputPrefix = "tracking_test_new_model_architecture"
+uniqueOutputPrefix = "tracking_test_old_architecture_with_sampling"
 path = "coding/code/exchange_base/"
 # Training input
 stage = "train"
@@ -211,7 +211,7 @@ setup.loadDataFromVariable("training",train_vectors,train_labels)
 setup.loadDataFromVariable("validation",val_vectors,val_labels)
 
 # Create Neural Network object from class nn.module
-model = CNN_1d_experiment(initial_num_channels=1, num_channels = 256, hidden_dim=256, num_classes=3, dropout_p=0.1)
+model = CNN_1d_experiment(variables)
 
 # add model to NNSetup object
 setup.addNN(model)
