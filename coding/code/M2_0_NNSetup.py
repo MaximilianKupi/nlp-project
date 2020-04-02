@@ -6,7 +6,7 @@ from torch.utils.data.dataloader import DataLoader
 from torch.nn.modules.container import Sequential
 from torch.nn.modules.conv import Conv2d
 from torch.nn.modules.batchnorm import BatchNorm2d
-from torch.nn.modules.activation import ReLU
+from torch.nn import ELU
 from torch.nn.modules.pooling import MaxPool2d
 from torch.nn.modules.linear import Linear
 from torch.optim.adam import Adam
@@ -21,6 +21,8 @@ from M2_1_CNN import CNN
 
 
 class NNSetup:
+    """ The main working horse to setup our the training routine """
+
     def __init__(self,variables):
         self.variables = variables
         print(variables)
@@ -46,18 +48,52 @@ class NNSetup:
         print("labels length: {:>5,}".format(len(labels)))
         return vectors, labels
 
-    def createDataLoader(self,stage,vectors,labels, shuffle=True):
+    # def make_weights_for_balanced_classes(labels, nclasses):
+    #     """ This method generates the weights to balance the dataset while training
+    #     """                        
+    #     count = [0] * nclasses                                                      
+    #     for item in enumerate(labels):                                                         
+    #         count[item[1]] += 1                                                     
+    #     weight_per_class = [0.] * nclasses                                      
+    #     N = float(sum(count))                                                   
+    #     for i in range(nclasses):                                                   
+    #         weight_per_class[i] = N/float(count[i])                                 
+    #     weight = [0] * len(labels)                                              
+    #     for idx, val in enumerate(labels):                                          
+    #         weight[idx] = weight_per_class[val[1]]                                  
+    #     return weight  
+
+    def createDataLoader(self,stage,vectors,labels, shuffle=True, sampler=True):
         """ creates dataloader that allow efficient extraction
             saves these as variables in the class
         """ 
         # Combine Vectorizations with labels in TensorDataset
         dataset = TensorDataset(vectors,labels)
-        #print(labels)
+        #print('dataset size:')
+        #print(dataset)
+
+        # compute the weights
+        targets = []
+        for _, target in dataset:
+                targets.append(target)
+        targets = torch.stack(targets)
+
+        # Compute samples weight (each sample should get its own weight)
+        class_sample_count = torch.tensor(
+            [(targets == t).sum() for t in torch.unique(targets, sorted=True)])
+        weight = 1. / class_sample_count.float()
+        samples_weight = torch.tensor([weight[t] for t in targets])
+
+        # Create sampler
+        if sampler:
+            sampler_object = torch.utils.data.sampler.WeightedRandomSampler(samples_weight, len(samples_weight), replacement=True)
+        else:
+            sampler_object = None
+            
         # Setup PyTorch Dataloader
         dataset_loader = DataLoader(dataset,
                         shuffle=shuffle,
-                        #sampler=ImbalancedDatasetSampler(dataset, callback_get_label=(dataset)), # add sampler to deal with imbalanced dataset
-                        #sampler = RandomSampler(dataset),
+                        sampler = sampler_object,
                         batch_size=self.variables[stage]["input"]["batch_size"])
         return dataset, dataset_loader
 
@@ -70,9 +106,9 @@ class NNSetup:
         print("Demo Label entry")
         print(labels[0])
         if stage == "training":
-            self.dataset, self.dataset_loader = self.createDataLoader(stage, vectors, labels)
+            self.dataset, self.dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=True, sampler=False)
         elif stage == "validation":
-            self.val_dataset, self.val_dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=False)
+            self.val_dataset, self.val_dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=False, sampler=False)
 
 
     def loadDataFromVariable(self,stage,vectors,labels):
@@ -100,19 +136,27 @@ class NNSetup:
         self.model = model.to(self.device)
 
     def setCriterion(self):
-        """ ??
+        """ Setting the loss function to cross entropy loss since we have a multi class problem
         """ 
         self.criterion = nn.CrossEntropyLoss()
     
     def setOptimizer(self):
-        """ ??
+        """ Setting the optimizer to Adam as this is the state of the art optimizer for these kind of tasks.
         """ 
         self.optimizer = torch.optim.Adam(
             params = self.model.parameters(),
             lr=self.variables["optimizer"]["learning_rate"]
         )
 
+    def setScheduler(self):
+        """ Setting the scheduler so that the learning rate is reduced dynamically based on the validation measures.
+        """
+        self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=self.optimizer, mode='min', factor=0.5, patience=1)
+
+
     def getAccuracy(self, total, correct):
+        """ Calculating the accuracy based on the number of correctly predicted classes.
+        """
         return 100*(correct/total)
 
     def train(self,demoLimit=0,saveToFile=False):
@@ -122,30 +166,41 @@ class NNSetup:
         self.resetResultMemory()
 
         total_step = len(self.dataset_loader)
+
         for epoch in range(self.variables["training"]["epochs"]):
             correct = 0
             total = 0
             outputs_epoch = []
             labels_epoch = []
             predicted_epoch = []
+            running_acc = 0.
+            running_loss = 0.
 
-            for i, (tweetBertTensor, labels) in enumerate(self.dataset_loader):
+            for i, (labelsBertTensor, labels) in enumerate(self.dataset_loader):
                 if (demoLimit>0) and (i>demoLimit):
                     break
-                tweetBertTensor = tweetBertTensor.to(self.device)
+                labelsBertTensor = labelsBertTensor.to(self.device)
                 labels = labels.to(self.device)
                 
                 # Forward pass
-                outputs = self.model(self.prepareVectorForNN(tweetBertTensor))               
+                outputs = self.model(self.prepareVectorForNN(labelsBertTensor))               
                 _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
                 loss = self.criterion(outputs, labels)
 
-                # appending the overall tensor for the whole epoch to calculate the metrics as lists
-                outputs_epoch.append(outputs)
+                # appending the overall predicted and target tensor for the whole epoch to calculate the metrics as lists
                 labels_epoch.append(labels)
                 predicted_epoch.append(predicted)
+
+                # calculating the running loss
+                loss_t = loss.item()
+                running_loss += (loss_t - running_loss) / (i+1)
+
+                # calculating the running accuracy
+                acc_t = self.getAccuracy(total, correct)
+                running_acc += (acc_t - running_acc) / (i+1)
+
 
                 # Backward and optimize
                 self.optimizer.zero_grad()
@@ -157,30 +212,35 @@ class NNSetup:
                         .format(epoch+1, self.variables["training"]["epochs"], i+1, total_step, loss.item()))
             
             # reconverting lists to tensors
-            outputs_epoch = torch.cat(outputs_epoch)
             labels_epoch = torch.cat(labels_epoch)
             predicted_epoch = torch.cat(predicted_epoch)     
-                
-            
-            loss_epoch = self.criterion(outputs_epoch, labels_epoch).item()
-            classifation_report = classification_report(labels_epoch, predicted_epoch, output_dict=True)
-            classifation_report_str = classification_report(labels_epoch, predicted_epoch, output_dict=False)
+
+            # calculating the classification report with sklearn    
+            classification_report_json = classification_report(labels_epoch, predicted_epoch, output_dict=True)
+            classification_report_str = classification_report(labels_epoch, predicted_epoch, output_dict=False)
                 
             result = {
                 "epoch" : epoch,
                 "correct" : correct,
                 "total" : total,
-                "accuracy" : self.getAccuracy(total, correct), 
-                "loss" : loss_epoch, 
+                "accuracy" : running_acc, 
+                "loss" : running_loss, 
                 "stage" : 'training',
-                "classification_report" : classifation_report,
-                "classification_report_str" : classifation_report_str
+                "recall_hate" : classification_report_json['0']['recall'],
+                "f1-score macro" : classification_report_json['macro avg']['f1-score'],
+                "classification_report_json" : classification_report_json,
+                "classification_report_str" : classification_report_str,
                 }
 
             # saving results of evaluation on training set    
             self.saveEvaluation(result, epoch)
             # evaluating on validation set and saving results
             self.saveEvaluation(self.evaluate(epoch), epoch)
+            # setting the scheduler to dynamically adapt the learning rate based on the f1-score macro
+            self.scheduler.step(classification_report_json['macro avg']['f1-score'])
+
+        #TODO: Save Best Model metric: classification_report_json['macro avg']['f1-score']
+        #TODO: Implement early stopping rule
 
         if saveToFile:
             self.writeResultMemoryToFile()
@@ -219,47 +279,57 @@ class NNSetup:
             outputs_epoch = []
             labels_epoch = []
             predicted_epoch = []
+            running_acc = 0.
+            running_loss = 0.
 
-            for tweetBertTensor, labels in self.val_dataset_loader:
+            for i, (labelsBertTensor, labels) in enumerate(self.val_dataset_loader):
                 
-                tweetBertTensor = tweetBertTensor.to(self.device)
+                labelsBertTensor = labelsBertTensor.to(self.device)
                 labels = labels.to(self.device)
                 
-                outputs = self.model(self.prepareVectorForNN(tweetBertTensor))
+                outputs = self.model(self.prepareVectorForNN(labelsBertTensor))
                 #print(outputs.data)
                 _, predicted = torch.max(outputs.data, 1)
                 #print(predicted.item())
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
+                loss = self.criterion(outputs, labels)
 
-                # appending the overall tensor for the whole epoch to calculate the metrics as lists
-                outputs_epoch.append(outputs)
+                # appending the overall predicted and target tensor for the whole epoch to calculate the metrics as lists
                 labels_epoch.append(labels)
                 predicted_epoch.append(predicted)
+
+                # calculating the running loss
+                loss_t = loss.item()
+                running_loss += (loss_t - running_loss) / (i+1)
+
+                # calculating the running accuracy
+                acc_t = self.getAccuracy(total, correct)
+                running_acc += (acc_t - running_acc) / (i+1)
+
 
             print('Test Accuracy of the model: {} %'.format(100 * correct / total))
            
             # tretransforming the list into tensors
-            outputs_epoch = torch.cat(outputs_epoch)
             labels_epoch = torch.cat(labels_epoch)
             predicted_epoch = torch.cat(predicted_epoch)
             
-            # calculating the overall loss of the model
-            loss_epoch = self.criterion(outputs_epoch, labels_epoch).item()
-            classifation_report = classification_report(labels_epoch, predicted_epoch, output_dict=True)
-            classifation_report_str = classification_report(labels_epoch, predicted_epoch, output_dict=False)
-  
-
+            # calculating the classification report with sklearn    
+            classification_report_json = classification_report(labels_epoch, predicted_epoch, output_dict=True)
+            classification_report_str = classification_report(labels_epoch, predicted_epoch, output_dict=False)
+                
             result = {
                 "epoch" : epoch,
                 "correct" : correct,
                 "total" : total,
-                "accuracy" : self.getAccuracy(total, correct),
-                "loss" : loss_epoch, 
+                "accuracy" : running_acc, 
+                "loss" : running_loss, 
                 "stage" : 'validation',
-                "classification_report" : classifation_report,
-                "classification_report_str" : classifation_report_str  
-            }
+                "recall_hate" : classification_report_json['0']['recall'],
+                "f1-score macro" : classification_report_json['macro avg']['f1-score'],
+                "classification_report_json" : classification_report_json,
+                "classification_report_str" : classification_report_str,
+                }
 
             return result
     
@@ -280,6 +350,16 @@ class NNSetup:
         with open(filenpath, 'w+', encoding='utf-8') as fp:
             print("Save outputfile")
             json.dump(self.result, fp, separators=(',', ':'), indent=4)
+
+
+
+
+
+
+
+
+
+
 
 
 # if __name__ == "__main__":
@@ -386,14 +466,14 @@ class NNSetup:
 
     #         total_step = len(self.dataset_loader)
     #         for epoch in range(self.variables["training"]["epochs"]):
-    #             for i, (tweetBertTensor, labels) in enumerate(self.dataset_loader):
+    #             for i, (labelsBertTensor, labels) in enumerate(self.dataset_loader):
     #                 if (demoLimit>0) and (i>demoLimit):
     #                     break
-    #                 tweetBertTensor = tweetBertTensor.to(self.device)
+    #                 labelsBertTensor = labelsBertTensor.to(self.device)
     #                 labels = labels.to(self.device)
                     
     #                 # Forward pass
-    #                 outputs = self.model(tweetBertTensor.unsqueeze(0))
+    #                 outputs = self.model(labelsBertTensor.unsqueeze(0))
     #                 loss = self.criterion(outputs, labels)
                     
     #                 # Backward and optimize
@@ -415,17 +495,17 @@ class NNSetup:
     #             # full validation data set
     #             correct = 0
     #             total = 0
-    #             for tweetBertTensor, labels in self.val_dataset_loader:
-    #                 # Batch with one tweet
-    #                 tweetBertTensor = tweetBertTensor.to(self.device)
+    #             for labelsBertTensor, labels in self.val_dataset_loader:
+    #                 # Batch with one labels
+    #                 labelsBertTensor = labelsBertTensor.to(self.device)
     #                 labels = labels.to(self.device)
-    #                 outputs = self.model(tweetBertTensor.unsqueeze(0))
+    #                 outputs = self.model(labelsBertTensor.unsqueeze(0))
     #                 _, predicted = torch.max(outputs.data, 1)
     #                 total += labels.size(0)
     #                 correct += (predicted == labels).sum().item()
                     
 
-    #             print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
+    #             print('Test Accuracy of the model on the 10000 test labelsBertTensor: {} %'.format(100 * correct / total))
 
     #             # TODO F1 score pro class
     #             # TODO F1 macro score (average for all classes)
