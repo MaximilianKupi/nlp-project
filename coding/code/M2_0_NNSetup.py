@@ -212,8 +212,8 @@ class NNSetup:
                         .format(epoch+1, self.variables["training"]["epochs"], i+1, total_step, loss.item()))
             
             # reconverting lists to tensors
-            labels_epoch = torch.cat(labels_epoch)
-            predicted_epoch = torch.cat(predicted_epoch)     
+            labels_epoch = torch.cat(labels_epoch).cpu()
+            predicted_epoch = torch.cat(predicted_epoch).cpu()     
 
             # calculating the classification report with sklearn    
             classification_report_json = classification_report(labels_epoch, predicted_epoch, output_dict=True)
@@ -236,7 +236,7 @@ class NNSetup:
             self.saveEvaluation(result, epoch)
             # evaluating on validation set and saving results
             self.saveEvaluation(self.evaluate(epoch), epoch)
-            torch.save(self.model.state_dict(), "exchange_base/Models/model_" + str(epoch) + str(".json"))
+            torch.save(self.model.state_dict(), "exchange_base/Models/model_50EpochsOnColab_Epoch_" + str(epoch))
             # setting the scheduler to dynamically adapt the learning rate based on the f1-score macro
             #self.scheduler.step(classification_report_json['macro avg']['f1-score'])
             #TODO: Add option to turn the scheduler on if needed
@@ -309,12 +309,9 @@ class NNSetup:
                 acc_t = self.getAccuracy(total, correct)
                 running_acc += (acc_t - running_acc) / (i+1)
 
-
-            print('Test Accuracy of the model: {} %'.format(100 * correct / total))
-           
             # tretransforming the list into tensors
-            labels_epoch = torch.cat(labels_epoch)
-            predicted_epoch = torch.cat(predicted_epoch)
+            labels_epoch = torch.cat(labels_epoch).cpu()
+            predicted_epoch = torch.cat(predicted_epoch).cpu()
             
             # calculating the classification report with sklearn    
             classification_report_json = classification_report(labels_epoch, predicted_epoch, output_dict=True)
@@ -332,6 +329,12 @@ class NNSetup:
                 "classification_report_json" : classification_report_json,
                 "classification_report_str" : classification_report_str,
                 }
+
+            print('Test Accuracy on Validation: {} %'.format(running_acc))
+            print('F1-score Macro on Validation: {}'.format(classification_report_json['macro avg']['f1-score']))
+            print('Precision of Hate on Validation: {}'.format(classification_report_json['0']['precision']))
+            print('Recall of Hate on Validation: {}'.format(classification_report_json['0']['recall']))
+            print('F1-score of Hate on Validation: {}'.format(classification_report_json['0']['f1-score']))
 
             return result
     
