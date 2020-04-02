@@ -236,8 +236,10 @@ class NNSetup:
             self.saveEvaluation(result, epoch)
             # evaluating on validation set and saving results
             self.saveEvaluation(self.evaluate(epoch), epoch)
+            torch.save(self.model.state_dict(), "exchange_base/Models/model_" + str(epoch) + str(".json"))
             # setting the scheduler to dynamically adapt the learning rate based on the f1-score macro
-            self.scheduler.step(classification_report_json['macro avg']['f1-score'])
+            #self.scheduler.step(classification_report_json['macro avg']['f1-score'])
+            #TODO: Add option to turn the scheduler on if needed
 
         #TODO: Save Best Model metric: classification_report_json['macro avg']['f1-score']
         #TODO: Implement early stopping rule
@@ -256,7 +258,7 @@ class NNSetup:
         """ saves weights of CNN as file (really small size)
         """ 
         torch.save(self.model.state_dict(), self.variables["output"]["filepath"])
-    
+
     def loadModel(self):
         """ loads weights saved to file
         """ 

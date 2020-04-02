@@ -75,14 +75,14 @@ import json
 # train set
 # TODO is it really necessary to do this ever time the application runs?
 # train_matrix, train_labels = vectorize(train_set)
-train_vectors = torch.load("coding/code/exchange_base/train_vectorized_1d.pt")
-train_labels = torch.load("coding/code/exchange_base/train_labels_1d.pt")
+train_vectors = torch.load("exchange_base/train_vectorized_1d.pt")
+train_labels = torch.load("exchange_base/train_labels_1d.pt")
 
 # TODO is it really necessary to do this ever time the application runs?
 # val set
 # train_vectors, val_labels = vectorize(val_set)
-val_vectors = torch.load("coding/code/exchange_base/val_vectorized_1d.pt")
-val_labels = torch.load("coding/code/exchange_base/val_labels_1d.pt")
+val_vectors = torch.load("exchange_base/val_vectorized_1d.pt")
+val_labels = torch.load("exchange_base/val_labels_1d.pt")
 
 # TODO is it really necessary to do this ever time the application runs?
 # test set
@@ -97,14 +97,14 @@ val_labels = torch.load("coding/code/exchange_base/val_labels_1d.pt")
 # Config NN
 # prefix to test different setups
 uniqueInputPrefix = ""
-uniqueOutputPrefix = "tracking_test_old_architecture_with_sampling"
-path = "coding/code/exchange_base/"
+uniqueOutputPrefix = "first_long_training"
+path = "exchange_base/"
 # Training input
 stage = "train"
 train_filpath_vectors = path + uniqueInputPrefix + stage +  "_vectorized.pt"
 train_filepath_labels = path + uniqueInputPrefix + stage +  "_labels.pt"
 # Model Training
-epochs = 2
+epochs = 50
 # Model Output
 output_filepath_model = path + uniqueOutputPrefix + stage + "_model_epochs" + str(epochs) + ".ckpt"
 # Evaluation
