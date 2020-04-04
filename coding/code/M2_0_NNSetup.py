@@ -18,6 +18,7 @@ from torchviz import make_dot, make_dot_from_trace
 import json
 from sklearn.metrics import classification_report
 from M2_1_CNN import CNN
+import os
 
 
 class NNSetup:
@@ -106,7 +107,11 @@ class NNSetup:
         print("Demo Label entry")
         print(labels[0])
         if stage == "training":
-            self.dataset, self.dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=False, sampler=True)
+            if self.variables['training']['sampler']:
+                self.dataset, self.dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=False, sampler=True)
+            else:
+                self.dataset, self.dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=True, sampler=False)
+        
         elif stage == "validation":
             self.val_dataset, self.val_dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=False, sampler=False)
 
@@ -143,11 +148,29 @@ class NNSetup:
     def setOptimizer(self):
         """ Setting the optimizer to Adam as this is the state of the art optimizer for these kind of tasks.
         """ 
-        self.optimizer = torch.optim.Adam(
-            params = self.model.parameters(),
-            lr=self.variables["optimizer"]["learning_rate"]
-        )
 
+        if self.variables['training']['optimizer']['type'] == 'Adam':
+            self.optimizer = torch.optim.Adam(
+                params = self.model.parameters(),
+                lr=self.variables["optimizer"]["learning_rate"],
+                amsgrad=True,
+            )
+
+        elif self.variables['training']['optimizer']['type'] == 'RMSprop':
+            self.optimizer = torch.optim.RMSprop(
+                params = self.model.parameters(),
+                lr=self.variables["optimizer"]["learning_rate"]
+            )
+
+        elif self.variables['training']['optimizer']['type'] == 'SGD':
+                self.optimizer = torch.optim.SGD(
+                    params = self.model.parameters(),
+                    lr=self.variables["optimizer"]["learning_rate"],
+                    moomentum= self.variables['training']['optimizer']['momentum']
+                )
+        else:
+            print('Please specify a valid optimizer')
+    
     def setScheduler(self):
         """ Setting the scheduler so that the learning rate is reduced dynamically based on the validation measures.
         """
@@ -183,8 +206,12 @@ class NNSetup:
                 labels = labels.to(self.device)
                 
                 # Forward pass
-                outputs = self.model(self.prepareVectorForNN(labelsBertTensor))               
-                _, predicted = torch.max(outputs.data, 1)
+                outputs = self.model(self.prepareVectorForNN(labelsBertTensor))
+
+                if self.variables['training']['softmax']:
+                    _, predicted = torch.softmax(outputs.data, 1)
+                else: 
+                    _, predicted = torch.max(outputs.data, 1)
                 total += labels.size(0)
                 correct += (predicted == labels).sum().item()
                 loss = self.criterion(outputs, labels)
@@ -236,9 +263,17 @@ class NNSetup:
             self.saveEvaluation(result, epoch)
             # evaluating on validation set and saving results
             self.saveEvaluation(self.evaluate(epoch), epoch)
-            torch.save(self.model.state_dict(), "exchange_base/Models/model_50EpochsOnColab_Epoch_" + str(epoch))
+            # saving the model after each epoch
+            save_dir = self.variables["output"]["filepath"]
+            save_prefix = os.path.join(save_dir, 'Model' )
+            save_path = '{}_epoch_{}.pt'.format(save_prefix, epoch)
+            print("save model to {}".format(save_path))
+            with open(save_path, mode="wb") as output:
+                torch.save(self.model.state_dict(), output)
+            # torch.save(model.state_dict(), save_path)
             # setting the scheduler to dynamically adapt the learning rate based on the f1-score macro
-            #self.scheduler.step(classification_report_json['macro avg']['f1-score'])
+            if self.variables['training']['scheduler']:
+                self.scheduler.step(classification_report_json['macro avg']['f1-score'])
             #TODO: Add option to turn the scheduler on if needed
 
         #TODO: Save Best Model metric: classification_report_json['macro avg']['f1-score']
@@ -358,180 +393,3 @@ class NNSetup:
 
 
 
-
-
-
-
-
-
-
-
-
-# if __name__ == "__main__":
-    # # prefix to test different setups
-    # uniqueInputPrefix = ""
-    # uniqueOutputPrefix = "test1_"
-    # path = "coding/code/exchange_base/"
-    # # Training input
-    # stage = "train"
-    # train_filpath_vectors = path + uniqueInputPrefix + stage +  "_vectorized.pt"
-    # train_filepath_labels = path + uniqueInputPrefix + stage +  "_labels.pt"
-    # # Model Training
-    # epochs = 3
-    # # Model Output
-    # output_filepath_model = path + uniqueOutputPrefix + stage + "_model_epochs" + str(epochs) + ".ckpt"
-    # # Evaluation
-    # stage = "val"
-    # val_filepath_vectors = path + uniqueInputPrefix + stage +  "_vectorized.pt"
-    # val_filepath_labels = path + uniqueInputPrefix + stage +  "_labels.pt"
-    # val_filepath_result_prefix = path + uniqueOutputPrefix + stage +  "_result.json"
-
-    # variables =	{
-    #     "global" : {
-    #         "path" : path
-    #     },
-    #     "CNN" : {
-    #         "layers" : {
-    #             "1" : {
-    #                 "Conv2d" : {
-    #                     "in_channels" : 1,
-    #                     "out_channels" : 16,
-    #                     "kernel_size" : 3,
-    #                     "stride" : 1,
-    #                     "padding" : 2,
-    #                 },
-    #                 "BatchNorm2d" : {
-    #                     "num_features" : 16
-    #                 },
-    #                 "MaxPool2d" : {
-    #                     "kernel_size" : 2,
-    #                     "stride" : 2
-    #                 }
-    #             },
-    #             "2" : {
-    #                 "Conv2d" : {
-    #                     "in_channels" : 16,
-    #                     "out_channels" : 32,
-    #                     "kernel_size" : 5,
-    #                     "stride" : 1,
-    #                     "padding" : 2
-    #                 },
-    #                 "BatchNorm2d" : {
-    #                     "num_features" : 32
-    #                 },
-    #                 "MaxPool2d" : {
-    #                     "kernel_size" : 2,
-    #                     "stride" : 2
-    #                 }
-    #             }
-    #         },
-    #         "fc.Linear" : {
-    #             "in_features" : 288,
-    #             "out_features" : 3
-    #         }
-    #     },
-    #     "optimizer" : {
-    #         "learning_rate" : 0.001
-    #     },
-    #     "training" : {
-    #         "epochs" : epochs,
-    #         "input" : {
-    #             "batch_size": 1,
-    #             "vectors": train_filpath_vectors,
-    #             "labels": train_filepath_labels
-    #         },
-    #     },
-    #     "output" : {
-    #         "filepath" : output_filepath_model
-    #     },
-    #     "validation" : {
-    #         "input" : {
-    #             "model" : output_filepath_model,
-    #             "result" : val_filepath_result_prefix,
-    #             "batch_size": 1,
-    #             "vectors": val_filepath_vectors,
-    #             "labels": val_filepath_labels
-    #         }
-    #     }
-    # }
-
-    # setup.loadModel() # only necessary when just evaluation models
-
-    # setup.saveEvaluation(setup.evaluate(),"final")
-
-
-    # class betterNNSetup(NNSetup):
-    #     def __init__(self,variables):
-    #         CNNSetup.__init__(self,variables)
-        
-    #     def train(self,demoLimit=0):
-    #         """ Training of the model
-    #         """ 
-            
-
-    #         total_step = len(self.dataset_loader)
-    #         for epoch in range(self.variables["training"]["epochs"]):
-    #             for i, (labelsBertTensor, labels) in enumerate(self.dataset_loader):
-    #                 if (demoLimit>0) and (i>demoLimit):
-    #                     break
-    #                 labelsBertTensor = labelsBertTensor.to(self.device)
-    #                 labels = labels.to(self.device)
-                    
-    #                 # Forward pass
-    #                 outputs = self.model(labelsBertTensor.unsqueeze(0))
-    #                 loss = self.criterion(outputs, labels)
-                    
-    #                 # Backward and optimize
-    #                 self.optimizer.zero_grad()
-    #                 loss.backward()
-    #                 self.optimizer.step()
-                    
-    #                 if (i+1) % 1000 == 0:
-    #                     print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
-    #                         .format(epoch+1, self.variables["training"]["epochs"], i+1, total_step, loss.item()))
-                
-        
-    #     def evaluate(self):
-    #         """ uses another dataset to calculate accuracy of model
-    #         """ 
-    #         # gets executed after each epoch
-    #         self.model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
-    #         with torch.no_grad():
-    #             # full validation data set
-    #             correct = 0
-    #             total = 0
-    #             for labelsBertTensor, labels in self.val_dataset_loader:
-    #                 # Batch with one labels
-    #                 labelsBertTensor = labelsBertTensor.to(self.device)
-    #                 labels = labels.to(self.device)
-    #                 outputs = self.model(labelsBertTensor.unsqueeze(0))
-    #                 _, predicted = torch.max(outputs.data, 1)
-    #                 total += labels.size(0)
-    #                 correct += (predicted == labels).sum().item()
-                    
-
-    #             print('Test Accuracy of the model on the 10000 test labelsBertTensor: {} %'.format(100 * correct / total))
-
-    #             # TODO F1 score pro class
-    #             # TODO F1 macro score (average for all classes)
-    #             print("F1 score here")
-    #             result = {
-    #                 "correct" : correct,
-    #                 "total" : total,
-    #                 "accuracy" : 100*correct/total
-    #             }
-
-    #             return result
-
-    # #variables_current = variables
-    # #variables_current["optimizer"]["learning_rate"] = 0.002
-
-    # setup2 = betterNNSetup(variables)
-    # setup2.loadData("training")
-    # setup2.loadData("validation")
-    # setup2.createCNN()
-    # setup2.setCriterion()
-    # setup2.setOptimizer()
-    # setup2.train(demoLimit=1000)
-    # setup2.saveModel()
-    # # setup.loadModel() # only necessary when just evaluation models

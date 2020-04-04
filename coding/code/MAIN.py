@@ -2,42 +2,12 @@
 
 ## packages used in the MAIN file
 import pandas as pd
-from M2_0_NNSetup import *
-from M2_1_CNN_1d import CNN_1d
-from M2_1_CNN_1d_experiment import CNN_1d_experiment
 import json
-
-## Packages used in our modules:
-
-# packages used in M1_2_cleaning_data
-    # import pandas as pd                       #   has to be installed
-    # import re                                 #   normally perinstalled
-    # import string                             #   normally preinstalled
-    # import preprocessor as p                  #   has to be installed using pip
-    # from nltk.tokenize import word_tokenize   #   has to installed
-    # from nltk.corpus import stopwords         #   has to installed
-
-# additional packages used in M1_3_splitting_datasets
-    # from sklearn.model_selection import StratifiedShuffleSplit    # has to be installed
-
-# additional packages used in M1_4_word_sentence_vectorisation
-    # import transformers                       # has to be installed 
-    # to install transformers rust has to be installed in the terminal beforehand with
-        # curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-        # Restart the terminal
-        # pip install transformers==2.5.1
-
-
-# additional packages used in M1_5_dictionary_approach       
-    # import torch                              #   has to be installed
-    # import spacy                              #   has to be installed
-    # from pandarallel import pandarallel       #   has to be installed using pip               
-    # language model for spacy has to be loaded using 'python -m spacy download en_core_web_sm' in the terminal
-    # import numpy as np                        #   normally preinstalled
-
+import platform
 
 ## loading our own created functions 
 
+# for Preprocessing
 # # function to clean the data
 # from M1_2_cleaning_data import data_cleaning
 # # function to split the data into train, val, and test set
@@ -47,11 +17,20 @@ import json
 # # function to search for hatebase dictionary terms in tweets
 # from M1_5_dictionary_approach import apply_dict
 
+# for Model Setup and Training
+# # clsas to setup the 
+from M2_0_NNSetup import *
+from M2_1_CNN_1d import CNN_1d
+from M2_1_CNN_1d_experiment import CNN_1d_experiment
+
 
 
 ########################
 ##### OUR PIPELINE #####
 ########################
+
+
+#### PREPROCESSING ####
 
 # ## only done once at the beginning ##
 # # getting the data from our exchange base
@@ -63,59 +42,35 @@ import json
 # # splitting the data 
 # train_set, val_set, test_set = split_data(data=data_cleaned)
 
-
 # ## reading the train, val, and test set
 # train_set = pd.read_csv("exchange_base/train_set.csv")
 # val_set = pd.read_csv("exchange_base/val_set.csv")
 # test_set = pd.read_csv("exchange_base/test_set.csv")
 
-# TODO vectorize three sets again with cleaned input and save as file
 
 # applying BERT vectorizer on train, validation and test set
 # train set
-# TODO is it really necessary to do this ever time the application runs?
-# train_matrix, train_labels = vectorize(train_set)
-train_vectors = torch.load("exchange_base/train_vectorized_1d.pt")
-train_labels = torch.load("exchange_base/train_labels_1d.pt")
 
-# TODO is it really necessary to do this ever time the application runs?
+# train_matrix, train_labels = vectorize(train_set)
+
 # val set
 # train_vectors, val_labels = vectorize(val_set)
-val_vectors = torch.load("exchange_base/val_vectorized_1d.pt")
-val_labels = torch.load("exchange_base/val_labels_1d.pt")
 
-# TODO is it really necessary to do this ever time the application runs?
 # test set
 #train_vectors, test_labels = vectorize(test_set)
 
-# TODO Question: Isn't that part of the preprocessing?
 # applying dictionary approach
 # HateFrequency, HateIntensity, dataset_with_hatebasecount = apply_dict(data=data)
 
 
+#### MODEL AND TRAINING ####
 
-# Config NN
-# prefix to test different setups
-uniqueInputPrefix = ""
-uniqueOutputPrefix = "first_long_training"
-path = "exchange_base/"
-# Training input
-stage = "train"
-train_filpath_vectors = path + uniqueInputPrefix + stage +  "_vectorized.pt"
-train_filepath_labels = path + uniqueInputPrefix + stage +  "_labels.pt"
-# Model Training
-epochs = 50
-# Model Output
-output_filepath_model = path + uniqueOutputPrefix + stage + "_model_epochs" + str(epochs) + ".ckpt"
-# Evaluation
-stage = "val"
-val_filepath_vectors = path + uniqueInputPrefix + stage +  "_vectorized.pt"
-val_filepath_labels = path + uniqueInputPrefix + stage +  "_labels.pt"
-val_filepath_result_prefix = path + uniqueOutputPrefix + stage +  "_result.json"
-
+# SETTING VARIABLES
 variables =	{
     "global" : {
-        "path" : path
+        "path" : "will_be_specified_based_on_plattform",
+        "plattform": 'colab', # 'local' 'colab'
+        "model_name" : "model"
     },
     "CNN" : {
         "layers" : {
@@ -154,32 +109,74 @@ variables =	{
         }
     },
     "optimizer" : {
-        "learning_rate" : 0.001
+        "type": "Adam", # "RMSprop", "Adam", "SGD"
+        "learning_rate" : 0.0001,
+        "momentum": 0.95
     },
     "training" : {
-        "epochs" : epochs,
+        "epochs" : 20,
+        "sampler": True, # if sampler is set to false, shuffle will automatically be set to 'True' while training
+        "softmax" : True,  
+        "scheduler" : False, 
         "input" : {
             "batch_size": 16,
-            "vectors": train_filpath_vectors, # only used with loadData function
-            "labels": train_filepath_labels # only used with loadData function
+            "vectors": "will_get_specified", # only used with loadData function
+            "labels": "will_get_specified" # only used with loadData function
         },
     },
     "output" : {
-        "filepath" : output_filepath_model # only used when
+        "filepath" : "will_get_specified",
+        "uniqueOutputPrefix": "will_get_specified" # only used when
     },
     "validation" : {
         "input" : {
-            "model" : output_filepath_model,
-            "result" : val_filepath_result_prefix,
+            "model" : "will_get_specified",
+            "result" : "will_get_specified",
             "batch_size": 1,
-            "vectors": val_filepath_vectors,
-            "labels": val_filepath_labels
+            "vectors": "will_get_specified",
+            "labels": "will_get_specified"
         }
     }
 }
 
 
+# specify prefixes and paths based on variables in dictionary 
+uniqueInputPrefix = ""
+uniqueOutputPrefix = variables['general']['model'] + "_optimizer_" + variables['optimzer']['type'] + "_lr_" + variables['optimzer']['learning_rate'] + "_epochs_" + variables['training']['epochs'] + "_batchsize_" + variables['training']['input']['batch_size'] + "_sampler_" + variables['training']['sampler'] + "_softmax_" + variables['training']['softmax'] + "_scheduler_" + variables['training']['scheduler'] 
 
+
+if variables['global']['platform'] == 'colab':
+    variables['global']['path'] = "exchange_base/" 
+elif variables['global']['platform'] == 'local':
+    variables['global']['path'] = "coding/code/exchange_base/"
+else:
+    print('Please specify platform in variables')
+    raise ValueError
+
+# Training input
+stage = "train"
+variables['training']['input']['vectors'] = variables['global']['path'] + uniqueInputPrefix + stage +  "_vectorized.pt"
+variables['training']['input']['labels'] = variables['global']['path']+ uniqueInputPrefix + stage +  "_labels.pt"
+# Model Output
+save_dir = variables['global']['path'] + "Model_Results/" + variables["output"]["uniqueOutputPrefix"]
+if not os.path.isdir(save_dir):
+    os.makedirs(save_dir)
+variables['output']['filepath'] = save_dir
+# Evaluation
+stage = "val"
+variables['validation']['input']['vectors'] = variables['global']['path']+ uniqueInputPrefix + stage +  "_vectorized.pt"
+variables['validation']['input']['labels'] = variables['global']['path']+ uniqueInputPrefix + stage +  "_labels.pt"
+variables['validation']['input']['results'] = variables['global']['path'] + uniqueOutputPrefix + "_" + stage +  "_result.json"
+
+
+# loading the data saved during preprocessing: 
+train_vectors = torch.load(variables['global']['path'] + "train_vectorized_1d.pt")
+train_labels = torch.load(variables['global']['path'] + "train_labels_1d.pt")
+
+# val set
+# train_vectors, val_labels = vectorize(val_set)
+val_vectors = torch.load(variables['global']['path'] + "val_vectorized_1d.pt")
+val_labels = torch.load(variables['global']['path'] + "val_labels_1d.pt")
 
 
 # run NN
@@ -212,6 +209,9 @@ setup.loadDataFromVariable("validation",val_vectors,val_labels)
 
 # Create Neural Network object from class nn.module
 model = CNN_1d_experiment(variables)
+
+# Create Neural Network object with the model from class
+#model = CNN_1d_experiment(initial_num_channels=1, num_channels=256, hidden_dim=256, num_classes=3, dropout_p=0.1)
 
 # add model to NNSetup object
 setup.addNN(model)
