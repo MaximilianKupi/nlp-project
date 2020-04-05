@@ -155,7 +155,7 @@ param_grid = {  'optimizer_type':variables['optimizer']['type'],
                 "scheduler" : variables['training']["scheduler"]}
 
 all_params = list(ParameterGrid(param_grid))
-
+ 
 # Running through the grid
 #TODO: Add run Run Number 27 to Results Overview.scv
 
