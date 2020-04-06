@@ -6,7 +6,11 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{amssymb}
-
+\usepackage{enumitem}
+\usepackage{pgfplots}
+\usepackage{verbatim}
+\newcommand{\source}[1]{\caption*{Source: {#1}} }
+\usepackage[hyphens]{url}
 % Include other packages here, before hyperref.
 
 % If you comment hyperref and then uncomment it, you should delete
@@ -30,17 +34,21 @@
 
 
 %%%%%%%%% TITLE
-\title{\LaTeX\ Template for NLP Midterm Project Report}
+\title{MIDTERM REPORT \\ Hate Speech Detection with Deep Learning Models in PyTorch}
 
-\author{First Author\\
-{\tt\small firstauthor@hertie-school.org}
+
+\author{Carlos Eduardo Posada\\
+{\tt\small c.posada@mpp.hertie-school.org}
 \and
-Second Author\\
-{\tt\small secondauthor@hertie-school.org}
+Maximilian Kupi\thanks{These authors are sharing the project between the NLP and Python class.}\\
+{\tt\small m.kupi@mpp.hertie-school.org}
+\and 
+Michael Bodnar\\
+{\tt\small m.bodnar@mpp.hertie-school.org}
 \and
-Third Author\\
-{\tt\small thirdauthor@hertie-school.org}
-}
+Nikolas Schmidt\footnotemark[1]\\
+{\tt\small n.schmidt@mpp.hertie-school.org}}
+
 
 \maketitle
 %\thispagestyle{empty}
@@ -51,67 +59,183 @@ Third Author\\
 
 %%%%%%%%% ABSTRACT
 \begin{abstract}
-   An abstract should concisely (200-250 words) motivate the problem, describe your aims, describe your contribution, and highlight your main finding(s). Given that your project is still a work-in-progress, it's OK if `your contribution' and `your findings' are things you're still working on.
-\end{abstract}
+ Hate speech is a growing concern, particularly on social media, and automated methods have so far been sub-par in reliably detecting it. Challenges lie in the evasive nature of hate speech, particularly in ambiguity and fast evolution of natural language, as well as lack of consensus due to the definition of hate speech. In this paper, we propose a new multi-class classification approach in order to identify hateful content, aiming to address these issues. We implement a Convolutional Neural Network architecture as well as a classification feature based on a dictionary of hateful words in order to classify a dataset of 125,000 tweets into three categories: hateful, abusive, and normal tweets.\footnote{The code used to set up and implement our model can be found at the following GitHub repository: \url{https://github.com/MaximilianKupi/nlp-project}.}. We utilize the CNN for the classification, by implementing the architecture’s core functionality to detect patterns from word combinations on our dataset after transformation with BERT. With the dictionary approach, we aim establish an up-to-date basis of hateful content, which will feed into the classification mechanism, thus addressing the issues commonly faced in hate speech detection.
+ {\color{red} Does anyone want to write something about preliminary results? We have 167 words of 200-250 words so far.}
+ 
 
+% An abstract should concisely (200-250 words) motivate the problem, describe your aims, describe your contribution, and highlight your main finding(s). Given that your project is still a work-in-progress, it's OK if `your contribution' and `your findings' are things you're still working on.
+\end{abstract}
 
 %%%%%%%%% BODY TEXT
 
-\begin{itemize}
-{\color{blue}
+%\begin{comment}
+ %   \begin{itemize}
+  %  \item Remember that you should \textbf{submit the report}  via Moodle and \textbf{include in the report the link to accessible GitHub repository that contains the code}. Also, \textbf{only one member per team} needs to submit the project material. You must include a link to your GitHub repository for the project as the first footnote on the first page. 
+    
+   % \item The midterm project report should be {\bf 4 pages long (not counting references), and a maximum 10 references}. The report should contain the sections that are already provided in this paper. It forms the basis of the final report with the same structure. Please check out the text in these sections for further information.
+    
+    %\item Your midterm milestone will be graded on the following criteria:
+    %\begin{itemize}
+    %\item Progress: Has the team made good progress on the project? You should have done approximately half of the work of your project.
+    %\item As a minimum, your milestone should show that you have setup your data, baseline model code, and evaluation metric, and run experiments to obtain some results (assuming you are doing a typical model-building project). Other than this, `good progress' depends on various factors (e.g., whether your model is implemented from scratch or based on an existing codebase).
+    %\item Understanding: Does the milestone show a strong understanding of its problem, tasks, methods, metrics, and research context?
+    %\item Writing quality: Does the milestone clearly communicate what you've done and why, providing the requested information, to an appropriate level of detail (given the page limit)?
+    %\item You will receive some brief feedback on your milestone. Feedback may contain helpful suggestions for your project (e.g., try a particular method, read a particular paper) and/or warnings about your project plan (e.g., if your plans are too ambitious or not ambitious enough), and how you could improve your technical writing (e.g., adjustments to clarity, level of detail, formatting, use of references).
+    %\end{itemize}
+    
+    %\item Technical writing is an important skill in this class, in research, and beyond. It's well worth spending time developing your ability to communicate technical concepts clearly. Here are some resources which might help you improve your technical writing:
+    %\begin{itemize}
+    %\item Tips for Writing Technical Papers, Jennifer Widom (\url{https://cs.stanford.edu/people/widom/paper-writing.html}).
+    %\item Write the Paper First, Jason Eisner (\url{https://www.cs.jhu.edu/~jason/advice/write-the-paper-first.html}).
+    %\end{itemize}
+    
+    %\item Here are some other things you can do to improve your technical writing:
+    %\begin{itemize}
+   % \item Look carefully at several ML / NLP papers to understand their typical structure, writing style, and the usual content of the different sections. Model your writing on these examples.
+  %  \item Think about the NLP / ML papers you've read (for example, the one you summarised for your proposal). Which parts did you find easy to understand and why? Which parts did you find difficult to understand and why? Can you identify any good writing practices that you could use in your technical writing?
+ %   \item Ask a friend to read through your writing and tell you if is clear. This can be useful even if the friend does not have the relevant technical knowledge.
+%   \end{itemize}
+%    \end{itemize}
+%\end{comment}
 
-\item Remember that you should \textbf{submit the report}  via Moodle and \textbf{include in the report the link to accessible GitHub repository that contains the code}. Also, \textbf{only one member per team} needs to submit the project material. You must include a link to your GitHub repository for the project as the first footnote on the first page. \footnote{Here's a link to my GitHub account \url{https://github.com/sjankin} and Hannah's \url{https://github.com/hannahbechara}. Make sure that your repository is accessible to us!}
+\section{Proposed Method} \label{Section 1} 
 
-\item The midterm project report should be {\bf 4 pages long (not counting references), and a maximum 10 references}. The report should contain the sections that are already provided in this paper. It forms the basis of the final report with the same structure. Please check out the text in these sections for further information.
+\subsection{Choice of Model} \label{Subsection 1.1} 
 
-\item Your midterm milestone will be graded on the following criteria:
-\begin{itemize}
-\item Progress: Has the team made good progress on the project? You should have done approximately half of the work of your project.
-\item As a minimum, your milestone should show that you have setup your data, baseline model code, and evaluation metric, and run experiments to obtain some results (assuming you are doing a typical model-building project). Other than this, `good progress' depends on various factors (e.g., whether your model is implemented from scratch or based on an existing codebase).
-\item Understanding: Does the milestone show a strong understanding of its problem, tasks, methods, metrics, and research context?
-\item Writing quality: Does the milestone clearly communicate what you've done and why, providing the requested information, to an appropriate level of detail (given the page limit)?
-\item You will receive some brief feedback on your milestone. Feedback may contain helpful suggestions for your project (e.g., try a particular method, read a particular paper) and/or warnings about your project plan (e.g., if your plans are too ambitious or not ambitious enough), and how you could improve your technical writing (e.g., adjustments to clarity, level of detail, formatting, use of references).
-\end{itemize}
+When it comes to the usage of different kinds of neural network architectures for various research purposes, literature shows that assigning one method to one purpose unambiguously is hardly ever possible. However, some methods have been predominantly used for specific purposes, mostly due to their superior performance. As such, CNNs excel at computer vision and image and video processing (including image classification, segmentation and object detection), but have also shown promise in Natural Language Processing, and Speech Recognition \cite{Khan2019}.
 
-\item Technical writing is an important skill in this class, in research, and beyond. It's well worth spending time developing your ability to communicate technical concepts clearly. Here are some resources which might help you improve your technical writing:
-\begin{itemize}
-\item Tips for Writing Technical Papers, Jennifer Widom (\url{https://cs.stanford.edu/people/widom/paper-writing.html}).
-\item Write the Paper First, Jason Eisner (\url{https://www.cs.jhu.edu/~jason/advice/write-the-paper-first.html}).
-\end{itemize}
+In Natural Language Processing, other architectures such as Recurrent Neural Networks (RNNs) have also been used, including Gated Recurrent Unit (GRU) and Long Short-Term Memory (LSTM) RNN architectures \cite{Adel2017}.
+However, in detecting hate speech, CNNs have been shown to offer distinct advantages over other architectures.%cite Heller paper (not Towards Data Science) here if still space
+Namely, CNNs are adept at extracting features and recognizing patterns from word combinations, while RNNs rely on features based in sequences. This specificity of CNNs is relevant for hate speech, where certain combinations of words occur often, while the sequence in which certain words occur is less important. Additionally, tweets are short\footnote{140 characters in the data we are using; Twitter changed the maximum character length of a tweet to 280 characters in 2017.}, which makes the capability to detect sequences in a single tweet less useful for our purposes. This is especially relevant, when hate speech is determined by the occurrence of specific words\footnote{This approach in understanding hate speech underpins also our further investigation methods, see Section \ref{Section 3} .}, whereas modeling a longer sequence - such as done with GRU - can miss key words determining the meaning within a sequence \cite{Yin2016}.
+Additionally, CNN architectures have been shown to be more efficient than RNN architectures, as RNNs take longer or more computing power to train \cite{Adel2017}.\footnote{While this may not be an issue in our application, as our data input is limited, striving for efficiency in use of computational power should be a matter of principle.} For these reasons, we've chosen a CNN model architecture to distinguish between hateful, abusive or normal tweets. We implement that architecture in Python, using the PyTorch library \cite{PyTorch2019}. 
 
-\item Here are some other things you can do to improve your technical writing:
-\begin{itemize}
-\item Look carefully at several ML / NLP papers to understand their typical structure, writing style, and the usual content of the different sections. Model your writing on these examples.
-\item Think about the NLP / ML papers you've read (for example, the one you summarised for your proposal). Which parts did you find easy to understand and why? Which parts did you find difficult to understand and why? Can you identify any good writing practices that you could use in your technical writing?
-\item Ask a friend to read through your writing and tell you if is clear. This can be useful even if the friend does not have the relevant technical knowledge.
-\end{itemize}
-}
-\end{itemize}
+\subsection{Convolutional Neural Network} \label{Subsection 1.2} 
+Convolutional Neural Networks (CNN) are a special kind of multi-layer perceptron that include additional layers called convolutional layers, in which the process of convolution occurs. In this process, a filter, which is a small matrix of weights —also called a kernel—, is applied to the input data in matrix form in order to capture local correlations between points (e. g. spatial and temporal dependencies) \cite{Khan2019}, and at the same time reduce processing complexity and time \cite{Saha2018}. It must be noted that the input matrix and the kernel can be matrices of dimension 1, i.e. vectors. This is of particular relevance for this project, as our input —text— has only one dimension, contrary to images, which have two, for which CNNs were originally developed.
 
-\section{Proposed Method}
+During convolution, the kernel strides over the input matrix. While striding, it is matrix-multiplied with a new section of the input matrix. The results of the multiplication are summed up and after the kernel has stridden over the whole input matrix, a matrix of weighted sums is obtained. This output has reduced complexity over the input dataset and conserves the most essential features, defined by the kernel. The first layers of convolution extract low-level features of the input data, while later layers capture high-level features \cite{Saha2018}.
 
-This section details your approach(es) to the problem. For example, this is where you describe the architecture of your model, and any other key methods or algorithms.
+Padding is another characteristic of the convolution process. It consists of adding extra zero values to the input matrix, so that the kernel can cover its edges equally while striding. When no additional values are added, the process is called valid padding and the convolved matrix will have the same dimensions as the kernel. When extra values are added, the process is called same padding, and the convolved matrix has the same size as the input matrix \cite{Saha2018}.
 
-You should be specific when describing your main approaches - you may want to include equations and figures (though it's fine if you want to defer creating time-consuming figures until you write your final report).
+The hyperparameters that can be set in order to define how the CNN will work are: (1) the size of the kernel, which defines the shape of the convolution; (2) the stride, which controls the size of the steps the kernel will take while displacing over the input matrix; (3) the padding, which defines the size of the convolved matrix; (4) and the dilation, which sets the pattern and distance between each step of matrix multiplication \cite{Rao2019}.
 
-This is an example of a mathematical equation:
+Furthermore, an extra layer, called the pooling layer, can be added after each convolutional layer. The pooling layer further reduces the size of the convolved matrix, producing significant gains in computational efficiency and a reduction in the risk of overfitting \cite{jacovi-etal-2018-understanding}. It “summarises” the convolved matrix by pooling values of the matrix and generating a new matrix with these values. Usually, this reduction is done by taking the maximum value of the pool, but other methods, such as taking the average value, can also be considered \cite{Newatia2019HowClassification}. In the case of text classification, the usage of pooling has to be considered carefully, since the redundancy of information in text is lesser than in images.
 
-$$f(\mathbf{x}; \mathbf{w}) = \sum_{i=1}^{n} w_ix_i.$$
+The final output matrix is flattened into a vector and fed into a fully connected layer (multi-layer perceptron), which receives the extracted features and calculates the values for final classification \cite{Newatia2019}. The loss is computed by comparing the predicted and the true labels, in our case, using a multi-class cross-entropy loss function (cite Brownlee).
+Finally, the weights of the kernel are adapted based on the loss through backpropagation. This is how the network "learns" \cite{Khan2019}.
 
-This is a mathematical expression, $h(\mathbf{x}) = \hat{y}$ formatted in text. 
+%This section details your approach(es) to the problem. For example, this is where you describe the architecture of your model, and any other key methods or algorithms.
+%You should be specific when describing your main approaches - you may want to include equations and figures (though it's fine if you want to defer creating time-consuming figures until you write your final report).
+%This is an example of a mathematical equation:
+%$$f(\mathbf{x}; \mathbf{w}) = \sum_{i=1}^{n} w_ix_i.$$
+%This is a mathematical expression, $h(\mathbf{x}) = \hat{y}$ formatted in text. 
+%You should also describe your baseline(s). Depending on space constraints, and how standard your baseline is, you might do this in detail, or simply refer the reader to some other paper for the details. 
+%If any part of your approach is original, make it clear (so we can give you credit!). For models and techniques that aren't yours, provide references.
+%If you're using any code that you didn't write yourself, make it clear and provide a reference or link. When describing something you coded yourself, make it clear (so we can give you credit!).
 
-You should also describe your baseline(s). Depending on space constraints, and how standard your baseline is, you might do this in detail, or simply refer the reader to some other paper for the details. 
-
-If any part of your approach is original, make it clear (so we can give you credit!). For models and techniques that aren't yours, provide references.
-
-If you're using any code that you didn't write yourself, make it clear and provide a reference or link. When describing something you coded yourself, make it clear (so we can give you credit!).
+\subsection{Convolution - mathematics in 1D} \label{Subsection 1.3} 
+The following explanation is based on the master documentation of PyTorch \cite{PyTorch2019}.
 
 
-\section{Experiments}
+As discussed above, a convolution is used to combine multiple input values with different weights attached to them to an output value. We call the object that contains all the weights used in the calculation a kernel and define it as $w\in\mathbb{R}^n$.
 
-This section contains the following.
+Each layer gets a 1D vector of length $n$ as input. Let the whole input vector be $x\in\mathbb{R}^n$. Based on the settings for kernel size, stride, and dilation the kernel is applied to a sub-sequence $\tilde{x}$ of input vector $x$.
 
-\paragraph{Data:}  Describe the dataset(s) you are using (provide references). If it's not already clear, make sure the associated task is clearly described.
+We can define the application of the kernel mathematically as a function that takes the sub-vector $\tilde{x}$ and a vector of weights $w$ to calculate a weighted sum, i.e. the convolution:
+$$f:\mathbb{R}^n\times\mathbb{R}^n\rightarrow \mathbb{R}, \hspace{0.3cm}(\tilde{x},w)\mapsto \sum_{i=1}^n w_i x_i =:y_* $$
+
+The initial weights are generated randomly with a uniform distribution of values. All neurons in the first layer get the same input vector but will produce different convolutions due to the randomness of the weights.
+If all weights would be equal then the backpropagation algorithm that tweaks the weights after each training step would have to change all of them or choose randomly which one to adjust because all would have the same effect. Randomization of the weights takes this decision from the algorithm by "breaking symmetry" in the network \cite[p.~297]{Goodfellow-et-al-2016}. Thus, the randomization is the precondition for the network to learn.
+
+PyTorch calculates the range of values from which it can draw randomly from the amount of input values and the kernel size.
+The possible weights must be in the range $(-\sqrt{k},+\sqrt{k})$, where $$k:=\frac{1}{\text{input channels}\cdot\text{kernel size}}$$
+
+If we look at all the convolutions happening in order to produce the output of one neuron, we can see that an individual input value is included in multiple weighted sums.
+The choice of $k$ ensures that neurons with different kernel size and/or input channel amount produce convolutions that are in the same numerical range. This happens through a kind of normalization in the definition of $k$.
+Each neuron in the neural network has its own weights and draws them randomly from a uniform random distribution, e.g. $w_1,w_2,w_3 \in\mathcal{U}(-\sqrt{k},\sqrt{k})$ like in Figure \ref{fig:initweights}.
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=6cm,keepaspectratio]{writing/01_midterm-report-latex/figures/intialization.pdf}
+        \caption{Random initialization of kernel weights (own visualisation)}
+        \label{fig:initweights}
+    \end{center}
+\end{figure}
+
+
+The weights are then used in function $f$ to apply them to the sub-vector. In the following example a sub-vector $\tilde{x}=[x_1,x_2,x_3]$ of length $3$ is convoluted with a weight vector $w=[w_1,w_2,w_3]$ of length $3$. The calculation for one output value of a neutron can be seen in Figure \ref{fig:calculate1}.
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=6cm,keepaspectratio]{writing/01_midterm-report-latex/figures/1dconvolution.pdf}
+        \caption{1D convolution as simple linear equation (own visualisation)}
+        \label{fig:calculate1}
+    \end{center}
+\end{figure}
+
+In each neuron this calculation is repeated for all sub-vectors of the vector (or only a part of it depending on kernel size, stride and dilation). This results in one matrix multiplication per neuron which applies the kernel to each sub-vector and outputs one vector with the result of all the associated convolutions. The calculation can be seen in Figure \ref{fig:matmult}.
+
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=7cm,keepaspectratio]{writing/01_midterm-report-latex/figures/matmult.pdf}
+        \caption{Convolution as matrix multiplication (own visualisation)}
+        \label{fig:matmult}
+    \end{center}
+\end{figure}
+
+Finally a bias $b$ is added to the weighted sum. The initial bias $b$ is drawn randomly from the same uniform distribution $\mathcal{U}(-\sqrt{k},\sqrt{k})$.
+
+While the weights $w$ determine the focus of the calculations, the bias $b$ directly influences the result of the activation function of the neuron. If the activation function is a Sigmoid function (see Figure \ref{fig:sigmoid}) then e.g. a simple shift to the left (negative $b$) could reduce the whole neuron output to zero and thus make the information covered in the convolutions irrelevant for the network. The bias puts some neurons' activation threshold lower and some higher in the beginning, and allows the network to focus on the relevant information. As was mentioned above in relation to the weights, the initial randomization of the bias allows the network to learn.
+%
+\begin{figure}[h]
+    \begin{center}
+        \begin{tikzpicture}
+          \begin{axis}[
+            height=3cm,
+            width=7cm,
+            ymax=1.1,
+            ymin=-0.1,
+            xlabel=$y$,
+            ylabel={$\sigma(y) = \frac{1}{1+e^{-y}}$}
+          ] 
+            \addplot[mark=none] {1/(1+e^(-x))};
+          \end{axis}
+        \end{tikzpicture}
+        \caption{Sigmoid Function (own visualisation)}
+        \label{fig:sigmoid}
+    \end{center}
+\end{figure}
+%
+The weights and the bias are adjusted depending on the loss after each training step through the backpropagation algorithm.
+
+\subsection{Convolution - from 1D to 2D} \label{Subsection 1.4} 
+The 2D CNN works analogously to the 1D network but inputs and kernels are extended into the second dimension. And thus, a matrix convolution builds weighted sums of numbers spread over the area of a sub-matrices instead of a sequence of numbers of a sub-vector. The second dimension allows to add additional potentially relevant information to each word of the text (see Dictionary approach in Section~\ref{Section 3}).
+\subsection{Data Preprocessing} The tweets were preprocessed in order to remove noise (Lata, 2018). The text was transformed to lower case, and punctuation, whitespaces and standalone digits were removed. Tweet-specific traits, such as URLs, mentions, hashtags, reserved words, emojis and smileys were also removed using the  tweet-preprocessor (cite Özcan). The tweets were then vectorised using a BERT pretrained model (Cite Jacob). BERT models are bidirectionally trained, so they achieve a better sense of language context than single-directional models. For efficiency and reliability reasons we employ the BERT-base-uncased model \cite{Rajapakse2020}. The maximum vector length has been set to 120 and padded with zeros.\par 
+\subsection{Baseline Model Architecture}
+As our baseline model we use a CNN architecture with two hidden layers, ReLU activation function, and batch normalization after each CNN layer. The initial number of channels is set to one, as we input one vector per tweet. The output channels of the first, second, and third CNN layer have been set to 16, 32, and 64 respectively. The out features of the final linear layer have been set to three to match the three classes of the tweet annotation. 
+
+
+\section{Experiments} \label{Section 2} %Max 
+\paragraph{Data:}  
+%Describe the dataset(s) you are using (provide references). If it's not already clear, make sure the associated task is clearly described.
+We use the following two datasets for our classification task:
+\begin{enumerate}
+    \item The dataset from Davidson et al. \cite{hateoffensive}, which is composed of 25,000 tweets. The tweets have been pre-selected using the crowd-sourced "Hatebase" hate speech keyword lexicon (see Section~\ref{Section 3}) and manually labeled using the crowd-sourcing platform CrowdFlower.
+    \item The dataset from Founta et al. \cite{founta2018large}, which comprises of 100,000 manually annotated tweets (again using CrwodFlower) whose annotation has been checked for statistical robustness by the authors. 
+\end{enumerate}
+
+The datasets have the following labelling categories:
+\begin{enumerate}
+    \item Davidson et al.: hate\_speech, offensive\_language, neither
+    \item Founta et al.: hateful, abusive, normal, spam
+\end{enumerate}
+
+Since our focus does not lie on spam detection, we decided to delete all tweets falling under this category from the second dataset. Next, following the definitions of Founta et al. \cite{founta2018large}, offensive and abusive language are two very similar categories, and so we decided to merge both datasets together. The benefits of doing so are a more balanced dataset\footnote{Both original datasets had a huge class in-balance between all three classes, while the resulting dataset is balanced at least between the classes normal, and abusive.} as well as an increased sample size for the hate class, which was highly underrepresented in both datasets. Since the resulting dataset was still unbalanced with respect to the hate category, we used a stratified shuffle split, to finally divide our dataset into training (70\%), validation (15\%), and test set (15\%) (see Figure~\ref{fig:counts}
+\begin{figure}[h]
+    \begin{center}
+        \includegraphics[width=7cm,keepaspectratio]{writing/01_midterm-report-latex/figures/matmult.pdf}
+        \caption{Counts for the respective labels in our datasets (own visualisation)}
+        \label{fig:counts}
+    \end{center}
+\end{figure}
 
 \paragraph{Evaluation method:} Describe the evaluation metric(s) you used, plus any other details necessary to understand your evaluation.
 
@@ -121,7 +245,7 @@ This section contains the following.
 
 Table \ref{tab:some-table} shows an example for formatting a table.
 
-\begin{table}
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{|l|c|}
 \hline
@@ -142,13 +266,44 @@ Method 1 & $70 \pm 3$ \% \\
 You don't need to report any qualitative results (`analysis') in the milestone, though you can if you like.
 
 
-\section{Future work}
+\section{Future work} \label{Section 3} % Michael, Niko
+% Michael: Math of 2d CNN + Dictionary and explaining Visualisation 
+% Niko: Dictionary non-math part - basically done
+% Max: Explain how we will do hyperparameter search
 
-Describe what you plan to do for the rest of the project, and why. You can include stretch goals if you like.
+% Describe what you plan to do for the rest of the project, and why. You can include stretch goals if you like.
+
+In order to further improve our model's performance, in particular with respect to correctly distinguishing hate speech from normal tweets, we are planning to implement the following additional features into our model architecture:
+\paragraph{Adding information retrieved from the "Hatebase" dictionary to the second input dimension:}
+The project "Hatebase"\footnote{\url{https://www.hatebase.org}} is the world's largest structured repository of regionalized, multilingual hate speech, including manually collected, tagged and described terms, which are used in incidents of hate speech in real public online conversations. For the purposes of our model, we have extracted the English-language entries, compiling a dictionary of hateful terms. During the preprocessing, we will check each word in each tweet in our dataset against this dictionary and generate a two-fold output: 
+\begin{itemize}
+    \item A vector containing a 0/1-classification (1: hate term, 0: not a hate term) for each word
+    \item A vector of numerical values indicating the level of hatefulness of each word calculated based on Hatebase's classifications of each term's average offensiveness as well as the unambiguity as a hateful term.
+\end{itemize}
+
+These vectors will then be transformed into tensors and attached to the tensor which was created with BERT from the original tweets. The resulting matrix will then be used as an input for the 2D-architecture for our model.
+
+This additional element should improve our model performance, since it offers the possibility of more clearly classifying tweets in which unambiguously hateful terms are used.
+
+So far, dictionaries / lexicons of hateful terms have mostly been utilized in rule-based machine classification \cite{Martins2018}. For example, in order to select potentially (!) hateful content (such as tweets) from a database of content to establish a baseline or to assess the quality of classification of crowd-sourced manual tagging \cite{hateoffensive}\footnote{Note that, while part of our data was already selected using Hatebase, this applies to only 20\% of our data. Furthermore, we are using the current version of Hatebase, which will result in better detection, since Hatebase is continuously updated.}. Furthermore, to our knowledge, none of these approaches has taken into account an ambiguity measure as provided by the Hatebase dictionary.
+
+Depending on the results of this approach and overall project progress, we might also use the first output in a different way – namely to not only use a 0/1-classification for each word, but to also count the number of hate terms in each tweet, as it has been suggested that most hateful content contains multiple hateful slurs \cite{hateoffensive}.
+
+
+
+
+
+%\paragraph{Transforming our model to a 2D-architecture:}
+
+\paragraph{Hyperparameter search:}
+
+\paragraph{Deepen our model and train on more epochs.}
+
+
 
 
 {\small
-\bibliographystyle{ieee}
+\bibliographystyle{IEEEtran}
 \bibliography{writing/references.bib}
 }
 
