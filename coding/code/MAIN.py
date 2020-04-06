@@ -80,7 +80,7 @@ variables =	{
     "global" : {
         "platform": 'colab', # 'local' 'colab'
         "model_name" : "CNN_experiment",
-        "grid_search_name" : "Retraining_Best_Performing_Model_60_epochs"
+        "grid_search_name" : "Retraining_Best_Performing_Model_90_epochs"
     },
     "optimizer" : {
         "type": ["Adam", "RMSprop",  "SGD"],
@@ -88,7 +88,7 @@ variables =	{
         "momentum": 0.9
     },
     "training" : {
-        "epochs" : 120,
+        "epochs" : 90,
         "sampler_true_class_weights_false": [True,False], # If set to True Sampler is set to True and Class Weights of Loss Function Criterion are set to False 
         #If set to False Sampler is set to False and Class Weights are set True. In this case shuffle will be automatically set to True during training. 
         "scheduler" : [True, False], 
