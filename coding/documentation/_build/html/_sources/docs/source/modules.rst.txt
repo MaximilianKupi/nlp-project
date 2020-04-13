@@ -19,5 +19,6 @@ code
    M2_1_CNN_1d_experiment
    M2_1_CNN_1d_fromClass
    M2_1_CNN_2d_experiment
-   M3_Testing_Model
-   MAIN
+   M3_1_data_preprocessing
+   M3_2_training_model
+   M3_3_testing_model

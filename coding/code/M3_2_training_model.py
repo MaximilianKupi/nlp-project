@@ -1,5 +1,9 @@
-"""Our main file to run the training of model.
+"""The main file to run the training of model.
 """
+
+########################
+####### TRAINING #######
+########################
 
 #### IMPORTING PACKAGES ####
 
@@ -12,18 +16,6 @@ import csv
 
 ## loading our own created functions 
 
-# for Preprocessing
-
-# # function to clean the data
-# from M1_2_cleaning_data import data_cleaning
-# # function to split the data into train, val, and test set
-# from M1_3_splitting_datasets import split_data
-# # functino to vectorize the text data using pretrained BERT
-# from M1_4_word_sentence_vectorisation import vectorize
-# # function to search for hatebase dictionary terms in tweets
-# from M1_5_dictionary_approach import apply_dict
-
-
 # for Model Setup and Training
 
 # # class to setup the model
@@ -35,49 +27,6 @@ from M2_1_CNN_2d_experiment import CNN_2d_experiment
 
 # # class to setup the dataloading, the training and the evaluation  
 from M2_0_NN_Training_Setup import *
-
-
-
-########################
-##### OUR PIPELINE #####
-########################
-
-
-#### PREPROCESSING ####
-
-# ## only done once at the beginning ##
-# # getting the data from our exchange base
-# data = pd.read_csv("exchange_base/data.csv")
-
-# # cleaning the data
-# data_cleaned = data_cleaning(data=data)
-
-# # splitting the data 
-# train_set, val_set, test_set = split_data(data=data_cleaned)
-
-# ## reading the train, val, and test set
-# train_set = pd.read_csv("exchange_base/train_set.csv")
-# val_set = pd.read_csv("exchange_base/val_set.csv")
-# test_set = pd.read_csv("exchange_base/test_set.csv")
-
-
-# applying BERT vectorizer on train, validation and test set
-# train set
-
-# train_matrix, train_labels = vectorize(train_set)
-
-# val set
-# train_vectors, val_labels = vectorize(val_set)
-
-# test set
-#train_vectors, test_labels = vectorize(test_set)
-
-# applying dictionary approach
-# HateFrequency, HateIntensity, dataset_with_hatebasecount = apply_dict(data=data)
-
-
-
-#### MODEL AND TRAINING ####
 
 
 # SETTING VARIABLES
