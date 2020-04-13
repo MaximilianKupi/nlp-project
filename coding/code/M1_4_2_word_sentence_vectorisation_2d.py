@@ -54,6 +54,11 @@ def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textCo
 
     for i,tweetText in enumerate(data[textColumn].values):
         # Encode tweet
+        if(isinstance(tweetText, float)): #empty value is interpreted as nan
+            print("Float tweet found in data "+str(i)+": \""+str(tweetText)+"\" --> interpreting it as string with str(tweet)")
+        
+        tweetText = str(tweetText) #empty tweets were interpreted as float 
+
         encoding = tokenizer.encode(tweetText, max_length=maxVectorLength)
         # Stats output
         lengthSample.append(len(encoding))
@@ -130,7 +135,7 @@ def createTensors(path,stage):
     # Use torch.save(tensor, 'file.pt') and torch.load('file.pt') to save Tensors to file
 
 if __name__ == "__main__":
-    path = "coding/code/exchange_base/"
+    path = "exchange_base/"
 
     createTensors(path,"train")
     createTensors(path,"val")
