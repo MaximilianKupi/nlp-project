@@ -1,3 +1,5 @@
+"""This is the script to define the settings for the convolutiona neural network using the 2D approach.
+"""
 import torch
 import numpy as np
 from torch.utils.data.dataset import TensorDataset
@@ -18,7 +20,11 @@ from torchviz import make_dot, make_dot_from_trace
 import json
 
 class CNN_2d_experiment(nn.Module):
-    # Convolutional neural network (two convolutional layers)
+    """This class sets up an experiment for a 2D CNN with two convolutional layers.
+    
+    Attributes:
+        nn.Module: Base class for all neural network models.
+    """
     def __init__(self,variables):
         """ Initializes the CNN as a class object
         """        
