@@ -139,3 +139,4 @@ if __name__ == "__main__":
 
     createTensors(path,"train")
     createTensors(path,"val")
+    createTensors(path,"test")
