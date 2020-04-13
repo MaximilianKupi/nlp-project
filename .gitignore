@@ -3,3 +3,4 @@
 *.vscode
 .ipynb_checkpoints
 **/FirstGridSearch
+**/Model_Results
