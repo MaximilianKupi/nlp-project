@@ -27,10 +27,11 @@ import csv
 #from M2_1_CNN_1d import CNN_1d
 # since we are still in the experimenting mode we use the CNN experiment
 from M2_1_CNN_1d_experiment import CNN_1d_experiment
+from M2_1_CNN_2d_experiment import CNN_2d_experiment
+
 
 # # class to setup the dataloading, the training and the evaluation  
 from M2_0_NN_Training_Setup import *
-
 
 
 
@@ -78,9 +79,10 @@ from M2_0_NN_Training_Setup import *
 # SETTING VARIABLES
 variables =	{
     "global" : {
-        "platform": 'colab', # 'local' 'colab'
+        "platform": 'local', # 'local' 'colab'
         "model_name" : "CNN_experiment",
-        "grid_search_name" : "Retraining_Best_Performing_Model_90_epochs"
+        "grid_search_name" : "Retraining_Best_Performing_Model_90_epochs",
+        "dimension_of_model" : "1D" #2D
     },
     "optimizer" : {
         "type": ["Adam", "RMSprop",  "SGD"],
@@ -159,129 +161,142 @@ all_params = list(ParameterGrid(param_grid))
 # Running through the grid
 #TODO: Add run Run Number 27 to Results Overview.scv
 
-for run_number, current_params in enumerate(all_params):
-    if run_number != 26:
-        print('skipping', run_number)
-    else:
-
-        print(current_params)
-        # writing the parameters of that grid search run into the dictionary
-        variables['optimizer']['learning_rate'] = current_params['learning_rate']
-        variables['optimizer']['type'] = current_params['optimizer_type']
-        variables['training']["sampler_true_class_weights_false"] = current_params["sampler_true_class_weights_false" ]
-        variables['training']["scheduler"] = current_params['scheduler']
-
-
-        # SPECIFYING  PREFIXES AND FILEPATHS 
-
-        uniqueInputPrefix = ""
-        uniqueOutputPrefix = str(run_number) + "_" + variables['global']['model_name'] + "_optimizer_" + variables['optimizer']['type'] + "_lr_" + str(variables['optimizer']['learning_rate']).split('.')[-1] + "_epochs_" + str(variables['training']['epochs']) + "_batchsize_" + str(variables['training']['input']['batch_size']) + "_samplerTclassweightsF_" + str(variables['training']['sampler_true_class_weights_false'])  + "_scheduler_" + str(variables['training']['scheduler'])
-
-        # setting general path
-        if variables['global']['platform'] == 'colab':
-            variables['global']['path'] = "exchange_base/" 
-        elif variables['global']['platform'] == 'local':
-            variables['global']['path'] = "coding/code/exchange_base/"
+# protecting things from being run during documentation process:
+if __name__ == "__main__":
+    
+    for run_number, current_params in enumerate(all_params):
+        if run_number != 26:
+            print('skipping', run_number)
         else:
-            print('Please specify platform in variables')
-            raise ValueError
+
+            print(current_params)
+            # writing the parameters of that grid search run into the dictionary
+            variables['optimizer']['learning_rate'] = current_params['learning_rate']
+            variables['optimizer']['type'] = current_params['optimizer_type']
+            variables['training']["sampler_true_class_weights_false"] = current_params["sampler_true_class_weights_false" ]
+            variables['training']["scheduler"] = current_params['scheduler']
 
 
-        # Training input
-        stage = "train"
-        variables['training']['input']['vectors'] = variables['global']['path'] + uniqueInputPrefix + stage +  "_vectorized.pt"
-        variables['training']['input']['labels'] = variables['global']['path']+ uniqueInputPrefix + stage +  "_labels.pt"
-        # Model Output
-        save_dir = variables['global']['path'] + "Model_Results/" + variables['global']['grid_search_name'] + "/" + uniqueOutputPrefix
-        if not os.path.isdir(save_dir):
-            os.makedirs(save_dir)
-        variables['output']['filepath'] = save_dir
+            # SPECIFYING  PREFIXES AND FILEPATHS 
 
-        # Evaluation
-        stage = "val"
-        variables['validation']['input']['vectors'] = variables['global']['path']+ uniqueInputPrefix + stage +  "_vectorized.pt"
-        variables['validation']['input']['labels'] = variables['global']['path']+ uniqueInputPrefix + stage +  "_labels.pt"
-        # path to save the dictionary of whole model performance in run
-        results_json_path = variables['output']['filepath'] +   "/all_results_of_model.json"
-        variables['validation']['output']['results'] = results_json_path
+            uniqueInputPrefix = ""
+            uniqueOutputPrefix = str(run_number) + "_" + variables['global']['model_name'] + "_optimizer_" + variables['optimizer']['type'] + "_lr_" + str(variables['optimizer']['learning_rate']).split('.')[-1] + "_epochs_" + str(variables['training']['epochs']) + "_batchsize_" + str(variables['training']['input']['batch_size']) + "_samplerTclassweightsF_" + str(variables['training']['sampler_true_class_weights_false'])  + "_scheduler_" + str(variables['training']['scheduler'])
+
+            # setting general path
+            if variables['global']['platform'] == 'colab':
+                variables['global']['path'] = "exchange_base/" 
+            elif variables['global']['platform'] == 'local':
+                variables['global']['path'] = "/Users/mxm/Google Drive/Masterstudium/Inhalte/4th Semester/NLP/nlp-project/coding/code/exchange_base/"
+            else:
+                print('Please specify platform in variables')
+                raise ValueError
 
 
-        # loading the data saved during preprocessing: 
-        train_vectors = torch.load(variables['global']['path'] + "train_vectorized_1d.pt")
-        train_labels = torch.load(variables['global']['path'] + "train_labels_1d.pt")
+            # Training Output
+            save_dir = variables['global']['path'] + "Model_Results/" + variables['global']['grid_search_name'] + "/" + uniqueOutputPrefix
+            if not os.path.isdir(save_dir):
+                os.makedirs(save_dir)
+            variables['output']['filepath'] = save_dir
 
-        # val set
-        # train_vectors, val_labels = vectorize(val_set)
-        val_vectors = torch.load(variables['global']['path'] + "val_vectorized_1d.pt")
-        val_labels = torch.load(variables['global']['path'] + "val_labels_1d.pt")
+            # Evaluation path to save the dictionary of whole model performance in run
+            results_json_path = variables['output']['filepath'] +   "/all_results_of_model.json"
+            variables['validation']['output']['results'] = results_json_path
+
+            # loading the vectors and labels from the exchange base
+            if variables['global']['dimension_of_model'] == '1D': 
+                # loading the data saved during preprocessing: 
+                train_vectors = torch.load(variables['global']['path'] + "train_vectorized_1d.pt")
+                train_labels = torch.load(variables['global']['path'] + "train_labels_1d.pt")
+
+                # val set
+                val_vectors = torch.load(variables['global']['path'] + "val_vectorized_1d.pt")
+                val_labels = torch.load(variables['global']['path'] + "val_labels_1d.pt")
+
+            elif variables['global']['dimension_of_model'] == '2D': 
+                # loading the data saved during preprocessing: 
+                train_vectors = torch.load(variables['global']['path'] + "train_vectorized_2d.pt")
+                train_labels = torch.load(variables['global']['path'] + "train_labels_2d.pt")
+
+                # val set
+                val_vectors = torch.load(variables['global']['path'] + "val_vectorized_2d.pt")
+                val_labels = torch.load(variables['global']['path'] + "val_labels_2d.pt")
+
+            else:
+                print('Please specify correct dimension of model.')
+
+            # RUNNING THE MODEL
+        
+            # Create new object of NNSetup class
+            setup = NN_Training_Setup(variables)
+
+            # load Data into the object NNSetup
+            setup.loadDataFromVariable("training",train_vectors,train_labels)
+            setup.loadDataFromVariable("validation",val_vectors,val_labels)
+
+            # Create Neural Network object from class nn.module
+            if variables['global']['dimension_of_model'] == '1D': 
+                model = CNN_1d_experiment(variables)
+
+            elif variables['global']['dimension_of_model'] == '2D': 
+                model = CNN_2d_experiment(variables)
+
+            else:
+                print('Please specify correct dimension of model.')
+            
 
 
+            # Create Neural Network object with the model from class
+            #model = CNN_1d_experiment(initial_num_channels=1, num_channels=256, hidden_dim=256, num_classes=3, dropout_p=0.1)
+
+            # add model to NNSetup object
+            setup.addNN(model)
+
+            # define Criterion
+            setup.setCriterion(train_labels)
+
+            # define Optimizer
+            setup.setOptimizer()
+
+            # set the Scheduler
+            setup.setScheduler()
+
+            # run with demo limit
+            #result = setup.train(demoLimit=5000, saveToFile=True) # result can be saved automatically with dictionary and train(self,saveToFile=True)
+
+            # run without demo limit
+            setup.train() # result can be saved automatically with dictionary and train(self,saveToFile=True)
+        
+            # Getting results of best epoch from this run
+            with open(results_json_path, 'r') as f:
+                json_data = json.load(f)
+
+            df = pd.DataFrame(json_data['epochs']) 
+            df = df[df.stage=='validation']
 
 
-        # RUNNING THE MODEL
-    
-        # Create new object of NNSetup class
-        setup = NN_Training_Setup(variables)
+            max_accuracy = df.accuracy.max()
+            max_accuracy_epoch = df[df.accuracy == max_accuracy].epoch.values[0]
+            max_f1_macro = df.f1_score_macro.max()
+            max_f1_macro_epoch = df[df.f1_score_macro == max_f1_macro].epoch.values[0]
+            max_hate_f1_score = df.f1_score_hate.max() 
+            max_hate_f1_score_epoch = df[df.f1_score_hate == max_hate_f1_score].epoch.values[0]
 
-        # load Data into the object NNSetup
-        setup.loadDataFromVariable("training",train_vectors,train_labels)
-        setup.loadDataFromVariable("validation",val_vectors,val_labels)
+            ResultsOverviewDict = {
+                "run_number" : run_number,
+                "max_accuracy" : max_accuracy,
+                "max_accuracy_epoch" : max_accuracy_epoch, 
+                "max_f1_macro" : max_f1_macro,
+                "max_f1_macro_epoch" : max_f1_macro_epoch,
+                "max_hate_f1_score" : max_hate_f1_score,
+                "max_hate_f1_score_epoch" : max_hate_f1_score_epoch
+            }
 
-        # Create Neural Network object from class nn.module
-        model = CNN_1d_experiment(variables)
-
-        # Create Neural Network object with the model from class
-        #model = CNN_1d_experiment(initial_num_channels=1, num_channels=256, hidden_dim=256, num_classes=3, dropout_p=0.1)
-
-        # add model to NNSetup object
-        setup.addNN(model)
-
-        # define Criterion
-        setup.setCriterion(train_labels)
-
-        # define Optimizer
-        setup.setOptimizer()
-
-        # set the Scheduler
-        setup.setScheduler()
-
-        # run with demo limit
-        #result = setup.train(demoLimit=5000, saveToFile=True) # result can be saved automatically with dictionary and train(self,saveToFile=True)
-
-        # run without demo limit
-        setup.train(saveToFile=True) # result can be saved automatically with dictionary and train(self,saveToFile=True)
-    
-        # Getting results of best epoch from this run
-        with open(results_json_path, 'r') as f:
-            json_data = json.load(f)
-
-        df = pd.DataFrame(json_data['epochs']) 
-        df = df[df.stage=='validation']
-
-
-        max_accuracy = df.accuracy.max()
-        max_accuracy_epoch = df[df.accuracy == max_accuracy].epoch.values[0]
-        max_f1_macro = df.f1_score_macro.max()
-        max_f1_macro_epoch = df[df.f1_score_macro == max_f1_macro].epoch.values[0]
-        max_hate_f1_score = df.f1_score_hate.max() 
-        max_hate_f1_score_epoch = df[df.f1_score_hate == max_hate_f1_score].epoch.values[0]
-
-        ResultsOverviewDict = {
-            "run_number" : run_number,
-            "max_accuracy" : max_accuracy,
-            "max_accuracy_epoch" : max_accuracy_epoch, 
-            "max_f1_macro" : max_f1_macro,
-            "max_f1_macro_epoch" : max_f1_macro_epoch,
-            "max_hate_f1_score" : max_hate_f1_score,
-            "max_hate_f1_score_epoch" : max_hate_f1_score_epoch
-        }
-
-        # Saving results of grid search
-        file = variables['global']['path'] + "Model_Results/" + variables['global']['grid_search_name'] + "/" + "ResultsOverview.csv"
-        with open(file, "a+") as file:
-            csv_writer = csv.DictWriter(file, fieldnames=ResultsOverviewDict.keys())
-            if run_number == 0:
-                csv_writer.writeheader()
-            csv_writer.writerow(ResultsOverviewDict)
+            # Saving results of grid search
+            file = variables['global']['path'] + "Model_Results/" + variables['global']['grid_search_name'] + "/" + "ResultsOverview.csv"
+            with open(file, "a+") as file:
+                csv_writer = csv.DictWriter(file, fieldnames=ResultsOverviewDict.keys())
+                if run_number == 0:
+                    csv_writer.writeheader()
+                csv_writer.writerow(ResultsOverviewDict)
 
 

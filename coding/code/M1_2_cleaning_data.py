@@ -1,3 +1,6 @@
+"""This is the script to defined the data cleaning function for our preprocessing.
+"""
+
 # Importing the required packages
 import pandas as pd
 import re
@@ -13,12 +16,12 @@ def data_cleaning(data = None, standard_twitter_cleaning = True, lower_casing = 
     Args:
         data: Specify the input dataframe. If nothing is specified, the function will get the data from our exchange base folder.
       
-        The data cleaning can be customized by setting the respective methods to False:
-        standard_twitter_cleaning
-        lower_casing
-        digits_removal
-        punct_removal
-        whitespace_removal
+        
+        standard_twitter_cleaning (bool): Whether or not to use standard twitter cleaining package. Default: True. 
+        lower_casing (bool): Whether or not to lower case the words. Default: True.
+        digits_removal (bool): Whether or not to remove digits. Default: True.
+        punct_removal (bool): Whether or not to remove anything but words. Default: True.
+        whitespace_removal (bool): Whether or not to remove excessive white space in between words. Default: True.
 
     Returns:
         The cleaned data frame.

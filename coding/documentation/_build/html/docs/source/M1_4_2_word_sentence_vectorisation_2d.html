@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>M1_4_2_word_sentence_vectorisation_2d module &#8212; Hate Speech Detection with Deep Learning Models in PyTorch April 2020 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-M1_4_2_word_sentence_vectorisation_2d">
+<span id="m1-4-2-word-sentence-vectorisation-2d-module"></span><h1>M1_4_2_word_sentence_vectorisation_2d module<a class="headerlink" href="#module-M1_4_2_word_sentence_vectorisation_2d" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="M1_4_2_word_sentence_vectorisation_2d.createTensors">
+<code class="sig-prename descclassname">M1_4_2_word_sentence_vectorisation_2d.</code><code class="sig-name descname">createTensors</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">stage</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_4_2_word_sentence_vectorisation_2d.createTensors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens the file:
+- path + stage + “_set.csv”
+vectorizes the data and saves the labels separate as
+- path + stage +  “_vectorized.pt”
+- path + stage +  “_labels.pt”</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – the path wheere the dataset is and the tensors will be saved to</p></li>
+<li><p><strong>stage</strong> (<em>str</em>) – prefix of the file</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="M1_4_2_word_sentence_vectorisation_2d.vectorize">
+<code class="sig-prename descclassname">M1_4_2_word_sentence_vectorisation_2d.</code><code class="sig-name descname">vectorize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">maxVectorLength</span><span class="o">=</span><span class="default_value">120</span></em>, <em class="sig-param"><span class="n">matrixColumns</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">matrixRows</span><span class="o">=</span><span class="default_value">12</span></em>, <em class="sig-param"><span class="n">textColumn</span><span class="o">=</span><span class="default_value">'tweet'</span></em>, <em class="sig-param"><span class="n">labelColumn</span><span class="o">=</span><span class="default_value">'label'</span></em>, <em class="sig-param"><span class="n">pretrainedModel</span><span class="o">=</span><span class="default_value">'bert-base-uncased'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">randomSeed</span><span class="o">=</span><span class="default_value">42</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_4_2_word_sentence_vectorisation_2d.vectorize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs a two tensors.
+One containing the vectorized entries of the column and one containing the associated labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>dataframe</em>) – The dataset from which the data should be extracted</p></li>
+<li><p><strong>maxVectorLength</strong> (<em>int</em>) – The length of the vector embedding. Will be padded with zeros if shorter</p></li>
+<li><p><strong>matrixColumns</strong> (<em>int</em>) – Vector embedding will be reshaped to matrix with this column amount</p></li>
+<li><p><strong>matrixRows</strong> (<em>int</em>) – Vector embedding will be reshaped to matrix with this row amount</p></li>
+<li><p><strong>textColumn</strong> (<em>str</em>) – The name of the column in the dataframe data containing the tweets</p></li>
+<li><p><strong>labelColumn</strong> (<em>str</em>) – The name of the column in the dataframe data contianing the labels</p></li>
+<li><p><strong>pretrainedModel</strong> (<em>str</em>) – The name of the model to be used from the transformers package</p></li>
+<li><p><strong>verbose</strong> (<em>str</em>) – Whether or not the script should output stats information about the input data: average, median, max, min of word count in tweets</p></li>
+<li><p><strong>randomSeed</strong> (<em>str</em>) – Random seed to ensure that results are reproducable</p></li>
+<li><p><strong>Is random seed really necessary in this script?</strong> (<em>TODO</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The vectorized column of the dataframe data
+torch.tensor:The Label Vector for the associated vectorized column</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>torch.tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Hate Speech Detection with Deep Learning Models in PyTorch</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Carlos Eduardo Posada, Maximilian Kupi, Michael Bodnar, and Nikolas Schmidt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/docs/source/M1_4_2_word_sentence_vectorisation_2d.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

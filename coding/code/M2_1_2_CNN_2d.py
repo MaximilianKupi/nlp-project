@@ -16,156 +16,156 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchviz import make_dot, make_dot_from_trace
 
+if __name__ == "__main__":
+    ######################
+    ## Data loading     ##
+    ######################
+    path = "/Users/mxm/Google Drive/Masterstudium/Inhalte/4th Semester/NLP/nlp-project/coding/code/exchange_base/"
 
-######################
-## Data loading     ##
-######################
-path = "coding/code/exchange_base/"
+    stage = "train"
+    input_file_name_vectorized = path + stage +  "_vectorized.pt"
+    input_file_name_labels = path + stage +  "_labels.pt"
+    vectors = torch.load(input_file_name_vectorized)
+    # Loading the label tensor
+    labels = torch.load(input_file_name_labels)
 
-stage = "train"
-input_file_name_vectorized = path + stage +  "_vectorized.pt"
-input_file_name_labels = path + stage +  "_labels.pt"
-vectors = torch.load(input_file_name_vectorized)
-# Loading the label tensor
-labels = torch.load(input_file_name_labels)
-
-stage = "val"
-input_file_name_vectorized_val = path + stage +  "_vectorized.pt"
-input_file_name_labels_val = path + stage +  "_labels.pt"
-vectors_val = torch.load(input_file_name_vectorized_val)
-# Loading the label tensor
-labels_val = torch.load(input_file_name_labels_val)
-
-
-######################
-## Configuration    ##
-######################
-# Batch Size for DataLoader
-batch_size = 1
-num_epochs = 5
-num_classes = 3
-learning_rate = 0.001
+    stage = "val"
+    input_file_name_vectorized_val = path + stage +  "_vectorized.pt"
+    input_file_name_labels_val = path + stage +  "_labels.pt"
+    vectors_val = torch.load(input_file_name_vectorized_val)
+    # Loading the label tensor
+    labels_val = torch.load(input_file_name_labels_val)
 
 
-######################
-## Setup for CNN    ##
-######################
-# Output Input Data information
-print("Matrix length: {:>5,}".format(len(vectors)))
-print("labels length: {:>5,}".format(len(labels)))
-
-# Combine Vectorizations with labels in TensorDataset
-dataset = TensorDataset(vectors,labels)
-# Setup PyTorch Dataloader
-dataset_loader = DataLoader(dataset,
-                #sampler = RandomSampler(dataset),
-                batch_size = batch_size)
+    ######################
+    ## Configuration    ##
+    ######################
+    # Batch Size for DataLoader
+    batch_size = 1
+    num_epochs = 5
+    num_classes = 3
+    learning_rate = 0.001
 
 
-# Combine Vectorizations with labels in TensorDataset
-dataset_val = TensorDataset(vectors_val,labels_val)
-# Setup PyTorch Dataloader
-dataset_loader_val = DataLoader(dataset_val,
-                #sampler = RandomSampler(dataset),
-                batch_size = batch_size)
+    ######################
+    ## Setup for CNN    ##
+    ######################
+    # Output Input Data information
+    print("Matrix length: {:>5,}".format(len(vectors)))
+    print("labels length: {:>5,}".format(len(labels)))
 
-classes = (0, 1, 2) #'hateful': '0', 'abusive': '1', 'normal': '2'
-
-
-######################
-## CUDA config      ##
-######################
-# If there's a GPU available...
-if torch.cuda.is_available():    
-
-    # Tell PyTorch to use the GPU.    
-    device = torch.device("cuda")
-
-    print('There are %d GPU(s) available.' % torch.cuda.device_count())
-
-    print('We will use the GPU:', torch.cuda.get_device_name(0))
-
-# If not...
-else:
-    print('No GPU available, using the CPU instead.')
-    device = torch.device("cpu")
-
-# #### Test
-# # import single data point
-# vec = vectors[0]
-# label = labels[0]
+    # Combine Vectorizations with labels in TensorDataset
+    dataset = TensorDataset(vectors,labels)
+    # Setup PyTorch Dataloader
+    dataset_loader = DataLoader(dataset,
+                    #sampler = RandomSampler(dataset),
+                    batch_size = batch_size)
 
 
-# Convolutional neural network (two convolutional layers)
-class CNN(nn.Module):
-    def __init__(self, num_classes=3):
-        super(CNN, self).__init__()
-        self.layer1 = nn.Sequential(
-            nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=2),
-            nn.BatchNorm2d(16),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
-        self.layer2 = nn.Sequential(
-            nn.Conv2d(16, 32, kernel_size=5, stride=1, padding=2),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = nn.Linear(288, num_classes) #7*7*32
-        
-    def forward(self, x):
-        out = self.layer1(x)
-        out = self.layer2(out)
-        out = out.reshape(out.size(0), -1)
-        out = self.fc(out)
-        return out
+    # Combine Vectorizations with labels in TensorDataset
+    dataset_val = TensorDataset(vectors_val,labels_val)
+    # Setup PyTorch Dataloader
+    dataset_loader_val = DataLoader(dataset_val,
+                    #sampler = RandomSampler(dataset),
+                    batch_size = batch_size)
 
-model = CNN(num_classes).to(device)
-
-# Output model graphviz
-#graph = make_dot(model(tweetBertTensor.unsqueeze(0)), params=dict(model.named_parameters()))
+    classes = (0, 1, 2) #'hateful': '0', 'abusive': '1', 'normal': '2'
 
 
-# Loss and optimizer
-criterion = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+    ######################
+    ## CUDA config      ##
+    ######################
+    # If there's a GPU available...
+    if torch.cuda.is_available():    
 
-# Train the model
-total_step = len(dataset_loader)
-for epoch in range(num_epochs):
-    for i, (tweetBertTensor, labels) in enumerate(dataset_loader):
-        tweetBertTensor = tweetBertTensor.to(device)
-        labels = labels.to(device)
-        
-        # Forward pass
-        outputs = model(tweetBertTensor.unsqueeze(0))
-        loss = criterion(outputs, labels)
-        
-        # Backward and optimize
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-        
-        if (i+1) % 100 == 0:
-            print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
-                   .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+        # Tell PyTorch to use the GPU.    
+        device = torch.device("cuda")
 
-# Save model checkpoint
-torch.save(model.state_dict(), path +"model" + "_epochs" + str(num_epochs) + ".ckpt")
+        print('There are %d GPU(s) available.' % torch.cuda.device_count())
+
+        print('We will use the GPU:', torch.cuda.get_device_name(0))
+
+    # If not...
+    else:
+        print('No GPU available, using the CPU instead.')
+        device = torch.device("cpu")
+
+    # #### Test
+    # # import single data point
+    # vec = vectors[0]
+    # label = labels[0]
 
 
+    # Convolutional neural network (two convolutional layers)
+    class CNN(nn.Module):
+        def __init__(self, num_classes=3):
+            super(CNN, self).__init__()
+            self.layer1 = nn.Sequential(
+                nn.Conv2d(1, 16, kernel_size=3, stride=1, padding=2),
+                nn.BatchNorm2d(16),
+                nn.ReLU(),
+                nn.MaxPool2d(kernel_size=2, stride=2))
+            self.layer2 = nn.Sequential(
+                nn.Conv2d(16, 32, kernel_size=5, stride=1, padding=2),
+                nn.BatchNorm2d(32),
+                nn.ReLU(),
+                nn.MaxPool2d(kernel_size=2, stride=2))
+            self.fc = nn.Linear(288, num_classes) #7*7*32
+            
+        def forward(self, x):
+            out = self.layer1(x)
+            out = self.layer2(out)
+            out = out.reshape(out.size(0), -1)
+            out = self.fc(out)
+            return out
 
-# Test the model
-model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
-with torch.no_grad():
-    correct = 0
-    total = 0
-    for tweetBertTensor, labels in dataset_loader_val:
-        
-        tweetBertTensor = tweetBertTensor.to(device)
-        labels = labels.to(device)
-        outputs = model(tweetBertTensor.unsqueeze(0))
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
+    model = CNN(num_classes).to(device)
 
-    print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))
+    # Output model graphviz
+    #graph = make_dot(model(tweetBertTensor.unsqueeze(0)), params=dict(model.named_parameters()))
+
+
+    # Loss and optimizer
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+
+    # Train the model
+    total_step = len(dataset_loader)
+    for epoch in range(num_epochs):
+        for i, (tweetBertTensor, labels) in enumerate(dataset_loader):
+            tweetBertTensor = tweetBertTensor.to(device)
+            labels = labels.to(device)
+            
+            # Forward pass
+            outputs = model(tweetBertTensor.unsqueeze(0))
+            loss = criterion(outputs, labels)
+            
+            # Backward and optimize
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+            
+            if (i+1) % 100 == 0:
+                print ('Epoch [{}/{}], Step [{}/{}], Loss: {:.4f}' 
+                    .format(epoch+1, num_epochs, i+1, total_step, loss.item()))
+
+    # Save model checkpoint
+    torch.save(model.state_dict(), path +"model" + "_epochs" + str(num_epochs) + ".ckpt")
+
+
+
+    # Test the model
+    model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
+    with torch.no_grad():
+        correct = 0
+        total = 0
+        for tweetBertTensor, labels in dataset_loader_val:
+            
+            tweetBertTensor = tweetBertTensor.to(device)
+            labels = labels.to(device)
+            outputs = model(tweetBertTensor.unsqueeze(0))
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+
+        print('Test Accuracy of the model on the 10000 test tweetBertTensor: {} %'.format(100 * correct / total))

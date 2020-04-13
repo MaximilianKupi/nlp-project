@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>M1_3_splitting_datasets module &#8212; Hate Speech Detection with Deep Learning Models in PyTorch April 2020 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-M1_3_splitting_datasets">
+<span id="m1-3-splitting-datasets-module"></span><h1>M1_3_splitting_datasets module<a class="headerlink" href="#module-M1_3_splitting_datasets" title="Permalink to this headline">¶</a></h1>
+<p>This is the script to define our data splitting for the preprocessing.</p>
+<dl class="py function">
+<dt id="M1_3_splitting_datasets.split_data">
+<code class="sig-prename descclassname">M1_3_splitting_datasets.</code><code class="sig-name descname">split_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">train_p</span><span class="o">=</span><span class="default_value">0.7</span></em>, <em class="sig-param"><span class="n">val_p</span><span class="o">=</span><span class="default_value">0.15</span></em>, <em class="sig-param"><span class="n">test_p</span><span class="o">=</span><span class="default_value">0.15</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">42</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">'label'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_3_splitting_datasets.split_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the cleaned dataset and splits it into train, validation and test set based on scikit learn’s StratifiedShuffleSplit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Specify the input data frame. If nothing is specified, the function will get the data from our exchange base folder.</p></li>
+<li><p><strong>random_state</strong> – Specify the seed for randomness in the shuffle split.</p></li>
+<li><p><strong>y</strong> (<em>default to 'label'</em>) – Sets the the column in the dataframe, where the labels are stored and which will be used as reference for the stratified sampling method.</p></li>
+<li><p><strong>train_p</strong> (<em>default set to 0.7</em>) – Specifying the proportion of the training split.</p></li>
+<li><p><strong>val_p</strong> (<em>default set to 0.15</em>) – Specifying the proportion of the validation split.</p></li>
+<li><p><strong>test_p</strong> (<em>default set to 0.15</em>) – Specifying the proportion of the test split.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Training, validation, and test set (in that order). To assign them put “train_set, val_set, test_set = split_data()”.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>Exception Error</strong> – If train_p, val_p, test_p don’t sum up to 1.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Hate Speech Detection with Deep Learning Models in PyTorch</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Carlos Eduardo Posada, Maximilian Kupi, Michael Bodnar, and Nikolas Schmidt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/docs/source/M1_3_splitting_datasets.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

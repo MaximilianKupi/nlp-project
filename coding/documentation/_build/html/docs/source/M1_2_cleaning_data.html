@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>M1_2_cleaning_data module &#8212; Hate Speech Detection with Deep Learning Models in PyTorch April 2020 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-M1_2_cleaning_data">
+<span id="m1-2-cleaning-data-module"></span><h1>M1_2_cleaning_data module<a class="headerlink" href="#module-M1_2_cleaning_data" title="Permalink to this headline">¶</a></h1>
+<p>This is the script to defined the data cleaning function for our preprocessing.</p>
+<dl class="py function">
+<dt id="M1_2_cleaning_data.data_cleaning">
+<code class="sig-prename descclassname">M1_2_cleaning_data.</code><code class="sig-name descname">data_cleaning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">standard_twitter_cleaning</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">lower_casing</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">digits_removal</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">punct_removal</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">whitespace_removal</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_2_cleaning_data.data_cleaning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleans the dataset by performing standard Twitter cleaning (removing URLs, mentions, hashtags, reserved words, emojis and smileys), changing the text to lower case, and removing punctuation, whitespaces and standalone digits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Specify the input dataframe. If nothing is specified, the function will get the data from our exchange base folder.</p></li>
+<li><p><strong>standard_twitter_cleaning</strong> – </p></li>
+<li><p><strong>lower_casing</strong> – </p></li>
+<li><p><strong>digits_removal</strong> – </p></li>
+<li><p><strong>punct_removal</strong> – </p></li>
+<li><p><strong>whitespace_removal</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The cleaned data frame.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Hate Speech Detection with Deep Learning Models in PyTorch</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Carlos Eduardo Posada, Maximilian Kupi, Michael Bodnar, and Nikolas Schmidt.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/docs/source/M1_2_cleaning_data.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
