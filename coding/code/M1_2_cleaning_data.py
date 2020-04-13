@@ -1,5 +1,4 @@
-# Importing the required modules
-
+# Importing the required packages
 import pandas as pd
 import re
 import string
@@ -7,11 +6,23 @@ import preprocessor as p
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
+# defining the function
 def data_cleaning(data = None, standard_twitter_cleaning = True, lower_casing = True, digits_removal = True, punct_removal = True, whitespace_removal = True):
-    """This funtion cleans the dataset by performing standard Twitter cleaning (removing URLs, mentions, hashtags, reserved words, emojis and smileys), changing the text to lower case, and removing punctuation, whitespaces and standalone digits.
-        The input dataframe can be specified with the argument "data". If nothing is specified, the function will get the data from our GitHub repository.
+    """Cleans the dataset by performing standard Twitter cleaning (removing URLs, mentions, hashtags, reserved words, emojis and smileys), changing the text to lower case, and removing punctuation, whitespaces and standalone digits.
+
+    Args:
+        data: Specify the input dataframe. If nothing is specified, the function will get the data from our exchange base folder.
+      
         The data cleaning can be customized by setting the respective methods to False:
-    standard_twitter_cleaning = True, lower_casing = True, digits_removal = True, punct_removal = True, whitespace_removal = True"""
+        standard_twitter_cleaning
+        lower_casing
+        digits_removal
+        punct_removal
+        whitespace_removal
+
+    Returns:
+        The cleaned data frame.
+    """
     
     # Setting the exchange_base link from where to get the data
 
@@ -23,6 +34,7 @@ def data_cleaning(data = None, standard_twitter_cleaning = True, lower_casing = 
         data = pd.read_csv(merged_data_path, index_col = "id")
         print('INFO: Reading data anew from exchange_base since no input was provided')
     
+
     # Creating the cleaning function
 
     def clean_data(text):
