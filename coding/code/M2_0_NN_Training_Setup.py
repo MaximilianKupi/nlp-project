@@ -1,5 +1,7 @@
 """This is the script to define the class for setting up the training and evaluation routine.
 """
+
+# loading the required packages
 import torch
 import numpy as np
 from torch.utils.data.dataset import TensorDataset
@@ -24,7 +26,7 @@ import os
 
 
 class NN_Training_Setup:
-    """This class sets up the main training and validation routine for the model.
+    """Sets up the main training and validation routine for the model.
     
     Attributes:
         variables: The dictionary containing the variables to specify the training routine (see MAIN module).
@@ -73,8 +75,8 @@ class NN_Training_Setup:
             
         Args:
             stage (str): The state which the model is in with respect to the specific file names (here 'validation', 'training', 'testing')
-            vectors (torch: tensor): The representation of tweet as tensor (is matrix in 2D case).
-            labels (torch: tensor): The labels of each tweet as long tensor.
+            vectors (torch tensor): The representation of tweet as tensor (is matrix in 2D case).
+            labels (torch tensor): The labels of each tweet as long tensor.
             shuffle (bool): Whether or not to use the shuffler while training the model. Default: True.
             sampler (bool): Whether or not to use the sampler while training the model. The sampler takes into account the sample weights such that each class is represented equally while training. Default: True.
         
@@ -116,8 +118,8 @@ class NN_Training_Setup:
 
         Args:
             stage (str): The state which the model is in with respect to the specific file names (here 'validation', 'training', 'testing')
-            vectors (torch: tensor): The representation of tweet as tensor (is matrix in 2D case).
-            labels (torch: tensor): The labels of each tweet as long tensor.
+            vectors (torch tensor): The representation of tweet as tensor (is matrix in 2D case).
+            labels (torch tensor): The labels of each tweet as long tensor.
         """
         vectors = vectors.float()
         labels = labels.type(torch.LongTensor)
@@ -145,14 +147,14 @@ class NN_Training_Setup:
 
         Args:
             stage (str): The state which the model is in with respect to the specific file names (here 'validation', 'training', 'testing').
-            vectors (torch: tensor): The representation of tweet as tensor (is matrix in 2D case).
-            labels (torch: tensor): The labels of each tweet as long tensor.
+            vectors (torch tensor): The representation of tweet as tensor (is matrix in 2D case).
+            labels (torch tensor): The labels of each tweet as long tensor.
         """ 
         self.saveDataToVariables(stage,vectors,labels)
 
 
     def addNN(self,model):
-        """Adds any model as class variable to the NN_training_Setup object, so that it can be used in the training / validation routine.
+        """Adds any model as class variable to the NN_training_Setup object (and sends it to the GPU if available), so that it can be used in the training / validation routine. 
         """
         self.model = model.to(self.device)
 
@@ -163,7 +165,7 @@ class NN_Training_Setup:
         Saves the loss function for training and validation in a class variable. 
 
         Args:
-            labels (torch: tensor): The labels of each tweet as long tensor.
+            labels (torch tensor): The labels of each tweet as long tensor to calculate the class weights.
         """ 
         # we set weights for training if so specified in variables
         if not self.variables['training']['sampler_true_class_weights_false']:
@@ -188,8 +190,7 @@ class NN_Training_Setup:
         Applies the respective learning rates from the dictionary, as well as the momentum in case of an SGD optimizer.
         Saves the optimizer into a class variable.
         
-        Error:
-            Warns if no valid optimizer is specified.
+        Warns if no valid optimizer is specified.
         """ 
 
         if self.variables['optimizer']['type'] == 'Adam':
@@ -219,8 +220,8 @@ class NN_Training_Setup:
 
         Args:
             mode (str): One of min, max. In min mode, lr will be reduced when the quantity monitored has stopped decreasing; in max mode it will be reduced when the quantity monitored has stopped increasing. Default: ‘max’.
-            factor (python:float): Factor by which the learning rate will be reduced. new_lr = lr * factor. Default: 0.1.
-            patience (python:int)): Number of epochs with no improvement after which learning rate will be reduced. For example, if patience = 2, then we will ignore the first 2 epochs with no improvement, and will only decrease the LR after the 3rd epoch if the loss still hasn’t improved then. Default: 2.
+            factor (python float): Factor by which the learning rate will be reduced. new_lr = lr * factor. Default: 0.1.
+            patience (python int): Number of epochs with no improvement after which learning rate will be reduced. For example, if patience = 2, then we will ignore the first 2 epochs with no improvement, and will only decrease the LR after the 3rd epoch if the loss still hasn’t improved then. Default: 2.
         """
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=self.optimizer, mode=mode, factor=factor, patience=patience, verbose=True)
 
@@ -229,8 +230,8 @@ class NN_Training_Setup:
         """Calculates the accuracy based on the number of correctly predicted classes.
 
         Args:
-            total (python:int): Total number of tweets to predict.
-            correct (python:int): Number of correctly predicted tweets.
+            total (python int): Total number of tweets to predict.
+            correct (python int): Number of correctly predicted tweets.
         
         Returns:
             Accuracy based on total tweets and number of correctly predicted tweets.
@@ -243,7 +244,7 @@ class NN_Training_Setup:
         Saves the model as well as the training / validation metrics into a class variable. 
 
         Args:
-            demoLimit (python:int): Sets a demo limit to reduce the dataset for demonstration / testing purposes only. Default: 0.
+            demoLimit (python int): Sets a demo limit to reduce the dataset for demonstration / testing purposes only. Default: 0.
             saveToFile (bool): Whether or not to save the model as well as the training / validation metrics to a file. Default: True.
         
         Returns: 
@@ -357,13 +358,27 @@ class NN_Training_Setup:
             return self.getResult()
 
     def prepareVectorForNN(self,vector):
+        """Prepares the input tensor for CNN by unsqueezing it on the first dimension. This is where the features will be written to while convoluting.
+
+        Args:
+            vector (torch tensor): Input tensor for the model.
+
+        Returns:
+            Unsqueezed input tensor. 
+        """
         #print(str(vector.size()))
         vector1 =  vector.unsqueeze(1)
         #print(str(vector1.size()))
         return vector1
 
     def evaluate(self, epoch):
-        """ uses another dataset to calculate accuracy of model
+        """Evaluates the model on the validation dataset.
+
+        Args:
+            epoch (python int): The current epoch number (is used to write the results).
+
+        Returns:
+            The evaluation results.
         """ 
 
         self.model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
@@ -438,18 +453,31 @@ class NN_Training_Setup:
             return result
     
     def resetResultMemory(self):
+        """Resets the memory where the results get written into.
+        """
         self.result = {
                 "epochs" : [],
                 "variables" : self.variables
             }
 
     def saveEvaluation(self,result,epoch):
+        """Saves the evalution to the results.
+        """
         self.result['epochs'].append(result)
     
     def getResult(self):
+        """Gets the results.
+
+        Returns:
+            The results as class variable.
+        """
         return self.result
 
     def writeResultMemoryToFile(self):
+        """Writes results to file.
+        
+        Takes the file path and name based on the combination of training specifications in the variables. 
+        """
         file = self.variables['validation']['output']['results'] 
         with open(file, 'w+', encoding='utf-8') as fp:
             print("Save outputfile")

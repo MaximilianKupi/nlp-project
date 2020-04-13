@@ -1,3 +1,6 @@
+"""Our main file to run the training of model.
+"""
+
 #### IMPORTING PACKAGES ####
 
 ## packages used in the MAIN file
@@ -71,6 +74,7 @@ from M2_0_NN_Training_Setup import *
 
 # applying dictionary approach
 # HateFrequency, HateIntensity, dataset_with_hatebasecount = apply_dict(data=data)
+
 
 
 #### MODEL AND TRAINING ####
@@ -157,19 +161,20 @@ param_grid = {  'optimizer_type':variables['optimizer']['type'],
                 "scheduler" : variables['training']["scheduler"]}
 
 all_params = list(ParameterGrid(param_grid))
- 
-# Running through the grid
-#TODO: Add run Run Number 27 to Results Overview.scv
 
-# protecting things from being run during documentation process:
+
+# to skip all following code when documenting with sphynx
 if __name__ == "__main__":
-    
+
+    # Running through the grid
     for run_number, current_params in enumerate(all_params):
         if run_number != 26:
             print('skipping', run_number)
         else:
 
+            # printing current parameters
             print(current_params)
+
             # writing the parameters of that grid search run into the dictionary
             variables['optimizer']['learning_rate'] = current_params['learning_rate']
             variables['optimizer']['type'] = current_params['optimizer_type']
@@ -180,6 +185,8 @@ if __name__ == "__main__":
             # SPECIFYING  PREFIXES AND FILEPATHS 
 
             uniqueInputPrefix = ""
+
+            # specifying uniqueOutputPrefix based on the used parameters
             uniqueOutputPrefix = str(run_number) + "_" + variables['global']['model_name'] + "_optimizer_" + variables['optimizer']['type'] + "_lr_" + str(variables['optimizer']['learning_rate']).split('.')[-1] + "_epochs_" + str(variables['training']['epochs']) + "_batchsize_" + str(variables['training']['input']['batch_size']) + "_samplerTclassweightsF_" + str(variables['training']['sampler_true_class_weights_false'])  + "_scheduler_" + str(variables['training']['scheduler'])
 
             # setting general path
@@ -192,17 +199,17 @@ if __name__ == "__main__":
                 raise ValueError
 
 
-            # Training Output
+            # Specifying directory to save output
             save_dir = variables['global']['path'] + "Model_Results/" + variables['global']['grid_search_name'] + "/" + uniqueOutputPrefix
             if not os.path.isdir(save_dir):
                 os.makedirs(save_dir)
             variables['output']['filepath'] = save_dir
 
-            # Evaluation path to save the dictionary of whole model performance in run
+            # Path to save the dictionary of whole model performance per epoch of run
             results_json_path = variables['output']['filepath'] +   "/all_results_of_model.json"
             variables['validation']['output']['results'] = results_json_path
 
-            # loading the vectors and labels from the exchange base
+            # loading the vectors and labels from the exchange base in 1d or 2d
             if variables['global']['dimension_of_model'] == '1D': 
                 # loading the data saved during preprocessing: 
                 train_vectors = torch.load(variables['global']['path'] + "train_vectorized_1d.pt")
@@ -233,7 +240,7 @@ if __name__ == "__main__":
             setup.loadDataFromVariable("training",train_vectors,train_labels)
             setup.loadDataFromVariable("validation",val_vectors,val_labels)
 
-            # Create Neural Network object from class nn.module
+            # Create Neural Network object based on the modules CNN_1d_experiment (if 1D) or CNN_2d_experiment (if 2D)
             if variables['global']['dimension_of_model'] == '1D': 
                 model = CNN_1d_experiment(variables)
 
@@ -244,14 +251,10 @@ if __name__ == "__main__":
                 print('Please specify correct dimension of model.')
             
 
-
-            # Create Neural Network object with the model from class
-            #model = CNN_1d_experiment(initial_num_channels=1, num_channels=256, hidden_dim=256, num_classes=3, dropout_p=0.1)
-
             # add model to NNSetup object
             setup.addNN(model)
 
-            # define Criterion
+            # define Criterion and pasting the train_labels to set class weights in case they are used
             setup.setCriterion(train_labels)
 
             # define Optimizer
@@ -260,13 +263,10 @@ if __name__ == "__main__":
             # set the Scheduler
             setup.setScheduler()
 
-            # run with demo limit
-            #result = setup.train(demoLimit=5000, saveToFile=True) # result can be saved automatically with dictionary and train(self,saveToFile=True)
-
             # run without demo limit
             setup.train() # result can be saved automatically with dictionary and train(self,saveToFile=True)
         
-            # Getting results of best epoch from this run
+            # Getting results of best epoch from this run of the grid search
             with open(results_json_path, 'r') as f:
                 json_data = json.load(f)
 

@@ -18,4 +18,6 @@ code
    M2_1_CNN_1d
    M2_1_CNN_1d_experiment
    M2_1_CNN_1d_fromClass
+   M2_1_CNN_2d_experiment
+   M3_Testing_Model
    MAIN
