@@ -1,3 +1,7 @@
+"""This is the script to define the settings for the convolutional neural network using the 1D approach.
+"""
+
+# Loading the necessary packages
 import torch
 import numpy as np
 from torch.utils.data.dataset import TensorDataset
@@ -18,10 +22,12 @@ from torchviz import make_dot, make_dot_from_trace
 import json
 
 class CNN_1d_experiment(nn.Module):
-    # Convolutional neural network (two convolutional layers)
+    """This class sets up an experiment for a 1D CNN with two convolutional layers.
+    
+    Attributes:
+        nn.Module: Base class for all neural network models from PyTorch.
+    """
     def __init__(self,variables):
-        """ Initializes the CNN as a class object
-        """        
         super(CNN_1d_experiment, self).__init__()
         self.layer1 = nn.Sequential( # first layer of CNN
             nn.Conv1d(**{
@@ -71,11 +77,3 @@ class CNN_1d_experiment(nn.Module):
             "out_features" : 3
         }) # final layer of CNN
         print(self.fc)
-        
-    def forward(self, x):
-        out = self.layer1(x)
-        out = self.layer2(out)
-        out = self.layer3(out)
-        out = out.reshape(out.size(0), -1)
-        out = self.fc(out)
-        return out

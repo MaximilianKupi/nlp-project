@@ -1,3 +1,8 @@
+"""Merging and Shuffling the Datasets
+
+This is the script which has to be run at the beginning to merge and shuffle the datasets of Founta et al. and Davidson et al.
+"""
+
 # loading packages
 import pandas as pd
 import numpy as np
@@ -8,8 +13,8 @@ np.random.seed(42)
 # loading dataframes and adapting labels and headers
 
 # setting the paths where to get the data from exchange_base
-path_davidson = "coding/data/twitter data/davidson et al/labeled_data.csv"
-path_founta = "coding/data/twitter data/founta et al/hatespeech_text_label_vote.csv"
+path_davidson = "../data/twitter data/davidson et al/labeled_data.csv"
+path_founta = "../data/twitter data/founta et al/hatespeech_text_label_vote.csv"
 
 
 data_davidson = pd.read_csv(path_davidson, names=["count", "hate_speech", "offensive_language", "neither", "label", "tweet"], header=1)
@@ -36,4 +41,4 @@ data.index.names = ['id']
 data = data[['label', 'count', 'tweet']]
 
 # saving the dataset
-data.to_csv("coding/code/exchange_base/data.csv")
+data.to_csv("./exchange_base/data.csv")
