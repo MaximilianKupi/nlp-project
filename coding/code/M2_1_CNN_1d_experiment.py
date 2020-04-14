@@ -77,3 +77,19 @@ class CNN_1d_experiment(nn.Module):
             "out_features" : 3
         }) # final layer of CNN
         print(self.fc)
+        
+    def forward(self, x):
+        """Defines the forward pass of the model.
+        
+        Args:
+            x (torch tensor): The input / vector or matrix representation of tweets. 
+
+        Returns:
+            The output / predictions (torch tensor).
+        """
+        out = self.layer1(x)
+        out = self.layer2(out)
+        out = self.layer3(out)
+        out = out.reshape(out.size(0), -1)
+        out = self.fc(out)
+        return out
