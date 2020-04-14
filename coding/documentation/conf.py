@@ -32,8 +32,7 @@ release = 'April 2020'
 # ones.
 extensions = [
 'sphinx.ext.napoleon',
-'sphinx.ext.autodoc',
-'rst2pdf.pdfbuilder'
+'sphinx.ext.autodoc'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
