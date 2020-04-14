@@ -54,6 +54,15 @@ class NN_Training_Setup:
             print('No GPU available, using the CPU instead.')
             self.device = torch.device("cpu")
 
+    def setSeedEverywhere(self):
+        """Sets seed for all random processes.
+        """
+        np.random.seed(self.variables['global']["seed"])
+        torch.manual_seed(self.variables['global']["seed"])
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(self.variables['global']["seed"])
+
+
     def loadFiles(self,stage):
         """Loads tensors from the filesystem into variables which it returns.
 

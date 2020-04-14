@@ -35,7 +35,8 @@ variables =	{
         "platform": 'local', # 'local' 'colab'
         "model_name" : "CNN_experiment",
         "grid_search_name" : "Retraining_Best_Performing_Model_90_epochs",
-        "dimension_of_model" : "1D" #2D
+        "dimension_of_model" : "1D", #2D,
+        "seed" : 42
     },
     "optimizer" : {
         "type": ["Adam", "RMSprop",  "SGD"],
@@ -184,6 +185,9 @@ if __name__ == "__main__":
         
             # Create new object of NNSetup class
             setup = NN_Training_Setup(variables)
+
+            # set seed everywhere for reprodrucability
+            setup.setSeedEverywhere()
 
             # load Data into the object NNSetup
             setup.loadDataFromVariable("training",train_vectors,train_labels)
