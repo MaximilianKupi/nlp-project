@@ -1,10 +1,10 @@
 # Fdb version 3
-["makeindex hatespeechdetectionwithdeeplearningmodelsinpytorch.idx"] 1586792254 "hatespeechdetectionwithdeeplearningmodelsinpytorch.idx" "hatespeechdetectionwithdeeplearningmodelsinpytorch.ind" "hatespeechdetectionwithdeeplearningmodelsinpytorch" 1586792255
-  "hatespeechdetectionwithdeeplearningmodelsinpytorch.idx" 1586792255 0 d41d8cd98f00b204e9800998ecf8427e ""
+["makeindex hatespeechdetectionwithdeeplearningmodelsinpytorch.idx"] 1586792254 "hatespeechdetectionwithdeeplearningmodelsinpytorch.idx" "hatespeechdetectionwithdeeplearningmodelsinpytorch.ind" "hatespeechdetectionwithdeeplearningmodelsinpytorch" 1586869732
+  "hatespeechdetectionwithdeeplearningmodelsinpytorch.idx" 1586869732 0 d41d8cd98f00b204e9800998ecf8427e ""
   (generated)
-  "hatespeechdetectionwithdeeplearningmodelsinpytorch.ind"
   "hatespeechdetectionwithdeeplearningmodelsinpytorch.ilg"
-["pdflatex"] 1586792255 "hatespeechdetectionwithdeeplearningmodelsinpytorch.tex" "hatespeechdetectionwithdeeplearningmodelsinpytorch.pdf" "hatespeechdetectionwithdeeplearningmodelsinpytorch" 1586792255
+  "hatespeechdetectionwithdeeplearningmodelsinpytorch.ind"
+["pdflatex"] 1586869731 "hatespeechdetectionwithdeeplearningmodelsinpytorch.tex" "hatespeechdetectionwithdeeplearningmodelsinpytorch.pdf" "hatespeechdetectionwithdeeplearningmodelsinpytorch" 1586869732
   "/usr/local/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.enc" 1480098666 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2017/texmf-dist/fonts/map/fontname/texfonts.map" 1480098670 3287 e6b82fe08f5336d4d5ebc73fb1152e87 ""
   "/usr/local/texlive/2017/texmf-dist/fonts/tfm/adobe/helvetic/phvb8r.tfm" 1480098688 4484 b828043cbd581d289d955903c1339981 ""
@@ -127,20 +127,20 @@
   "/usr/local/texlive/2017/texmf-var/web2c/pdftex/pdflatex.fmt" 1521449916 4129592 63d8196af8fd619cfd185e5f7087d9ec ""
   "/usr/local/texlive/2017/texmf.cnf" 1495593465 577 2b71d4d888f9e5560b2e99985915a9fa ""
   "footnotehyper-sphinx.sty" 1586787141 8888 1bbd7bdeae8c8bed1d10d551bddb1cc9 ""
-  "hatespeechdetectionwithdeeplearningmodelsinpytorch.aux" 1586792255 1109 28576d3c425865e372e0433b21e7a5c6 ""
+  "hatespeechdetectionwithdeeplearningmodelsinpytorch.aux" 1586869732 1109 28576d3c425865e372e0433b21e7a5c6 ""
   "hatespeechdetectionwithdeeplearningmodelsinpytorch.ind" 1586792254 0 d41d8cd98f00b204e9800998ecf8427e "makeindex hatespeechdetectionwithdeeplearningmodelsinpytorch.idx"
-  "hatespeechdetectionwithdeeplearningmodelsinpytorch.out" 1586792255 139 e81c69f63ad497b126c77c1297be8a5d ""
-  "hatespeechdetectionwithdeeplearningmodelsinpytorch.tex" 1586792253 2720 3b1b11a708b171d962a2a667454487b8 ""
-  "hatespeechdetectionwithdeeplearningmodelsinpytorch.toc" 1586792255 100 198be1d680e364906a511146358e7407 ""
+  "hatespeechdetectionwithdeeplearningmodelsinpytorch.out" 1586869732 139 e81c69f63ad497b126c77c1297be8a5d ""
+  "hatespeechdetectionwithdeeplearningmodelsinpytorch.tex" 1586869731 2720 0da580f26bc8e29f880ec7792a2789b4 ""
+  "hatespeechdetectionwithdeeplearningmodelsinpytorch.toc" 1586869732 100 198be1d680e364906a511146358e7407 ""
   "sphinx.sty" 1586787141 82020 a38700b8aa22dfd94a8a5b905e69be73 ""
-  "sphinxhighlight.sty" 1586792253 8137 38a433148fcb7611515a989ff1750dd5 ""
+  "sphinxhighlight.sty" 1586869731 8137 38a433148fcb7611515a989ff1750dd5 ""
   "sphinxmanual.cls" 1586787141 4236 124cd90deb92742b5d3922bfc2cd70c0 ""
-  "sphinxmessages.sty" 1586792253 745 3f5fcd6cdd7964ed608767954a8ced6f ""
+  "sphinxmessages.sty" 1586869731 745 3f5fcd6cdd7964ed608767954a8ced6f ""
   "sphinxmulticell.sty" 1586787141 14606 0b6edc2b1a83546ed92026d1f6a311b5 ""
   (generated)
-  "hatespeechdetectionwithdeeplearningmodelsinpytorch.aux"
-  "hatespeechdetectionwithdeeplearningmodelsinpytorch.idx"
   "hatespeechdetectionwithdeeplearningmodelsinpytorch.out"
   "hatespeechdetectionwithdeeplearningmodelsinpytorch.pdf"
+  "hatespeechdetectionwithdeeplearningmodelsinpytorch.aux"
   "hatespeechdetectionwithdeeplearningmodelsinpytorch.log"
+  "hatespeechdetectionwithdeeplearningmodelsinpytorch.idx"
   "hatespeechdetectionwithdeeplearningmodelsinpytorch.toc"
