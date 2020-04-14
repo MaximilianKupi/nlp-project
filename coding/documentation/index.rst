@@ -5,6 +5,7 @@
 
 Welcome to Hate Speech Detection with Deep Learning Models in PyTorch's documentation!
 ======================================================================================
+Please go to :ref:`modindex` to find the documentation of all modules in this project.
 
 .. toctree::
    :maxdepth: 2
@@ -13,7 +14,7 @@ Welcome to Hate Speech Detection with Deep Learning Models in PyTorch's document
 
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
