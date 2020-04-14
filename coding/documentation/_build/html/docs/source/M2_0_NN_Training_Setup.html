@@ -77,7 +77,7 @@
 <dd><p>Evaluates the model on the validation dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>epoch</strong> (<em>python int</em>) – The current epoch number (is used to write the results).</p>
+<dd class="field-odd"><p><strong>epoch</strong> (<em>int</em>) – The current epoch number (is used to write the results).</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The evaluation results.</p>
@@ -92,8 +92,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>total</strong> (<em>python int</em>) – Total number of tweets to predict.</p></li>
-<li><p><strong>correct</strong> (<em>python int</em>) – Number of correctly predicted tweets.</p></li>
+<li><p><strong>total</strong> (<em>int</em>) – Total number of tweets to predict.</p></li>
+<li><p><strong>correct</strong> (<em>int</em>) – Number of correctly predicted tweets.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -216,11 +216,17 @@ Saves the optimizer into a class variable.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mode</strong> (<em>str</em>) – One of min, max. In min mode, lr will be reduced when the quantity monitored has stopped decreasing; in max mode it will be reduced when the quantity monitored has stopped increasing. Default: ‘max’.</p></li>
-<li><p><strong>factor</strong> (<em>python float</em>) – Factor by which the learning rate will be reduced. new_lr = lr * factor. Default: 0.1.</p></li>
-<li><p><strong>patience</strong> (<em>python int</em>) – Number of epochs with no improvement after which learning rate will be reduced. For example, if patience = 2, then we will ignore the first 2 epochs with no improvement, and will only decrease the LR after the 3rd epoch if the loss still hasn’t improved then. Default: 2.</p></li>
+<li><p><strong>factor</strong> (<em>float</em>) – Factor by which the learning rate will be reduced. new_lr = lr * factor. Default: 0.1.</p></li>
+<li><p><strong>patience</strong> (<em>int</em>) – Number of epochs with no improvement after which learning rate will be reduced. For example, if patience = 2, then we will ignore the first 2 epochs with no improvement, and will only decrease the LR after the 3rd epoch if the loss still hasn’t improved then. Default: 2.</p></li>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.setSeedEverywhere">
+<code class="sig-name descname">setSeedEverywhere</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.setSeedEverywhere" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets seed for all random processes.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -242,7 +248,7 @@ Saves the optimizer into a class variable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>demoLimit</strong> (<em>python int</em>) – Sets a demo limit to reduce the dataset for demonstration / testing purposes only. Default: 0.</p></li>
+<li><p><strong>demoLimit</strong> (<em>int</em>) – Sets a demo limit to reduce the dataset for demonstration / testing purposes only. Default: 0.</p></li>
 <li><p><strong>saveToFile</strong> (<em>bool</em>) – Whether or not to save the model as well as the training / validation metrics to a file. Default: True.</p></li>
 </ul>
 </dd>
