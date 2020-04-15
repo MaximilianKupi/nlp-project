@@ -11,7 +11,7 @@ code
    M1_4_2_word_sentence_vectorisation_2d
    M1_5_dictionary_approach
    M1_6_create_matrix_vector_and_dictionary
-   M2_0_NN_Training_Setup
+   M2_0_NN_training_setup
    M2_1_2_CNN_2d
    M2_1_3_CNN_dictmatrix_2d
    M2_1_CNN
