@@ -260,7 +260,7 @@ class NN_Training_Setup:
             The model as well as the training / validation metrics as dictionary. 
 
         Warning:
-            Don't use demoLimit during actual training routine – only ment for test purposes. 
+            Don't use demoLimit during actual training routine – only meant for test purposes. 
         """ 
 
         self.resetResultMemory()
