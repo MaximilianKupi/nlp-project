@@ -4,6 +4,10 @@ import numpy as np
 import transformers
 import torch
 import torch.nn.functional as F
+from M1_5t_dictionary_approach_tweetlevel import hatesearch
+from M1_7_stretch import stretch
+
+import sys, os
 
 def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textColumn="tweet", labelColumn="label", pretrainedModel="bert-base-uncased", verbose=True, randomSeed=42):
     """ Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs a two tensors.
@@ -47,7 +51,7 @@ def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textCo
 
 
     # Stats output initialization
-    lengthSample = [] 
+    lengthSample = []
     # Embeddings 
     #vectorEmbeddings = torch.zeros([0,len(data), 2], dtype=torch.int32)
     vectorEmbeddings = torch.Tensor()
@@ -59,18 +63,18 @@ def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textCo
         
         tweetText = str(tweetText) #empty tweets were interpreted as float 
 
-        encoding = tokenizer.encode(tweetText, max_length=maxVectorLength)
+        encoding = padWithZeros(torch.Tensor(tokenizer.encode(tweetText, max_length=maxVectorLength)),maxVectorLength)
+        
+        vlength = len(encoding)
+        hateMetric = padWithZeros(stretch(hatesearch(tweetText),vlength),maxVectorLength)
+
+        matrix = torch.cat((encoding,hateMetric),0).unsqueeze(0)
+
         # Stats output
-        lengthSample.append(len(encoding))
-        # Add zeros at the end of the vector until maxVectorLength is reached
-        paddedTensor = torch.zeros(1,maxVectorLength)
-        paddedTensor[:,:len(encoding)] = torch.tensor(encoding) 
-        # convert to matrix/tensor for CNN
-        reshapedTensor = paddedTensor.view((matrixColumns, matrixRows))
-        # without unsqueezing all the tensors will be concatenated into one big matrix instead of multiple small ones
-        unequeezedTensor = reshapedTensor.unsqueeze(0)
+        lengthSample.append(vlength)
+    
         # save into tensor
-        vectorEmbeddings = torch.cat((vectorEmbeddings,unequeezedTensor),dim=0)
+        vectorEmbeddings = torch.cat((vectorEmbeddings,matrix),dim=0)
         
         #print("#"+str(i)+" check: "+str(i % 1000))
         # Progress bar 
@@ -104,6 +108,20 @@ def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textCo
 # input_file = "https://raw.githubusercontent.com/MaximilianKupi/nlp-project/master/coding/code/exchange_base/train_set.csv"
 # output_file_name = "exchange_base/train_vec.pt"
 # 2. use exchange_base files
+def padWithZeros(vector,n):
+    """Adds zeros to the end of a vector until a certain size is reached
+
+    Args:
+        vector (tensorr): The input vector that should be padded
+        n (int): The length of the output vector after padding
+
+    Returns:
+        tensor: padded vector
+
+    """
+    paddedTensor = torch.zeros(1,n)
+    paddedTensor[:,:len(vector)] = torch.tensor(vector)
+    return paddedTensor
 
 def createTensors(path,stage):
     """ Opens the file:

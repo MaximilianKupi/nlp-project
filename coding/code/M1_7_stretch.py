@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import torch
 
 
 def stretch(vector,n,plot=False):
@@ -17,12 +18,13 @@ def stretch(vector,n,plot=False):
         n (int): The length of the output vector after stretching
 
     Returns:
-        np.array: stretched vector
+        tensor: stretched vector
 
     """
 
     if(n<len(vector)):
-        raise ValueError("Shrinking not allowed")
+        return vector
+        #raise ValueError("Shrinking not allowed")
     # Converts input to numpy array
     oldY = np.array(vector)
     # Treates input as y-values of a function on x-values created here
@@ -47,4 +49,4 @@ def stretch(vector,n,plot=False):
     if(plot):
         plt.plot(oldX,oldY)
         plt.plot(newX,newY)
-    return newY
+    return torch.Tensor(newY)
