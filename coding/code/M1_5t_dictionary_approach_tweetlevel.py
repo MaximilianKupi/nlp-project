@@ -6,7 +6,7 @@ import numpy as np
 
 # Defining the function
 
-def hatesearch(data = None, dictionary = None):
+def hatesearch(data = None, dictionary = None, verbose = False):
     """This function matches the terms in the Hatebase.org dictionary with the tweets in our dataset.
     Each word in the tweet gets assigned a number based on its hatefulness, based on hatebase.org
     (hatefulness is determined by the word appearing in the dictionary, its ambiguity as a term of hatespeech, 
@@ -21,7 +21,7 @@ def hatesearch(data = None, dictionary = None):
     
     if dictionary is None:
         hatebase_dic = pd.read_csv(hatebase_path, index_col = 'vocabulary_id')
-        print('INFO: Reading dictionary anew from exchange_base since no input was provided')
+        #print('INFO: Reading dictionary anew from exchange_base since no input was provided')
     else:
         hatebase_dic = dictionary
 
@@ -31,7 +31,7 @@ def hatesearch(data = None, dictionary = None):
 
     # Data specifier reminder
     if data is None:
-        print('Please specify the data input')
+        #print('Please specify the data input')
 
     # Splitting the tweets
     tweet_split = str(data).split()
@@ -44,7 +44,7 @@ def hatesearch(data = None, dictionary = None):
         hatefulness_term_weighted = 0
         offensiveness_value = 0
         Hatefulness = 0
-        print(word)
+        #print(word)
         for hateterm in hatebase_dic['term']:
             frequency = 0
             hatefulness_term_weighted = 0
@@ -52,7 +52,7 @@ def hatesearch(data = None, dictionary = None):
             if hateterm == word:
                 frequency += 1
                 offensiveness_value = hatebase_dic.loc[hatebase_dic['term'] == hateterm, 'average_offensiveness'].iloc[0]
-                print("Single offensiveness value is", offensiveness_value)
+                #print("Single offensiveness value is", offensiveness_value)
                 #print(frequency)
                 if np.isnan(offensiveness_value):
                     offensiveness_value = 77.27734806629834
@@ -62,14 +62,14 @@ def hatesearch(data = None, dictionary = None):
                     hatefulness_term_weighted = offensiveness_value
                 else:
                     hatefulness_term_weighted = offensiveness_value*2
-                print("Weighted hatefulness value is", hatefulness_term_weighted)
+                #print("Weighted hatefulness value is", hatefulness_term_weighted)
                 #print(frequency)
                 if frequency != 0:
                     Hatefulness = hatefulness_term_weighted
                 else:
                     Hatefulness = 0
         HateVector.append(Hatefulness)
-    print(HateVector)
+    #print(HateVector)
     #return HateVector
 
     # Building a tensor from the vector created
