@@ -12,7 +12,9 @@ def hatesearch(data = None, dictionary = None, verbose = False):
     (hatefulness is determined by the word appearing in the dictionary, its ambiguity as a term of hatespeech, 
     its average offensiveness (as defined by hatebase.org methodology). 
     The output is a tensor used for further analysis.
-    The input dataframe (tweets) needs to be specified with the variable "data". """
+    The input dataframe (tweets) needs to be specified with the variable "data". 
+    Note: The print-Function and other comments have been used for testing purposes. 
+    Use verbose = True to show its output."""
 
     # Loading the data
 
