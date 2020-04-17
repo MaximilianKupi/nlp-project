@@ -21,6 +21,8 @@ def stretch(vector,n,plot=False):
         tensor: stretched vector
 
     """
+    if(len(vector) == 0):
+        return torch.zeros(1,n)
 
     if(n<len(vector)):
         return vector
