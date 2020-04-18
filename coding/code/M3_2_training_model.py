@@ -36,7 +36,7 @@ variables =	{
         "platform": 'colab', # 'local' 'colab'
         "model_name" : "CNN_experiment_1D",
         "grid_search_name" : 'SecondGridSearch_1D_withPadding_and_Seed', #"SecondGridSearch_1D_withPadding_and_seed",
-        "dimension_of_model" : "2D", #2D,
+        "dimension_of_model" : "1D", #2D,
         "seed" : 42
     },
     "optimizer" : {
@@ -45,7 +45,7 @@ variables =	{
         "momentum": 0.9
     },
     "training" : {
-        "epochs" : 90,
+        "epochs" : 60,
         "sampler_true_class_weights_false": [True,False], # If set to True Sampler is set to True and Class Weights of Loss Function Criterion are set to False 
         #If set to False Sampler is set to False and Class Weights are set True. In this case shuffle will be automatically set to True during training. 
         "scheduler" : [True, False], 

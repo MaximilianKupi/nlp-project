@@ -5,3 +5,4 @@
 **/FirstGridSearch
 **/Model_Results
 __pycache__
+*.pyc
