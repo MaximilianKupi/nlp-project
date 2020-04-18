@@ -9,7 +9,6 @@ code
    M1_3_splitting_datasets
    M1_4_1_word_sentence_vectorisation_1d
    M1_4_2_word_sentence_vectorisation_2d
-   M1_5_alt_dictionary_approach
    M1_5_dictionary_approach
    M1_5t_dictionary_approach_tweetlevel
    M1_6_create_matrix_vector_and_dictionary
