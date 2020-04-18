@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>M2_0_NN_Training_Setup module &#8212; Hate Speech Detection with Deep Learning Models in PyTorch April 2020 documentation</title>
+    <title>M2_0_NN_training_setup module &#8212; Hate Speech Detection with Deep Learning Models in PyTorch April 2020 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,29 +31,29 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-M2_0_NN_Training_Setup">
-<span id="m2-0-nn-training-setup-module"></span><h1>M2_0_NN_Training_Setup module<a class="headerlink" href="#module-M2_0_NN_Training_Setup" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-M2_0_NN_training_setup">
+<span id="m2-0-nn-training-setup-module"></span><h1>M2_0_NN_training_setup module<a class="headerlink" href="#module-M2_0_NN_training_setup" title="Permalink to this headline">¶</a></h1>
 <p>This is the script to define the class for setting up the training and evaluation routine.</p>
 <dl class="py class">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup">
-<em class="property">class </em><code class="sig-prename descclassname">M2_0_NN_Training_Setup.</code><code class="sig-name descname">NN_Training_Setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">variables</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup">
+<em class="property">class </em><code class="sig-prename descclassname">M2_0_NN_training_setup.</code><code class="sig-name descname">NN_Training_Setup</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">variables</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Sets up the main training and validation routine for the model.</p>
 <dl class="py attribute">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.variables">
-<code class="sig-name descname">variables</code><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.variables" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.variables">
+<code class="sig-name descname">variables</code><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.variables" title="Permalink to this definition">¶</a></dt>
 <dd><p>The dictionary containing the variables to specify the training routine (see MAIN module).</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.addNN">
-<code class="sig-name descname">addNN</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.addNN" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.addNN">
+<code class="sig-name descname">addNN</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.addNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds any model as class variable to the NN_training_Setup object (and sends it to the GPU if available), so that it can be used in the training / validation routine.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.createDataLoader">
-<code class="sig-name descname">createDataLoader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stage</span></em>, <em class="sig-param"><span class="n">vectors</span></em>, <em class="sig-param"><span class="n">labels</span></em>, <em class="sig-param"><span class="n">shuffle</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">sampler</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.createDataLoader" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.createDataLoader">
+<code class="sig-name descname">createDataLoader</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stage</span></em>, <em class="sig-param"><span class="n">vectors</span></em>, <em class="sig-param"><span class="n">labels</span></em>, <em class="sig-param"><span class="n">shuffle</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">sampler</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.createDataLoader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates dataloader that allows efficient extraction of samples.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -72,8 +72,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.evaluate">
-<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">epoch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.evaluate" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.evaluate">
+<code class="sig-name descname">evaluate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">epoch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates the model on the validation dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -86,8 +86,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.getAccuracy">
-<code class="sig-name descname">getAccuracy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">total</span></em>, <em class="sig-param"><span class="n">correct</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.getAccuracy" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.getAccuracy">
+<code class="sig-name descname">getAccuracy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">total</span></em>, <em class="sig-param"><span class="n">correct</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.getAccuracy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the accuracy based on the number of correctly predicted classes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -103,8 +103,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.getResult">
-<code class="sig-name descname">getResult</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.getResult" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.getResult">
+<code class="sig-name descname">getResult</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.getResult" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gets the results.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -114,8 +114,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.loadDataFromVariable">
-<code class="sig-name descname">loadDataFromVariable</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stage</span></em>, <em class="sig-param"><span class="n">vectors</span></em>, <em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.loadDataFromVariable" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.loadDataFromVariable">
+<code class="sig-name descname">loadDataFromVariable</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stage</span></em>, <em class="sig-param"><span class="n">vectors</span></em>, <em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.loadDataFromVariable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper for createDataLoader.</p>
 <p>Uses input data and distinguishes between training and validation data (see MAIN file).
 This is done to ensure that training data is really not used in validation.
@@ -132,8 +132,8 @@ Saves object as class variable.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.loadFiles">
-<code class="sig-name descname">loadFiles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stage</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.loadFiles" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.loadFiles">
+<code class="sig-name descname">loadFiles</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stage</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.loadFiles" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads tensors from the filesystem into variables which it returns.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -146,8 +146,8 @@ Saves object as class variable.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.prepareVectorForNN">
-<code class="sig-name descname">prepareVectorForNN</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vector</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.prepareVectorForNN" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.prepareVectorForNN">
+<code class="sig-name descname">prepareVectorForNN</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vector</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.prepareVectorForNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the input tensor for CNN by unsqueezing it on the first dimension. This is where the features will be written to while convoluting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -160,14 +160,14 @@ Saves object as class variable.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.resetResultMemory">
-<code class="sig-name descname">resetResultMemory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.resetResultMemory" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.resetResultMemory">
+<code class="sig-name descname">resetResultMemory</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.resetResultMemory" title="Permalink to this definition">¶</a></dt>
 <dd><p>Resets the memory where the results get written into.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.saveDataToVariables">
-<code class="sig-name descname">saveDataToVariables</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stage</span></em>, <em class="sig-param"><span class="n">vectors</span></em>, <em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.saveDataToVariables" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.saveDataToVariables">
+<code class="sig-name descname">saveDataToVariables</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stage</span></em>, <em class="sig-param"><span class="n">vectors</span></em>, <em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.saveDataToVariables" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the dataset and dataloader for training (self.dataset, self.dataset_loader) and validation (self.val_dataset, self.val_dataset_loader) into class variables.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -181,14 +181,14 @@ Saves object as class variable.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.saveEvaluation">
-<code class="sig-name descname">saveEvaluation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">result</span></em>, <em class="sig-param"><span class="n">epoch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.saveEvaluation" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.saveEvaluation">
+<code class="sig-name descname">saveEvaluation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">result</span></em>, <em class="sig-param"><span class="n">epoch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.saveEvaluation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves the evalution to the results.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.setCriterion">
-<code class="sig-name descname">setCriterion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.setCriterion" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.setCriterion">
+<code class="sig-name descname">setCriterion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">labels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.setCriterion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the loss function to cross entropy loss (since we have a multi class problem).</p>
 <p>Listens to variable “sampler_true_class_weights_false” from the dictionary to only use class weights if sampler is set to false.
 Saves the loss function for training and validation in a class variable.</p>
@@ -200,8 +200,8 @@ Saves the loss function for training and validation in a class variable.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.setOptimizer">
-<code class="sig-name descname">setOptimizer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.setOptimizer" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.setOptimizer">
+<code class="sig-name descname">setOptimizer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.setOptimizer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the optimizer to Adam, RMSprop, or SGD, depending on the specification in the variables from the dictionary.</p>
 <p>Applies the respective learning rates from the dictionary, as well as the momentum in case of an SGD optimizer.
 Saves the optimizer into a class variable.</p>
@@ -209,8 +209,8 @@ Saves the optimizer into a class variable.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.setScheduler">
-<code class="sig-name descname">setScheduler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">factor</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">patience</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.setScheduler" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.setScheduler">
+<code class="sig-name descname">setScheduler</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mode</span><span class="o">=</span><span class="default_value">'max'</span></em>, <em class="sig-param"><span class="n">factor</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">patience</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.setScheduler" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets the scheduler so that the learning rate is reduced dynamically based on the validation measures.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -224,14 +224,14 @@ Saves the optimizer into a class variable.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.setSeedEverywhere">
-<code class="sig-name descname">setSeedEverywhere</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.setSeedEverywhere" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.setSeedEverywhere">
+<code class="sig-name descname">setSeedEverywhere</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.setSeedEverywhere" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets seed for all random processes.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.setupGPU">
-<code class="sig-name descname">setupGPU</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.setupGPU" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.setupGPU">
+<code class="sig-name descname">setupGPU</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.setupGPU" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if GPU is available and tells PyTorch to use the GPU if available.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -241,8 +241,8 @@ Saves the optimizer into a class variable.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.train">
-<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">demoLimit</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">saveToFile</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.train" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.train">
+<code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">demoLimit</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">saveToFile</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trains the model.</p>
 <p>Saves the model as well as the training / validation metrics into a class variable.</p>
 <dl class="field-list simple">
@@ -258,13 +258,13 @@ Saves the optimizer into a class variable.</p>
 </dl>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Don’t use demoLimit during actual training routine – only ment for test purposes.</p>
+<p>Don’t use demoLimit during actual training routine – only meant for test purposes.</p>
 </div>
 </dd></dl>
 
 <dl class="py method">
-<dt id="M2_0_NN_Training_Setup.NN_Training_Setup.writeResultMemoryToFile">
-<code class="sig-name descname">writeResultMemoryToFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_Training_Setup.NN_Training_Setup.writeResultMemoryToFile" title="Permalink to this definition">¶</a></dt>
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.writeResultMemoryToFile">
+<code class="sig-name descname">writeResultMemoryToFile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.writeResultMemoryToFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Writes results to file.</p>
 <p>Takes the file path and name based on the combination of training specifications in the variables.</p>
 </dd></dl>
@@ -328,7 +328,7 @@ Saves the optimizer into a class variable.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../../_sources/docs/source/M2_0_NN_Training_Setup.rst.txt"
+      <a href="../../_sources/docs/source/M2_0_NN_training_setup.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
