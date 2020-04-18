@@ -4,12 +4,18 @@ import numpy as np
 import transformers
 import torch
 import torch.nn.functional as F
-from M1_5t_dictionary_approach_tweetlevel import hatesearch
+from M1_5tp_dictionary_approach_tweetlevel import hatesearch,loadDictionary
 from M1_7_stretch import stretch
+from math import sqrt
+from joblib import Parallel, delayed
+import multiprocessing
+from datetime import datetime
+from tqdm import tqdm
+import timeit
 
 import sys, os
 
-def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textColumn="tweet", labelColumn="label", pretrainedModel="bert-base-uncased", verbose=True, randomSeed=42):
+def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textColumn="tweet", labelColumn="label", pretrainedModel="bert-base-uncased", verbose=False, randomSeed=42):
     """ Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs a two tensors.
     One containing the vectorized entries of the column and one containing the associated labels.
 
@@ -30,7 +36,7 @@ def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textCo
         torch.tensor:The Label Vector for the associated vectorized column  
 
     """
-
+    startTime = datetime.now()
     ### Settings
     # setting seed for reproducability
     np.random.seed(randomSeed)
@@ -49,58 +55,45 @@ def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textCo
     # Load pretrained Tokenizer
     tokenizer = transformers.BertTokenizer.from_pretrained(pretrainedModel)
 
+    embeddings = torch.zeros([len(data[textColumn]),2,120])
 
-    # Stats output initialization
-    lengthSample = []
-    # Embeddings 
-    #vectorEmbeddings = torch.zeros([0,len(data), 2], dtype=torch.int32)
-    vectorEmbeddings = torch.Tensor()
+    num_cores = multiprocessing.cpu_count()
 
-    for i,tweetText in enumerate(data[textColumn].values):
-        # Encode tweet
-        if(isinstance(tweetText, float)): #empty value is interpreted as nan
-            print("Float tweet found in data "+str(i)+": \""+str(tweetText)+"\" --> interpreting it as string with str(tweet)")
-        
-        tweetText = str(tweetText) #empty tweets were interpreted as float 
+    hatebase_dic = loadDictionary()
 
-        encoding = padWithZeros(torch.Tensor(tokenizer.encode(tweetText, max_length=maxVectorLength)),maxVectorLength)
-        
-        vlength = len(encoding)
-        hateMetric = padWithZeros(stretch(hatesearch(tweetText),vlength),maxVectorLength)
+    list = Parallel(n_jobs=num_cores, prefer="threads")(delayed(createMatrix)(tweet,tokenizer,maxVectorLength,pretrainedModel,hatebase_dic) for tweet in tqdm(data[textColumn]))
 
-        matrix = torch.cat((encoding,hateMetric),0).unsqueeze(0)
+    embeddings = torch.stack(list).squeeze(1)
+    print("saved tensor "+str(embeddings.size()))
 
-        # Stats output
-        lengthSample.append(vlength)
-    
-        # save into tensor
-        vectorEmbeddings = torch.cat((vectorEmbeddings,matrix),dim=0)
-        
-        #print("#"+str(i)+" check: "+str(i % 1000))
-        # Progress bar 
-        if(i % 30 == 0):
-            print("Progress: "+str(round(i/len(data),3)), end ="\r")
-
-
-        # vectorEmbeddings.append(paddedEncodingMatrix)
-
-    # Progress bar    
-    print("")
-
-
-    # convert Stats helper vector to DataFrame for stats function usage
-    lengthSample = pd.DataFrame(lengthSample) 
-
-    # Output stats information about tweet representation
     if(verbose):
-        print("Tweets: "+str(len(vectorEmbeddings))+" mean-length: "+str(lengthSample.mean()[0])+" median-length: "+str(lengthSample.median()[0])+" min: "+str(lengthSample.min()[0])+" max: "+str(lengthSample.max()[0]))
+        print("Tweets: "+str(len(embeddings)))
+        print("First tweet: "+str(embeddings[0]))
 
-    # Convert vector of vectors to tensor
-    #matrix = torch.tensor(vectorEmbeddings, dtype=torch.float32)
     labels = torch.tensor(data[labelColumn].values)
 
-    return vectorEmbeddings, labels
+    print(datetime.now() - startTime)
+    return embeddings, labels
 
+def createMatrix(tweetText,tokenizer,maxVectorLength,pretrainedModel,hatebase_dic):
+    
+    if(isinstance(tweetText, float)): #empty value is interpreted as nan
+            print("Float tweet found in data: \""+str(tweetText)+"\" --> interpreting it as string with str(tweet)")
+        
+    tweetText = str(tweetText) #empty tweets were interpreted as float 
+
+    encoding = padWithZeros(torch.Tensor(tokenizer.encode(tweetText, max_length=maxVectorLength)),maxVectorLength)
+    
+    vlength = encoding.size()[0]
+    hateMetric = padWithZeros(stretch(hatesearch(tweetText,hatebase_dic),vlength),maxVectorLength)
+
+    matrix = torch.cat((encoding,hateMetric),0).unsqueeze(0)
+
+
+    # embeddings[i] = matrix
+    return matrix
+
+    
 
 ### Preparing input data
 # File source possibilities (uncomment what applies to you)
