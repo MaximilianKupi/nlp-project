@@ -8,26 +8,17 @@ import difflib
 # Defining the function
 
 def hatesearch(data = None, dictionary = None, verbose = False, average_hate = True, difflib_percentage = 0.85):
-    """This function matches the terms in the Hatebase.org dictionary with the tweets in our dataset.
-    Each word in the tweet gets assigned a number based on its hatefulness, based on hatebase.org 
-    (hatefulness is determined by the word appearing in the dictionary, its ambiguity as a term of hatespeech, 
-    its average offensiveness (as defined by hatebase.org methodology). 
-    The output is a tensor used for further analysis.
+    """This function matches the terms in the Hatebase.org dictionary with the tweets in our dataset. Each word in the tweet gets assigned a number based on its hatefulness, based on hatebase.org (hatefulness is determined by the word appearing in the dictionary, its ambiguity as a term of hatespeech, its average offensiveness (as defined by hatebase.org methodology). The output is a tensor used for further analysis.
     
-    Parameters:
+    Args:
+        data (str): The input, a string (in this a tweet) from our dataframe
+        dictionary (dataframe): a dataframe containing hateful terms, default is an up-to-date extraction of English-language terms from Hatebase.org
+        verbose (str): Whether or not outputs from print-Functions (used for testing purposes) should be shown
+        average_hate = Determines if a word in a tweet is found in multiple hate-dictionary entries, what value of hatefulness should be used. If "False", the maximum is used. If "True" (Default), the average is calculated.
+        difflib_percentage (float): Percentage used to determine how sensible the matching function of words in the tweets with terms in the dictionary should be (in order to catch words with typos or small changes, which have been deliberately included in order to avoid detection, idea adapted from Chiu (2018): https://ethanchiu.xyz/blog/2018/02/03/Identifying-Hate/). Default: 0.85.
 
-    data (str): The input, a string (in this a tweet) from our dataframe
-    dictionary (dataframe): a dataframe containing hateful terms, 
-        default is an up-to-date extraction of English-language terms from Hatebase.org
-    verbose (str): Whether or not outputs from print-Functions (used for testing purposes) should be shown
-    average_hate = Determines if a word in a tweet is found in multiple hate-dictionary entries, 
-        what value of hatefulness should be used. 
-        If "False", the maximum is used. 
-        If "True" (Default), the average is calculated.
-    difflib_percentage (float): Percentage used to determine how sensible the matching function of words
-        in the tweets with terms in the dictionary should be (in order to catch words with typos or small changes
-        changes, which have been deliberately included in order to avoid detection, idea adapted from Chiu (2018)).
-        Default is 0.85.
+    Returns:
+        Tensor of numbers for each word in the tweet, indicating hatefulness of the word
     """
 
     # Loading the data
@@ -61,7 +52,8 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
 
     for word in listoftweets:
         final_hatefulness = 0
-        #print(word)
+        if verbose:
+            print(word)
         list_of_hate = []
         for hateterm in hatebase_dic['term']:
             frequency = 0
@@ -69,12 +61,11 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
             offensiveness_value = 0
             Hatefulness = 0
             if hateterm in word or (len(difflib.get_close_matches(hateterm, word, 1, difflib_percentage)) == 1):
-                # tbd if this works!
-                #print(hateterm)
                 frequency += 1
                 offensiveness_value = hatebase_dic.loc[hatebase_dic['term'] == hateterm, 'average_offensiveness'].iloc[0]
-                #print("Single offensiveness value is", offensiveness_value)
-                #print(frequency)
+                if verbose:
+                    print("Single offensiveness value is", offensiveness_value)
+                    print("Frequency": frequency)
                 if np.isnan(offensiveness_value):
                     offensiveness_value = averagevalue_of_offensiveness
                 else:
@@ -83,26 +74,26 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
                     hatefulness_term_weighted = offensiveness_value
                 else:
                     hatefulness_term_weighted = offensiveness_value*2
-                #print("Weighted hatefulness value is", hatefulness_term_weighted)
-                #print(frequency)
+                if verbose:
+                    print("Weighted hatefulness value is", hatefulness_term_weighted)
                 if frequency != 0:
                     Hatefulness = hatefulness_term_weighted
                 else:
-                    Hatefulness = 0
-                #print(Hatefulness)     
+                    Hatefulness = 0    
             list_of_hate.append(Hatefulness)
-            #print(array_of_hate)
+            if verbose:
+                print(array_of_hate)
         if not average_hate:
             final_hatefulness = np.amax(array_of_hate) 
         else:
             list_of_hate = np.array(list_of_hate)
             array_of_hate = list_of_hate[list_of_hate != 0]
-            #print("New array", array_of_hate_new)   
+            if verbose:
+                print("New array", array_of_hate_new)   
             final_hatefulness = array_of_hate.mean()
             if np.isnan(final_hatefulness):
                 final_hatefulness = 0
         HateVector.append(final_hatefulness)
-        #print(HateVector)
 
     # Building a tensor from the vector created
     HateTensor = torch.tensor(HateVector)
@@ -110,7 +101,8 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     return HateTensor
 
 # Testing on an example
-#tweet = ("your wagon fish chief you retarded f*ggots")
-#hatesearch(data = tweet)
+if verbose:
+    tweet = ("your wagon fish chief you retarded f*ggots")
+    hatesearch(data = tweet)
 
 # %%
