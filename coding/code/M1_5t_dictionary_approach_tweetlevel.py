@@ -101,8 +101,7 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     return HateTensor
 
 # Testing on an example
-if verbose:
-    tweet = ("your wagon fish chief you retarded f*ggots")
-    hatesearch(data = tweet)
+# tweet = ("your wagon fish chief you retarded f*ggots")
+# hatesearch(data = tweet, verbose = True)
 
 # %%
