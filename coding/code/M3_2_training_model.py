@@ -26,7 +26,7 @@ from M2_1_CNN_2d_experiment import CNN_2d_experiment
 
 
 # # class to setup the dataloading, the training and the evaluation  
-from M2_0_NN_Training_Setup import *
+from M2_0_NN_training_setup import *
 
 
 # SETTING VARIABLES

@@ -13,8 +13,8 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     Args:
         data (str): The input, a string (in this a tweet) from our dataframe
         dictionary (dataframe): a dataframe containing hateful terms, default is an up-to-date extraction of English-language terms from Hatebase.org
-        verbose (str): Whether or not outputs from print-Functions (used for testing purposes) should be shown
-        average_hate = Determines if a word in a tweet is found in multiple hate-dictionary entries, what value of hatefulness should be used. If "False", the maximum is used. If "True" (Default), the average is calculated.
+        verbose (bool): Whether or not outputs from print-Functions (used for testing purposes) should be shown
+        average_hate (bool): Determines if a word in a tweet is found in multiple hate-dictionary entries, what value of hatefulness should be used. If "False", the maximum is used. If "True" (Default), the average is calculated.
         difflib_percentage (float): Percentage used to determine how sensible the matching function of words in the tweets with terms in the dictionary should be (in order to catch words with typos or small changes, which have been deliberately included in order to avoid detection, idea adapted from Chiu (2018): https://ethanchiu.xyz/blog/2018/02/03/Identifying-Hate/). Default: 0.85.
 
     Returns:
@@ -65,7 +65,7 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
                 offensiveness_value = hatebase_dic.loc[hatebase_dic['term'] == hateterm, 'average_offensiveness'].iloc[0]
                 if verbose:
                     print("Single offensiveness value is", offensiveness_value)
-                    print("Frequency": frequency)
+                    print("Frequency", frequency)
                 if np.isnan(offensiveness_value):
                     offensiveness_value = averagevalue_of_offensiveness
                 else:
@@ -82,11 +82,11 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
                     Hatefulness = 0    
             list_of_hate.append(Hatefulness)
             if verbose:
-                print(array_of_hate)
+                print("List of hate numbers", list_of_hate)
+        list_of_hate = np.array(list_of_hate)
         if not average_hate:
             final_hatefulness = np.amax(array_of_hate) 
         else:
-            list_of_hate = np.array(list_of_hate)
             array_of_hate = list_of_hate[list_of_hate != 0]
             if verbose:
                 print("New array", array_of_hate_new)   
@@ -101,8 +101,7 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     return HateTensor
 
 # Testing on an example
-if verbose:
-    tweet = ("your wagon fish chief you retarded f*ggots")
-    hatesearch(data = tweet)
+# tweet = ("your wagon fish chief you retarded f*ggots")
+# hatesearch(data = tweet, verbose = True)
 
 # %%

@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>M1_4_2_word_sentence_vectorisation_2d module &#8212; Hate Speech Detection with Deep Learning Models in PyTorch April 2020 documentation</title>
+    <title>M1_7_stretch module &#8212; Hate Speech Detection with Deep Learning Models in PyTorch April 2020 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,8 +31,32 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="m1-4-2-word-sentence-vectorisation-2d-module">
-<h1>M1_4_2_word_sentence_vectorisation_2d module<a class="headerlink" href="#m1-4-2-word-sentence-vectorisation-2d-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-M1_7_stretch">
+<span id="m1-7-stretch-module"></span><h1>M1_7_stretch module<a class="headerlink" href="#module-M1_7_stretch" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="M1_7_stretch.stretch">
+<code class="sig-prename descclassname">M1_7_stretch.</code><code class="sig-name descname">stretch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vector</span></em>, <em class="sig-param"><span class="n">n</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_7_stretch.stretch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stretches Vectors to desired length by interpolating values</p>
+<p>Example
+stretch([0,0,0,0,20,0,0,1],15)</p>
+<p>with plotting
+stretch([0,0,0,0,20,0,0,1],15,True)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector</strong> (<em>array</em><em>(</em><em>float</em><em>)</em>) – The input vector that should be stretched</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – The length of the output vector after stretching</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>stretched vector</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -90,7 +114,7 @@
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../../_sources/docs/source/M1_4_2_word_sentence_vectorisation_2d.rst.txt"
+      <a href="../../_sources/docs/source/M1_7_stretch.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 
