@@ -13,7 +13,7 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     Args:
         data (str): The input, a string (in this a tweet) from our dataframe
         dictionary (dataframe): a dataframe containing hateful terms, default is an up-to-date extraction of English-language terms from Hatebase.org
-        verbose (str): Whether or not outputs from print-Functions (used for testing purposes) should be shown
+        verbose (bool): Whether or not outputs from print-Functions (used for testing purposes) should be shown
         average_hate = Determines if a word in a tweet is found in multiple hate-dictionary entries, what value of hatefulness should be used. If "False", the maximum is used. If "True" (Default), the average is calculated.
         difflib_percentage (float): Percentage used to determine how sensible the matching function of words in the tweets with terms in the dictionary should be (in order to catch words with typos or small changes, which have been deliberately included in order to avoid detection, idea adapted from Chiu (2018): https://ethanchiu.xyz/blog/2018/02/03/Identifying-Hate/). Default: 0.85.
 
