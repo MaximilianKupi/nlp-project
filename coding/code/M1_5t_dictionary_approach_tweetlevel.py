@@ -65,7 +65,7 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
                 offensiveness_value = hatebase_dic.loc[hatebase_dic['term'] == hateterm, 'average_offensiveness'].iloc[0]
                 if verbose:
                     print("Single offensiveness value is", offensiveness_value)
-                    print("Frequency": frequency)
+                    print("Frequency", frequency)
                 if np.isnan(offensiveness_value):
                     offensiveness_value = averagevalue_of_offensiveness
                 else:
@@ -82,11 +82,11 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
                     Hatefulness = 0    
             list_of_hate.append(Hatefulness)
             if verbose:
-                print(array_of_hate)
+                print("List of hate numbers", list_of_hate)
+        list_of_hate = np.array(list_of_hate)
         if not average_hate:
             final_hatefulness = np.amax(array_of_hate) 
         else:
-            list_of_hate = np.array(list_of_hate)
             array_of_hate = list_of_hate[list_of_hate != 0]
             if verbose:
                 print("New array", array_of_hate_new)   
