@@ -33,10 +33,10 @@ from M2_0_NN_training_setup import *
 # SETTING VARIABLES
 variables =	{
     "global" : {
-        "platform": 'colab', # 'local' 'colab'
-        "model_name" : "CNN_experiment_1D",
-        "grid_search_name" : 'SecondGridSearch_1D_withPadding_and_Seed', #"SecondGridSearch_1D_withPadding_and_seed",
-        "dimension_of_model" : "1D", #2D,
+        "platform": 'colab', # 'local' 'colab' # bitte anpassen, je nachdem, wo es läuft
+        "model_name" : "CNN_experiment_1D", # pro run bitte anpassen
+        "grid_search_name" : 'SecondGridSearch_1D_withPadding_and_Seed', #pro run bitte anpassen
+        "dimension_of_model" : "1D", #2D, # bitte anpassen, je nachdem ob es 1D oder 2D sein soll
         "seed" : 42
     },
     "optimizer" : {
