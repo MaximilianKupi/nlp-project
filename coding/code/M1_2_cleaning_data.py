@@ -6,6 +6,9 @@ import pandas as pd
 import re
 import string
 import preprocessor as p
+# TODO make sure pip requirements are documented
+# pip3 install preprocessor is not enoug for this to work
+# pip3 install tweet-preprocessor is also necessary, although it doesn't have to be imported separately
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
