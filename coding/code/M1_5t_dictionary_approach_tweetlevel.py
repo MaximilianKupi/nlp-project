@@ -24,7 +24,7 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     # Loading the data
 
     # loading Hatebase dictionary
-    hatebase_path = '../data/dictionary/hatebase/full_dictionary.csv'
+    hatebase_path = 'coding/data/dictionary/hatebase/full_dictionary.csv'
     
     if dictionary is None:
         hatebase_dic = pd.read_csv(hatebase_path, index_col = 'vocabulary_id')
