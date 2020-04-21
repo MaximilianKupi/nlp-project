@@ -4,4 +4,5 @@
 .ipynb_checkpoints
 **/FirstGridSearch
 **/Model_Results
-**/__pycache__
+__pycache__
+*.pyc
