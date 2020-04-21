@@ -11,8 +11,8 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     """This function matches the terms in the Hatebase.org dictionary with the tweets in our dataset. Each word in the tweet gets assigned a number based on its hatefulness, based on hatebase.org (hatefulness is determined by the word appearing in the dictionary, its ambiguity as a term of hatespeech, its average offensiveness (as defined by hatebase.org methodology). The output is a tensor used for further analysis.
     
     Args:
-        data (str): The input, a string (in this a tweet) from our dataframe
-        dictionary (dataframe): a dataframe containing hateful terms, default is an up-to-date extraction of English-language terms from Hatebase.org
+        data (str): The input, a string (in this a tweet) from our dataframe. To be specified. Default: None.
+        dictionary (dataframe): a dataframe containing hateful terms, default is an up-to-date extraction of English-language terms from Hatebase.org.
         verbose (bool): Whether or not outputs from print-Functions (used for testing purposes) should be shown
         average_hate (bool): Determines if a word in a tweet is found in multiple hate-dictionary entries, what value of hatefulness should be used. If "False", the maximum is used. If "True" (Default), the average is calculated.
         difflib_percentage (float): Percentage used to determine how sensible the matching function of words in the tweets with terms in the dictionary should be (in order to catch words with typos or small changes, which have been deliberately included in order to avoid detection, idea adapted from Chiu (2018): https://ethanchiu.xyz/blog/2018/02/03/Identifying-Hate/). Default: 0.85.
@@ -24,7 +24,7 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     # Loading the data
 
     # loading Hatebase dictionary
-    hatebase_path = 'coding/data/dictionary/hatebase/full_dictionary.csv'
+    hatebase_path = '../data/dictionary/hatebase/full_dictionary.csv'
     
     if dictionary is None:
         hatebase_dic = pd.read_csv(hatebase_path, index_col = 'vocabulary_id')
@@ -87,7 +87,7 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
         if not average_hate:
             final_hatefulness = np.amax(array_of_hate) 
         else:
-            array_of_hate = list_of_hate[array_of_hate != 0]
+            array_of_hate = array_of_hate[array_of_hate != 0]
             if verbose:
                 print("Array of hate (without 0)", array_of_hate)   
             final_hatefulness = array_of_hate.mean()
@@ -101,7 +101,7 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     return HateTensor
 
 # Testing on an example
-# tweet = ("your wagon fish chief you retarded f*ggots")
-# hatesearch(data = tweet, verbose = True)
+#tweet = ("your wagon fish chief you retarded f*ggots")
+#hatesearch(data = tweet, verbose = False)
 
 # %%
