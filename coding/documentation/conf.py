@@ -55,3 +55,6 @@ html_theme = 'alabaster'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+# -- Options for PDF output -------------------------------------------------
+pdf_documents = [('index', u'rst2pdf', u'Sample rst2pdf doc', u'Carlos Eduardo Posada, Maximilian Kupi, Michael Bodnar, and Nikolas Schmid'),]

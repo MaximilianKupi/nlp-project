@@ -16,11 +16,11 @@ def split_data(data=None, train_p=0.7, val_p=0.15, test_p=0.15, random_state=42,
 
     Args:
         data (variable name of the dataframe): Specify the input data frame. If nothing is specified, the function will get the data from our exchange base folder. 
-        random_state (python:int): Specify the seed for randomness in the shuffle split.
+        random_state (int): Specify the seed for randomness in the shuffle split.
         y (str): Sets the the column in the dataframe, where the labels are stored and which will be used as reference for the stratified sampling method. Default: 'label'.
-        train_p (python:float): Specify the proportion of the training split. Default: 0.7.
-        val_p (python:float): Specify the proportion of the validation split. Default: 0.15.
-        test_p (python:float): Specify the proportion of the test split. Default: 0.15.
+        train_p (float): Specify the proportion of the training split. Default: 0.7.
+        val_p (float): Specify the proportion of the validation split. Default: 0.15.
+        test_p (float): Specify the proportion of the test split. Default: 0.15.
 
     Returns:
         Training, validation, and test set (in that order). To assign them put "train_set, val_set, test_set = split_data()". 

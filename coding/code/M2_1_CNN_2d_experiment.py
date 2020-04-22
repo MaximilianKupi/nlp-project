@@ -33,7 +33,8 @@ class CNN_2d_experiment(nn.Module):
             nn.Conv2d(**{
                     "in_channels" : 1,
                     "out_channels" : 16,
-                    "kernel_size" : 3
+                    "kernel_size" : 3,
+                    "padding":1
                 }),
             nn.BatchNorm2d(**{
                     "num_features" : 16
@@ -49,6 +50,7 @@ class CNN_2d_experiment(nn.Module):
                     "in_channels" : 16,
                     "out_channels" : 32,
                     "kernel_size" : 3,
+                    "padding":1
                 }),
             nn.BatchNorm2d(**{
                     "num_features" : 32
@@ -63,6 +65,7 @@ class CNN_2d_experiment(nn.Module):
                     "in_channels" : 32,
                     "out_channels" : 64,
                     "kernel_size" : 3,
+                    "padding":1
                 }),
             nn.BatchNorm2d(**{
                     "num_features" : 64
@@ -73,7 +76,23 @@ class CNN_2d_experiment(nn.Module):
         print(self.layer3)
 
         self.fc = nn.Linear(**{
-            "in_features" : 1536, #7296 #3712, 
+            "in_features" : 15360, #7296 #3712, 
             "out_features" : 3
         }) # final layer of CNN
         print(self.fc)
+
+    def forward(self, x):
+        """Defines the forward pass of the model.
+        
+        Args:
+            x (torch tensor): The input / vector or matrix representation of tweets. 
+
+        Returns:
+            The output / predictions (torch tensor).
+        """
+        out = self.layer1(x)
+        out = self.layer2(out)
+        out = self.layer3(out)
+        out = out.reshape(out.size(0), -1)
+        out = self.fc(out)
+        return out

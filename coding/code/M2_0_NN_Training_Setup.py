@@ -54,6 +54,15 @@ class NN_Training_Setup:
             print('No GPU available, using the CPU instead.')
             self.device = torch.device("cpu")
 
+    def setSeedEverywhere(self):
+        """Sets seed for all random processes.
+        """
+        np.random.seed(self.variables['global']["seed"])
+        torch.manual_seed(self.variables['global']["seed"])
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(self.variables['global']["seed"])
+
+
     def loadFiles(self,stage):
         """Loads tensors from the filesystem into variables which it returns.
 
@@ -222,8 +231,8 @@ class NN_Training_Setup:
 
         Args:
             mode (str): One of min, max. In min mode, lr will be reduced when the quantity monitored has stopped decreasing; in max mode it will be reduced when the quantity monitored has stopped increasing. Default: ‘max’.
-            factor (python float): Factor by which the learning rate will be reduced. new_lr = lr * factor. Default: 0.1.
-            patience (python int): Number of epochs with no improvement after which learning rate will be reduced. For example, if patience = 2, then we will ignore the first 2 epochs with no improvement, and will only decrease the LR after the 3rd epoch if the loss still hasn’t improved then. Default: 2.
+            factor (float): Factor by which the learning rate will be reduced. new_lr = lr * factor. Default: 0.1.
+            patience (int): Number of epochs with no improvement after which learning rate will be reduced. For example, if patience = 2, then we will ignore the first 2 epochs with no improvement, and will only decrease the LR after the 3rd epoch if the loss still hasn’t improved then. Default: 2.
         """
         self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer=self.optimizer, mode=mode, factor=factor, patience=patience, verbose=True)
 
@@ -232,8 +241,8 @@ class NN_Training_Setup:
         """Calculates the accuracy based on the number of correctly predicted classes.
 
         Args:
-            total (python int): Total number of tweets to predict.
-            correct (python int): Number of correctly predicted tweets.
+            total (int): Total number of tweets to predict.
+            correct (int): Number of correctly predicted tweets.
         
         Returns:
             Accuracy based on total tweets and number of correctly predicted tweets.
@@ -246,14 +255,14 @@ class NN_Training_Setup:
         Saves the model as well as the training / validation metrics into a class variable. 
 
         Args:
-            demoLimit (python int): Sets a demo limit to reduce the dataset for demonstration / testing purposes only. Default: 0.
+            demoLimit (int): Sets a demo limit to reduce the dataset for demonstration / testing purposes only. Default: 0.
             saveToFile (bool): Whether or not to save the model as well as the training / validation metrics to a file. Default: True.
         
         Returns: 
             The model as well as the training / validation metrics as dictionary. 
 
         Warning:
-            Don't use demoLimit during actual training routine – only ment for test purposes. 
+            Don't use demoLimit during actual training routine – only meant for test purposes. 
         """ 
 
         self.resetResultMemory()
@@ -377,7 +386,7 @@ class NN_Training_Setup:
         """Evaluates the model on the validation dataset.
 
         Args:
-            epoch (python int): The current epoch number (is used to write the results).
+            epoch (int): The current epoch number (is used to write the results).
 
         Returns:
             The evaluation results.

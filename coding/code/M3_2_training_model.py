@@ -11,6 +11,7 @@
 import pandas as pd
 import json
 import platform
+import sys
 from sklearn.model_selection import ParameterGrid
 import csv 
 
@@ -26,16 +27,17 @@ from M2_1_CNN_2d_experiment import CNN_2d_experiment
 
 
 # # class to setup the dataloading, the training and the evaluation  
-from M2_0_NN_Training_Setup import *
+from M2_0_NN_training_setup import *
 
 
 # SETTING VARIABLES
 variables =	{
     "global" : {
-        "platform": 'local', # 'local' 'colab'
-        "model_name" : "CNN_experiment",
-        "grid_search_name" : "Retraining_Best_Performing_Model_90_epochs",
-        "dimension_of_model" : "1D" #2D
+        "platform": 'colab', # 'local' 'colab' # bitte anpassen, je nachdem, wo es läuft
+        "model_name" : "CNN_experiment_1D", # pro run bitte anpassen
+        "grid_search_name" : 'SecondGridSearch_1D_withPadding_and_Seed', #pro run bitte anpassen
+        "dimension_of_model" : "1D", #2D, # bitte anpassen, je nachdem ob es 1D oder 2D sein soll
+        "seed" : 42
     },
     "optimizer" : {
         "type": ["Adam", "RMSprop",  "SGD"],
@@ -43,7 +45,7 @@ variables =	{
         "momentum": 0.9
     },
     "training" : {
-        "epochs" : 90,
+        "epochs" : 40,
         "sampler_true_class_weights_false": [True,False], # If set to True Sampler is set to True and Class Weights of Loss Function Criterion are set to False 
         #If set to False Sampler is set to False and Class Weights are set True. In this case shuffle will be automatically set to True during training. 
         "scheduler" : [True, False], 
@@ -64,43 +66,6 @@ variables =	{
         #will be filled on the go
         },
     },
-    # currently not used since we are using cnn experiment
-    # "CNN" : {
-    #     "layers" : {
-    #         "1" : {
-    #             "Conv1d" : {
-    #                 "in_channels" : 120,
-    #                 "out_channels" : 16,
-    #                 "kernel_size" : 3
-    #             },
-    #             "BatchNorm1d" : {
-    #                 "num_features" : 16
-    #             },
-    #             "MaxPool2d" : {
-    #                 "kernel_size" : 2,
-    #                 "stride" : 2
-    #             }
-    #         },
-    #         "2" : {
-    #             "Conv1d" : {
-    #                 "in_channels" : 16,
-    #                 "out_channels" : 32,
-    #                 "kernel_size" : 3,
-    #             },
-    #             "BatchNorm1d" : {
-    #                 "num_features" : 32
-    #             },
-    #             "MaxPool2d" : {
-    #                 "kernel_size" : 2,
-    #                 "stride" : 2
-    #             }
-    #         }
-    #     },
-    #     "fc.Linear" : {
-    #         "in_features" : 32,
-    #         "out_features" : 3
-    #     }
-    # },
 }
 
 # SETTING-UP HYPER PARAMETER GRID SEARCH
@@ -117,10 +82,10 @@ if __name__ == "__main__":
 
     # Running through the grid
     for run_number, current_params in enumerate(all_params):
-        if run_number != 26:
+        
+        if run_number == 1000:
             print('skipping', run_number)
         else:
-
             # printing current parameters
             print(current_params)
 
@@ -184,6 +149,9 @@ if __name__ == "__main__":
         
             # Create new object of NNSetup class
             setup = NN_Training_Setup(variables)
+
+            # set seed everywhere for reprodrucability
+            setup.setSeedEverywhere()
 
             # load Data into the object NNSetup
             setup.loadDataFromVariable("training",train_vectors,train_labels)

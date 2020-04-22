@@ -18,7 +18,8 @@ from M1_2_cleaning_data import data_cleaning
 # function to split the data into train, val, and test set
 from M1_3_splitting_datasets import split_data
 # functino to vectorize the text data using pretrained BERT
-from M1_4_1_word_sentence_vectorisation_1d import createTensors
+from M1_4_vectorisation_1d import vectorize,createTensors
+from M1_4_vectorisation_2d import vectorize,createMatrix,padWithZeros,createTensors,stretch
 # function to search for hatebase dictionary terms in tweets
 from M1_5_dictionary_approach import apply_dict
 
@@ -27,15 +28,17 @@ from M1_5_dictionary_approach import apply_dict
 # to skip all following code when documenting with sphynx
 if __name__ == "__main__":
 
+    path = "coding/code/exchange_base/"
+
     ## only done once at the beginning ##
     # getting the data from our exchange base
-    data = pd.read_csv("exchange_base/data.csv")
+    data = pd.read_csv(path + "data.csv")
 
     ### cleaning the data ###
     data_cleaned = data_cleaning()
     # output_file_name = "exchange_base/data_cleaned.csv"
     # 2. use exchange_base files
-    path = "coding/code/exchange_base/"
+    
     output_file_path = path +  "data_cleaned.csv"
     # Saving the cleaned dataset
     data_cleaned.to_csv(output_file_path)

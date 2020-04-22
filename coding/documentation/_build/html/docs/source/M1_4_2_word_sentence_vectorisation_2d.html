@@ -52,6 +52,26 @@ vectorizes the data and saves the labels separate as
 </dd></dl>
 
 <dl class="py function">
+<dt id="M1_4_2_word_sentence_vectorisation_2d.padWithZeros">
+<code class="sig-prename descclassname">M1_4_2_word_sentence_vectorisation_2d.</code><code class="sig-name descname">padWithZeros</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vector</span></em>, <em class="sig-param"><span class="n">n</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_4_2_word_sentence_vectorisation_2d.padWithZeros" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds zeros to the end of a vector until a certain size is reached</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vector</strong> (<em>tensorr</em>) – The input vector that should be padded</p></li>
+<li><p><strong>n</strong> (<em>int</em>) – The length of the output vector after padding</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>padded vector</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>tensor</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="M1_4_2_word_sentence_vectorisation_2d.vectorize">
 <code class="sig-prename descclassname">M1_4_2_word_sentence_vectorisation_2d.</code><code class="sig-name descname">vectorize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">maxVectorLength</span><span class="o">=</span><span class="default_value">120</span></em>, <em class="sig-param"><span class="n">matrixColumns</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">matrixRows</span><span class="o">=</span><span class="default_value">12</span></em>, <em class="sig-param"><span class="n">textColumn</span><span class="o">=</span><span class="default_value">'tweet'</span></em>, <em class="sig-param"><span class="n">labelColumn</span><span class="o">=</span><span class="default_value">'label'</span></em>, <em class="sig-param"><span class="n">pretrainedModel</span><span class="o">=</span><span class="default_value">'bert-base-uncased'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">randomSeed</span><span class="o">=</span><span class="default_value">42</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_4_2_word_sentence_vectorisation_2d.vectorize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs a two tensors.
