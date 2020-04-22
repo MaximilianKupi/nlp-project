@@ -136,7 +136,9 @@ class NN_Training_Setup:
         
         elif stage == "validation":
             self.val_dataset, self.val_dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=False, sampler=False)
-
+        
+        elif stage == "testing":
+            self.test_dataset, self.test_dataset_loader = self.createDataLoader(stage, vectors, labels, shuffle=False, sampler=False)
 
     def loadDataFromVariable(self,stage,vectors,labels):
         """Wrapper for createDataLoader.
@@ -461,7 +463,7 @@ class NN_Training_Setup:
             }
 
     def saveEvaluation(self,result,epoch):
-        """Saves the evalution to the results.
+        """Saves the evaluation to the results.
         """
         self.result['epochs'].append(result)
     
@@ -484,5 +486,86 @@ class NN_Training_Setup:
             print(file)
             json.dump(self.result, fp, separators=(',', ':'), indent=4)
 
+    def loadModel(self, model_path):
+            """Loads pretrained model for testing.
 
+            Args:
+                model_path: The location of the model to test.
+            """ 
+            self.model.load_state_dict(torch.load(model_path))
 
+    def testModel(self):
+            """Evaluates the model on the validation dataset.
+
+            Returns:
+                The evaluation results.
+            """ 
+
+            self.model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
+            with torch.no_grad():
+                correct = 0
+                total = 0
+                outputs_epoch = []
+                labels_epoch = []
+                predicted_epoch = []
+                running_acc = 0.
+         
+                for i, (labelsBertTensor, labels) in enumerate(self.test_dataset_loader):
+                    
+                    labelsBertTensor = labelsBertTensor.to(self.device)
+                    labels = labels.to(self.device)
+                    
+                    outputs = self.model(self.prepareVectorForNN(labelsBertTensor))
+                    #print(outputs.data)
+                    _, predicted = torch.max(outputs.data, 1)
+                    #print(predicted.item())
+
+                    # calculating total number, correct number and loss for predicted tweets
+                    total += labels.size(0)
+                    correct += (predicted == labels).sum().item()
+                    
+                    # appending the overall predicted and target tensor for the whole epoch to calculate the metrics as lists
+                    labels_epoch.append(labels)
+                    predicted_epoch.append(predicted)
+
+                    # calculating the running accuracy
+                    acc_t = self.getAccuracy(total, correct)
+                    running_acc += (acc_t - running_acc) / (i+1)
+
+                # tretransforming the list into tensors
+                labels_epoch = torch.cat(labels_epoch).cpu()
+                predicted_epoch = torch.cat(predicted_epoch).cpu()
+                
+                # calculating the classification report with sklearn    
+                classification_report_json = classification_report(labels_epoch, predicted_epoch, output_dict=True)
+                classification_report_str = classification_report(labels_epoch, predicted_epoch, output_dict=False)
+                
+                labels_epoch_str =  " ".join(str(x) for x in labels_epoch.numpy().tolist()) 
+                predicted_epoch_str = " ".join(str(x) for x in predicted_epoch.numpy().tolist())
+
+                result = {
+                    "correct" : correct,
+                    "total" : total,
+                    "accuracy" : running_acc, 
+                    "stage" : 'testing',
+                    "f1_score_hate" : classification_report_json['0']['f1-score'],
+                    "f1_score_macro" : classification_report_json['macro avg']['f1-score'],
+                    "classification_report_json" : classification_report_json,
+                    "classification_report_str" : classification_report_str,
+                    "predicted_epoch": predicted_epoch_str,
+                    "labels_epoch": labels_epoch_str
+                    }
+
+                print('Test Accuracy on Testing: {} %'.format(running_acc))
+                print('F1-score Macro on Testing: {}'.format(classification_report_json['macro avg']['f1-score']))
+                print('Precision of Hate on Testing: {}'.format(classification_report_json['0']['precision']))
+                print('Recall of Hate on Testing: {}'.format(classification_report_json['0']['recall']))
+                print('F1-score of Hate on Testing: {}'.format(classification_report_json['0']['f1-score']))
+
+                # Saving the testing results to a file
+
+                file_path = self.variables['testing']['output']['results'] 
+                with open(file_path, 'w+', encoding='utf-8') as fp:
+                    print("Save outputfile")
+                    print(file_path)
+                    json.dump(result, fp, separators=(',', ':'), indent=4)
