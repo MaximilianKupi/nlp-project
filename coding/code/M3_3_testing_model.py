@@ -30,13 +30,13 @@ from M2_0_NN_Training_Setup import *
 
 
 # SETTING VARIABLES
-path_of_the_model_to_test = ""
+path_of_the_model_to_test = "/Users/mxm/Google Drive/Masterstudium/Inhalte/4th Semester/NLP/nlp-project/coding/code/exchange_base/Model_Results/FirstGridSearch_2D_withPadding_and_Seed/28_CNN_experiment_2D_optimizer_RMSprop_lr_01_epochs_40_batchsize_16_samplerTclassweightsF_True_scheduler_True/Model_epoch_33.pt"
 variables =	{
     "global" : {
         "platform": 'local', # 'local' 'colab'
         "model_name" : "CNN_experiment", 
-        "grid_search_name" : "Retraining_Best_Performing_Model_90_epochs",
-        "dimension_of_model" : "1D" #2D
+        "grid_search_name" : "First_try_testing",
+        "dimension_of_model" : "2D" #2D
     },
     "optimizer" : {
         "type": ["Adam", "RMSprop",  "SGD"],
@@ -118,6 +118,9 @@ else:
 
 # RUNNING THE MODEL
 
+# Create new object of NNSetup class
+setup = NN_Training_Setup(variables)
+
 # load Data into the object NNSetup
 setup.loadDataFromVariable("testing",test_vectors,test_labels)
 
@@ -131,8 +134,6 @@ elif variables['global']['dimension_of_model'] == '2D':
 else:
     print('Please specify correct dimension of model.')
 
-# Create new object of NNSetup class
-setup = NN_Training_Setup(variables)
 
 # add model to NNSetup object
 setup.addNN(model)

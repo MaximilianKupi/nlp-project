@@ -12,7 +12,6 @@
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/language_data.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
    
@@ -31,57 +30,8 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-M1_6_create_matrix_vector_and_dictionary">
-<span id="m1-6-create-matrix-vector-and-dictionary-module"></span><h1>M1_6_create_matrix_vector_and_dictionary module<a class="headerlink" href="#module-M1_6_create_matrix_vector_and_dictionary" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
-<dt id="M1_6_create_matrix_vector_and_dictionary.merge">
-<code class="sig-prename descclassname">M1_6_create_matrix_vector_and_dictionary.</code><code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vectorized</span></em>, <em class="sig-param"><span class="n">hatefreq</span></em>, <em class="sig-param"><span class="n">hateint</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_6_create_matrix_vector_and_dictionary.merge" title="Permalink to this definition">¶</a></dt>
-<dd><p>merges a 1d vectorized representation of a tweet with the hatefrequency and</p>
-</dd></dl>
-
-<dl class="py function">
-<dt id="M1_6_create_matrix_vector_and_dictionary.squeeze">
-<code class="sig-prename descclassname">M1_6_create_matrix_vector_and_dictionary.</code><code class="sig-name descname">squeeze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">input</span></em>, <em class="sig-param"><span class="n">dim</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">out</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Tensor<a class="headerlink" href="#M1_6_create_matrix_vector_and_dictionary.squeeze" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a tensor with all the dimensions of <code class="xref py py-attr docutils literal notranslate"><span class="pre">input</span></code> of size <cite>1</cite> removed.</p>
-<p>For example, if <cite>input</cite> is of shape:
-<span class="math notranslate nohighlight">\((A \times 1 \times B \times C \times 1 \times D)\)</span> then the <cite>out</cite> tensor
-will be of shape: <span class="math notranslate nohighlight">\((A \times B \times C \times D)\)</span>.</p>
-<p>When <code class="xref py py-attr docutils literal notranslate"><span class="pre">dim</span></code> is given, a squeeze operation is done only in the given
-dimension. If <cite>input</cite> is of shape: <span class="math notranslate nohighlight">\((A \times 1 \times B)\)</span>,
-<code class="docutils literal notranslate"><span class="pre">squeeze(input,</span> <span class="pre">0)</span></code> leaves the tensor unchanged, but <code class="docutils literal notranslate"><span class="pre">squeeze(input,</span> <span class="pre">1)</span></code>
-will squeeze the tensor to the shape <span class="math notranslate nohighlight">\((A \times B)\)</span>.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The returned tensor shares the storage with the input tensor,
-so changing the contents of one will change the contents of the other.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>input</strong> (<em>Tensor</em>) – the input tensor.</p></li>
-<li><p><strong>dim</strong> (<em>int</em><em>, </em><em>optional</em>) – if given, the input will be squeezed only in
-this dimension</p></li>
-<li><p><strong>out</strong> (<em>Tensor</em><em>, </em><em>optional</em>) – the output tensor.</p></li>
-</ul>
-</dd>
-</dl>
-<p>Example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-<span class="go">torch.Size([2, 1, 2, 1, 2])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-<span class="go">torch.Size([2, 2, 2])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-<span class="go">torch.Size([2, 1, 2, 1, 2])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
-<span class="go">torch.Size([2, 2, 1, 2])</span>
-</pre></div>
-</div>
-</dd></dl>
-
+  <div class="section" id="m1-6-create-matrix-vector-and-dictionary-module">
+<h1>M1_6_create_matrix_vector_and_dictionary module<a class="headerlink" href="#m1-6-create-matrix-vector-and-dictionary-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 

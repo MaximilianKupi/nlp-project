@@ -34,9 +34,9 @@ from M2_0_NN_training_setup import *
 variables =	{
     "global" : {
         "platform": 'colab', # 'local' 'colab' # bitte anpassen, je nachdem, wo es läuft
-        "model_name" : "CNN_experiment_1D", # pro run bitte anpassen
-        "grid_search_name" : 'SecondGridSearch_1D_withPadding_and_Seed', #pro run bitte anpassen
-        "dimension_of_model" : "1D", #2D, # bitte anpassen, je nachdem ob es 1D oder 2D sein soll
+        "model_name" : "CNN_experiment_2D", # pro run bitte anpassen
+        "grid_search_name" : 'Final_long_training_2D_60_epochs', #pro run bitte anpassen
+        "dimension_of_model" : "2D", #2D, # bitte anpassen, je nachdem ob es 1D oder 2D sein soll
         "seed" : 42
     },
     "optimizer" : {
@@ -45,7 +45,7 @@ variables =	{
         "momentum": 0.9
     },
     "training" : {
-        "epochs" : 40,
+        "epochs" : 60,
         "sampler_true_class_weights_false": [True,False], # If set to True Sampler is set to True and Class Weights of Loss Function Criterion are set to False 
         #If set to False Sampler is set to False and Class Weights are set True. In this case shuffle will be automatically set to True during training. 
         "scheduler" : [True, False], 
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     # Running through the grid
     for run_number, current_params in enumerate(all_params):
         
-        if run_number == 1000:
+        if run_number not in [27,28]:
             print('skipping', run_number)
         else:
             # printing current parameters

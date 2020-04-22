@@ -501,7 +501,7 @@ class NN_Training_Setup:
             Args:
                 model_path: The location of the model to test.
             """ 
-            self.model.load_state_dict(torch.load(model_path))
+            self.model.load_state_dict(torch.load(model_path, map_location=self.device))
 
     def testModel(self):
             """Evaluates the model on the validation dataset.
@@ -553,6 +553,7 @@ class NN_Training_Setup:
                 predicted_epoch_str = " ".join(str(x) for x in predicted_epoch.numpy().tolist())
 
                 result = {
+                    "epoch" : 0,
                     "correct" : correct,
                     "total" : total,
                     "accuracy" : running_acc, 
