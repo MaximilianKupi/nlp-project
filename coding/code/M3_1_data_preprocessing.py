@@ -20,8 +20,6 @@ from M1_3_splitting_datasets import split_data
 # functino to vectorize the text data using pretrained BERT
 from M1_4_vectorisation_1d import vectorize,createTensors
 from M1_4_vectorisation_2d import vectorize,createMatrix,padWithZeros,createTensors,stretch
-# function to search for hatebase dictionary terms in tweets
-from M1_5_dictionary_approach import apply_dict
 
 #### PREPROCESSING ####
 
@@ -60,5 +58,4 @@ if __name__ == "__main__":
     createTensors(path,"val")
     createTensors(path,"test")
 
-    # applying dictionary approach
-    HateFrequency, HateIntensity, dataset_with_hatebasecount = apply_dict(data=data)
+    # TODO: Michael, add differntiation between 1D and 2D 

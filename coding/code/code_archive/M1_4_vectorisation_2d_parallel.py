@@ -4,7 +4,7 @@ import numpy as np
 import transformers
 import torch
 import torch.nn.functional as F
-from M1_5t_dictionary_approach_tweetlevel import hatesearch,loadDictionary
+from M1_5_dictionary_approach_tweetlevel import hatesearch,loadDictionary
 from math import sqrt
 from joblib import Parallel, delayed
 import multiprocessing
