@@ -34,18 +34,40 @@
 <span id="m1-2-cleaning-data-module"></span><h1>M1_2_cleaning_data module<a class="headerlink" href="#module-M1_2_cleaning_data" title="Permalink to this headline">¶</a></h1>
 <p>This is the script to defined the data cleaning function for our preprocessing.</p>
 <dl class="py function">
-<dt id="M1_2_cleaning_data.data_cleaning">
-<code class="sig-prename descclassname">M1_2_cleaning_data.</code><code class="sig-name descname">data_cleaning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">standard_twitter_cleaning</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">lower_casing</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">digits_removal</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">punct_removal</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">whitespace_removal</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_2_cleaning_data.data_cleaning" title="Permalink to this definition">¶</a></dt>
-<dd><p>Cleans the dataset by performing standard Twitter cleaning (removing URLs, mentions, hashtags, reserved words, emojis and smileys), changing the text to lower case, and removing punctuation, whitespaces and standalone digits.</p>
+<dt id="M1_2_cleaning_data.clean_text">
+<code class="sig-prename descclassname">M1_2_cleaning_data.</code><code class="sig-name descname">clean_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">standard_twitter_cleaning</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">lower_casing</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">digits_removal</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">punct_removal</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">whitespace_removal</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_2_cleaning_data.clean_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cleans any string of text by performing standard Twitter cleaning (removing URLs, mentions, hashtags, reserved words, emojis and smileys), changing the text to lower case, and removing punctuation, whitespaces and standalone digits.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – Specify the input dataframe. If nothing is specified, the function will get the data from our exchange base folder.</p></li>
+<li><p><strong>text</strong> (<em>str</em>) – The input text to clean.</p></li>
 <li><p><strong>standard_twitter_cleaning</strong> (<em>bool</em>) – Whether or not to use standard twitter cleaining package. Default: True.</p></li>
 <li><p><strong>lower_casing</strong> (<em>bool</em>) – Whether or not to lower case the words. Default: True.</p></li>
 <li><p><strong>digits_removal</strong> (<em>bool</em>) – Whether or not to remove digits. Default: True.</p></li>
 <li><p><strong>punct_removal</strong> (<em>bool</em>) – Whether or not to remove anything but words. Default: True.</p></li>
 <li><p><strong>whitespace_removal</strong> (<em>bool</em>) – Whether or not to remove excessive white space in between words. Default: True.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The cleaned text.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="M1_2_cleaning_data.data_cleaning">
+<code class="sig-prename descclassname">M1_2_cleaning_data.</code><code class="sig-name descname">data_cleaning</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">text_column</span><span class="o">=</span><span class="default_value">'tweet'</span></em>, <em class="sig-param"><span class="n">standard_twitter_cleaning</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">lower_casing</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">digits_removal</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">punct_removal</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">whitespace_removal</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M1_2_cleaning_data.data_cleaning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the clean_text function to a dataframe where the tweets are saved as strings in a column.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>pandas dataframe</em>) – Specify the input dataframe. If nothing is specified, the function will get the data from our exchange base folder.</p></li>
+<li><p><strong>text_column</strong> (<em>str</em>) – Specify the column where the tweets are stored as strings. Default: ‘tweet’.</p></li>
+<li><p><strong>standard_twitter_cleaning</strong> (<em>bool</em>) – Whether or not to use standard twitter cleaining package. Default: True. (will be passed on to the clean_text function)</p></li>
+<li><p><strong>lower_casing</strong> (<em>bool</em>) – Whether or not to lower case the words. Default: True. (will be passed on to the clean_text function)</p></li>
+<li><p><strong>digits_removal</strong> (<em>bool</em>) – Whether or not to remove digits. Default: True. (will be passed on to the clean_text function)</p></li>
+<li><p><strong>punct_removal</strong> (<em>bool</em>) – Whether or not to remove anything but words. Default: True. (will be passed on to the clean_text function)</p></li>
+<li><p><strong>whitespace_removal</strong> (<em>bool</em>) – Whether or not to remove excessive white space in between words. Default: True. (will be passed on to the clean_text function)</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
