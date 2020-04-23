@@ -145,6 +145,17 @@ Saves object as class variable.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.loadModel">
+<code class="sig-name descname">loadModel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_path</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.loadModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads pretrained model for testing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model_path</strong> – The location of the model to test.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt id="M2_0_NN_training_setup.NN_Training_Setup.prepareVectorForNN">
 <code class="sig-name descname">prepareVectorForNN</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vector</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.prepareVectorForNN" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prepares the input tensor for CNN by unsqueezing it on the first dimension. This is where the features will be written to while convoluting.</p>
@@ -182,7 +193,7 @@ Saves object as class variable.</p>
 <dl class="py method">
 <dt id="M2_0_NN_training_setup.NN_Training_Setup.saveEvaluation">
 <code class="sig-name descname">saveEvaluation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">result</span></em>, <em class="sig-param"><span class="n">epoch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.saveEvaluation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves the evalution to the results.</p>
+<dd><p>Saves the evaluation to the results.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -237,6 +248,13 @@ Saves the optimizer into a class variable.</p>
 <dd class="field-odd"><p>Prints status report.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="M2_0_NN_training_setup.NN_Training_Setup.testModel">
+<code class="sig-name descname">testModel</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M2_0_NN_training_setup.NN_Training_Setup.testModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates the model on the validation dataset.</p>
+<p>Saves the results as JSON file under the path specified in the M3_3_testing_model script.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -327,7 +345,7 @@ Saves the optimizer into a class variable.</p>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
-      <a href="../../_sources/docs/source/M2_0_NN_training_setup.rst.txt"
+      <a href="../../_sources/docs/source/M2_0_NN_Training_Setup.rst.txt"
           rel="nofollow">Page source</a>
     </div>
 

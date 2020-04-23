@@ -1,7 +1,7 @@
-M2\_1\_CNN\_1d\_fromClass module
+M4\_1\_Testing\_functions module
 ================================
 
-.. automodule:: M2_1_CNN_1d_fromClass
+.. automodule:: M4_1_Testing_functions
    :members:
    :undoc-members:
    :show-inheritance:

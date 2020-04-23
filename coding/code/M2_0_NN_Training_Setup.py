@@ -506,8 +506,7 @@ class NN_Training_Setup:
     def testModel(self):
             """Evaluates the model on the validation dataset.
 
-            Returns:
-                The evaluation results.
+            Saves the results as JSON file under the path specified in the M3_3_testing_model script. 
             """ 
 
             self.model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)

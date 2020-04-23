@@ -39,8 +39,8 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>str</em>) – The input, a string (in this a tweet) from our dataframe</p></li>
-<li><p><strong>dictionary</strong> (<em>dataframe</em>) – a dataframe containing hateful terms, default is an up-to-date extraction of English-language terms from Hatebase.org</p></li>
+<li><p><strong>data</strong> (<em>str</em>) – The input, a string (in this a tweet) from our dataframe. To be specified. Default: None.</p></li>
+<li><p><strong>dictionary</strong> (<em>dataframe</em>) – a dataframe containing hateful terms, default is an up-to-date extraction of English-language terms from Hatebase.org.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – Whether or not outputs from print-Functions (used for testing purposes) should be shown</p></li>
 <li><p><strong>average_hate</strong> (<em>bool</em>) – Determines if a word in a tweet is found in multiple hate-dictionary entries, what value of hatefulness should be used. If “False”, the maximum is used. If “True” (Default), the average is calculated.</p></li>
 <li><p><strong>difflib_percentage</strong> (<em>float</em>) – Percentage used to determine how sensible the matching function of words in the tweets with terms in the dictionary should be (in order to catch words with typos or small changes, which have been deliberately included in order to avoid detection, idea adapted from Chiu (2018): <a class="reference external" href="https://ethanchiu.xyz/blog/2018/02/03/Identifying-Hate/">https://ethanchiu.xyz/blog/2018/02/03/Identifying-Hate/</a>). Default: 0.85.</p></li>
