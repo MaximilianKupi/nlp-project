@@ -1,4 +1,4 @@
-"""This is the script to test some our functions
+"""This is the script to test some of our functions
 """
 
 ### WORK IN PROGRESS
@@ -17,7 +17,7 @@ from nltk.corpus import stopwords
 import torch
 import difflib
 from M1_2_cleaning_data import data_cleaning
-from M1_5t_dictionary_approach_tweetlevel import hatesearch
+from M1_5_dictionary_approach_tweetlevel import hatesearch
 
 # %% Defining tests
 
