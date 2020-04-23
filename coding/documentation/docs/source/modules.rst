@@ -16,4 +16,4 @@ code
    M3_1_data_preprocessing
    M3_2_training_model
    M3_3_testing_model
-   M4_1_Testing_functions
+   M4_1_testing_functions

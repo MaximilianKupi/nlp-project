@@ -1,7 +1,7 @@
-M4\_1\_Testing\_functions module
+M4\_1\_testing\_functions module
 ================================
 
-.. automodule:: M4_1_Testing_functions
+.. automodule:: M4_1_testing_functions
    :members:
    :undoc-members:
    :show-inheritance:
