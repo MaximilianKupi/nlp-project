@@ -83,10 +83,15 @@ def createMatrix(tweetText,tokenizer,maxVectorLength,pretrainedModel,hatebase_di
             print("Float tweet found in data: \""+str(tweetText)+"\" --> interpreting it as string with str(tweet)")
         
     tweetText = str(tweetText) #empty tweets were interpreted as float 
-
-    encoding = padWithZeros(torch.Tensor(tokenizer.encode(tweetText, max_length=maxVectorLength)),maxVectorLength)
     
-    vlength = encoding.size()[0]
+    raw_encoding = torch.Tensor(tokenizer.encode(tweetText, max_length=maxVectorLength))
+    
+    vlength = raw_encoding.size()[0]
+
+    #print(vlength)
+
+    encoding = padWithZeros(raw_encoding,maxVectorLength)
+
     hateMetric = padWithZeros(stretch(hatesearch(tweetText,hatebase_dic),vlength),maxVectorLength)
 
     matrix = torch.cat((encoding,hateMetric),0).unsqueeze(0)
@@ -131,8 +136,8 @@ def createTensors(path,stage):
 
     """
     input_file = path + stage + "_set.csv"
-    output_file_name_vectorized = path + stage +  "_vectorized_2d.pt"
-    output_file_name_labels = path + stage +  "_labels_2d.pt"
+    output_file_name_vectorized = path + stage +  "_vectorized_2d_NEW.pt"
+    output_file_name_labels = path + stage +  "_labels_2d_NEW.pt"
     # loading data
     data = pd.read_csv(input_file)
 
@@ -198,7 +203,7 @@ def stretch(vector,n,plot=False):
     return torch.Tensor(newY)
 
 if __name__ == "__main__":
-    path = "exchange_base/"
+    path = "coding/code/exchange_base/"
 
     createTensors(path,"train")
     createTensors(path,"val")

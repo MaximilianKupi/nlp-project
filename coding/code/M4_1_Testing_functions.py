@@ -88,17 +88,21 @@ class TestingFunctions(unittest.TestCase):
         original_df = pd.DataFrame([["★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp",2]], columns=['tweet', 'label'])
         function_embeddings, function_labels = vectorize1D(original_df)
         ideal_embeddings, ideal_labels = torch.tensor([np.random.randint(0, 9, 120)]), torch.tensor([2])  
-        self.assertTrue(ideal_embeddings.size()==function_embeddings.size())    
+        self.assertTrue(ideal_embeddings.size()==function_embeddings.size())
+        self.assertTrue(function_labels.size() == ideal_labels.size())    
 
-    # TODO: either delete or check what micheal said, and then also add the 2d version
     def test_VectoriserDimensions2D(self):
         """Tests the correct output dimensions of the vectorize function from M1_4_vectorisation_2d.
         """
         original_df = pd.DataFrame([["★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp",2]], columns=['tweet', 'label'])
         function_embeddings, function_labels = vectorize2D(original_df)
         ideal_embeddings, ideal_labels = torch.tensor([np.random.randint(0, 9, (2,120))]), torch.tensor([2])  
+        print(function_embeddings.size())
+        print(ideal_embeddings.size())
+        print(function_labels.size())
+        print(ideal_labels.size())
         self.assertTrue(ideal_embeddings.size()==function_embeddings.size())
-        self.assertTrue(function_labels, ideal_labels)
+        self.assertTrue(function_labels.size() == ideal_labels.size())
 
 
 if __name__ == '__main__':

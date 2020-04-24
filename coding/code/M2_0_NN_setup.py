@@ -1,4 +1,4 @@
-"""This is the script to define the class for setting up the training and evaluation routine.
+"""This is the script to define the class for setting up the training and testing routine.
 """
 
 # loading the required packages
