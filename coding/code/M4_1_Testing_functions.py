@@ -56,7 +56,7 @@ class TestingFunctions(unittest.TestCase):
         ideal_cleaned_tweet = 'jamice caption this picture *shows a picture from show* ""so u dressed like sherlock holmes but im embarrassing u?"" lmaooooo love her"'
         self.assertEqual(function_cleaned_tweet, ideal_cleaned_tweet)
 
-    def test_DataClealing(self):
+    def test_DataCleaning(self):
         """Tests the text_column setter of the data_cleaning function from M1_2_cleaning_data works, based on an example dataframe.
         """
         original_df = pd.DataFrame({"text":"★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp", "label":2}, {"text":"Hey #Sweden how you liking those immigrants now? #Stockholm Wonder how many will say it's not radical islamic terro… https://t.co/7V9UWL3S5f", "label":0})

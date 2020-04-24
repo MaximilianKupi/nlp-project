@@ -1,4 +1,7 @@
-# %% Loading packages
+"""This is the script to define the function that searches for hatetful terms.
+"""
+
+# Loading packages
 
 import torch
 import pandas as pd
@@ -104,4 +107,3 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
 #tweet = ("your wagon fish chief you retarded f*ggots")
 #hatesearch(data = tweet, verbose = False)
 
-# %%
