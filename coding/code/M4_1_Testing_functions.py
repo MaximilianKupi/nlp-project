@@ -7,6 +7,7 @@
 import unittest
 import pandas as pd
 import numpy as np
+import random
 import re
 import string
 import preprocessor as p # needs to be installed via pip and tweet-preprocessor as well
@@ -17,7 +18,8 @@ import difflib
 from M1_2_cleaning_data import *
 from M1_5_dictionary_approach_tweetlevel import hatesearch
 from M1_3_splitting_datasets import split_data
-from M1_4_vectorisation_2d import vectorize 
+from M1_4_vectorisation_1d import vectorize as vectorize1D
+from M1_4_vectorisation_2d import vectorize as vectorize2D
 
 class TestingFunctions(unittest.TestCase):
     """Sets up various unittests.
@@ -82,13 +84,25 @@ class TestingFunctions(unittest.TestCase):
         print(ideal_output)
         self.assertTrue(torch.equal(function_output, ideal_output))
 
-    # TODO: either delete or check what micheal said, and then also add the 2d version
     def test_VectoriserDimensions1D(self):
         """Tests the correct output dimensions of the vectorize function from M1_4_vectorisation_1d.
         """
         original_df = pd.DataFrame([["★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp",2]], columns=['tweet', 'label'])
-        function_embeddings, function_labels = vectorize(original_df)
-        ideal_embeddings, ideal_labels = torch.tensor([0,0,0,0,0,0,0,0]), torch.tensor([2])   
+        function_embeddings, function_labels = vectorize1D(original_df)
+        ideal_embeddings, ideal_labels = torch.tensor([np.random.randint(0, 9, 120)]), torch.tensor([2])  
+        print(ideal_embeddings)
+        print(function_embeddings)
+        print(ideal_embeddings.size())
+        print(function_embeddings.size())
+        self.assertTrue(ideal_embeddings.size()==function_embeddings.size())    
+
+    # TODO: either delete or check what micheal said, and then also add the 2d version
+    def test_VectoriserDimensions2D(self):
+        """Tests the correct output dimensions of the vectorize function from M1_4_vectorisation_2d.
+        """
+        original_df = pd.DataFrame([["★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp",2]], columns=['tweet', 'label'])
+        function_embeddings, function_labels = vectorize2D(original_df)
+        ideal_embeddings, ideal_labels = torch.tensor([np.random.randint(0, 9, (2,120))]), torch.tensor([2])  
         print(ideal_embeddings)
         print(function_embeddings)
         print(ideal_embeddings.size())
