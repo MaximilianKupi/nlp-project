@@ -1,3 +1,6 @@
+"""This is the script to define the vectorisation function for the 2D model with dictionary approach.
+"""
+
 # loading packages
 import pandas as pd
 import numpy as np
@@ -18,7 +21,7 @@ def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textCo
     """ Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs a two tensors.
     One containing the vectorized entries of the column and one containing the associated labels.
 
-    Parameters:
+    Args:
         data (dataframe): The dataset from which the data should be extracted
         maxVectorLength (int): The length of the vector embedding. Will be padded with zeros if shorter
         matrixColumns (int): Vector embedding will be reshaped to matrix with this column amount

@@ -1,6 +1,4 @@
-"""Merging and Shuffling the Datasets
-
-This is the script which has to be run at the beginning to merge and shuffle the datasets of Founta et al. and Davidson et al.
+"""This is the script which has to be run at the beginning to merge and shuffle the datasets of Founta et al. and Davidson et al.
 """
 
 # loading packages

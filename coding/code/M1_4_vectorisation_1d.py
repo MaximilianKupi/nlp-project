@@ -1,3 +1,5 @@
+"""This is the script to define the 1D vectorisation without our dictionary approach.
+"""
 # %%
 # loading packages
 import pandas as pd
@@ -8,7 +10,7 @@ import tqdm
 
 # %%
 def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label", pretrainedModel="bert-base-uncased", verbose=True, randomSeed=42):
-    """ Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs a two tensors.
+    """ Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs two tensors.
     One containing the vectorized entries of the column and one containing the associated labels.
 
     Parameters:

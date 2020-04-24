@@ -70,7 +70,7 @@ def data_cleaning(data = None, text_column ='tweet', standard_twitter_cleaning =
     Args:
         data (pandas dataframe): Specify the input dataframe. If nothing is specified, the function will get the data from our exchange base folder.
         text_column (str): Specify the column where the tweets are stored as strings. Default: 'tweet'.
-        standard_twitter_cleaning (bool): Whether or not to use standard twitter cleaining package. Default: True. (will be passed on to the clean_text function)
+        standard_twitter_cleaning (bool): Whether or not to use standard twitter cleaning package. Default: True. (will be passed on to the clean_text function)
         lower_casing (bool): Whether or not to lower case the words. Default: True. (will be passed on to the clean_text function)
         digits_removal (bool): Whether or not to remove digits. Default: True. (will be passed on to the clean_text function)
         punct_removal (bool): Whether or not to remove anything but words. Default: True. (will be passed on to the clean_text function)
