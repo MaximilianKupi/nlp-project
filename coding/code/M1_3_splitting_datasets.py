@@ -36,12 +36,17 @@ def split_data(data=None, train_p=0.7, val_p=0.15, test_p=0.15, random_state=42,
         raise Exception('train_p + val_p + test_p should sum up to 1, however they sum up to: {}'.format(x))
 
     # setting the exchange_base link from where to get the data
-    path_data_cleaned = 'coding/code/exchange_base/data_cleaned.csv'
+    path_data_cleaned = 'coding/code/exchange_base/data_cleaned_wp.csv'
 
     # reading the data in case it is not here already (since it will later all be applied in one pipeline)
     if data is None:
         data = pd.read_csv(path_data_cleaned, index_col='id')
         print('INFO: Reading data_cleaned anew from exchange_base since no input was provided')
+
+    # drop rows where the cleaning deleted all content from tweet column and resetting the index
+    data = data.dropna()
+    data.reset_index(inplace=True)
+
 
     # instatiating the class for the shuffle split of training and test/validation set
     split = StratifiedShuffleSplit(n_splits=10, test_size = test_p, random_state = random_state)
@@ -69,6 +74,6 @@ if __name__ == "__main__":
     train_set, val_set, test_set = split_data()
 
     # saving the dataframes
-    train_set.to_csv("coding/code/exchange_base/train_set.csv")
-    val_set.to_csv("coding/code/exchange_base/val_set.csv")
-    test_set.to_csv("coding/code/exchange_base/test_set.csv")
+    train_set.to_csv("coding/code/exchange_base/train_set_wp.csv")
+    val_set.to_csv("coding/code/exchange_base/val_set_wp.csv")
+    test_set.to_csv("coding/code/exchange_base/test_set_wp.csv")

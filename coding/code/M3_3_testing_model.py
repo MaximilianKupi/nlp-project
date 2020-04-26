@@ -26,18 +26,18 @@ from M2_1_CNN_2d_experiment import CNN_2d_experiment
 
 
 # # class to setup the dataloading, the training and the evaluation  
-from M2_0_NN_training_setup import *
+from M2_0_NN_setup import *
 
 # keeping script from running while documenting
 if __name__ == "__main__":
     # SETTING VARIABLES
-    path_of_the_model_to_test = "/Users/mxm/Google Drive/Masterstudium/Inhalte/4th Semester/NLP/nlp-project/coding/code/exchange_base/Model_Results/Final_long_training_2D_90_epochs/27_CNN_experiment_2D_optimizer_Adam_lr_01_epochs_90_batchsize_16_samplerTclassweightsF_False_scheduler_False/Model_epoch_57.pt"
+    path_of_the_model_to_test = "/Users/mxm/Google Drive/Masterstudium/Inhalte/4th Semester/NLP/nlp-project/coding/code/exchange_base/Model_Results/Training_26_27_28_2D_60_epochs/26_CNN_experiment_2D_optimizer_Adam_lr_01_epochs_60_batchsize_16_samplerTclassweightsF_False_scheduler_True/Model_epoch_35.pt"
 
     variables =	{
         "global" : {
             "platform": 'local', # 'local' 'colab'
             "model_name" : "CNN_experiment_2D", 
-            "grid_search_name" : "2D_run27_epoch57_longrun",
+            "grid_search_name" : "final_2D_gs26",
             "dimension_of_model" : "2D" #2D
         },
         "optimizer" : {

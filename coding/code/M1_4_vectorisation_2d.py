@@ -61,7 +61,7 @@ def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textCo
 
     num_cores = multiprocessing.cpu_count()
 
-    hatebase_dic = None
+    hatebase_dic = None #pd.read_csv('coding/data/dictionary/hatebase/full_dictionary.csv', index_col = 'vocabulary_id')
 
     list = Parallel(n_jobs=num_cores, prefer="threads")(delayed(createMatrix)(tweet,tokenizer,maxVectorLength,pretrainedModel,hatebase_dic) for tweet in tqdm(data[textColumn]))
 
@@ -84,11 +84,9 @@ def createMatrix(tweetText,tokenizer,maxVectorLength,pretrainedModel,hatebase_di
         
     tweetText = str(tweetText) #empty tweets were interpreted as float 
     
-    raw_encoding = torch.Tensor(tokenizer.encode(tweetText, max_length=maxVectorLength))
+    raw_encoding = torch.tensor(tokenizer.encode(tweetText, max_length=maxVectorLength))
     
     vlength = raw_encoding.size()[0]
-
-    #print(vlength)
 
     encoding = padWithZeros(raw_encoding,maxVectorLength)
 
@@ -119,6 +117,7 @@ def padWithZeros(vector,n):
         tensor: padded vector
 
     """
+    #print('before padding: ', vector)
     paddedTensor = torch.zeros(1,n)
     paddedTensor[:,:len(vector)] = vector
     return paddedTensor
@@ -135,9 +134,10 @@ def createTensors(path,stage):
         stage (str): prefix of the file
 
     """
-    input_file = path + stage + "_set.csv"
-    output_file_name_vectorized = path + stage +  "_vectorized_2d_NEW.pt"
-    output_file_name_labels = path + stage +  "_labels_2d_NEW.pt"
+    input_file = path + stage + "_set_wp.csv"
+    output_file_name_vectorized = path + stage +  "_vectorized_2d_wp.pt"
+    output_file_name_labels = path + stage +  "_labels_2d_wp.pt"
+    
     # loading data
     data = pd.read_csv(input_file)
 
@@ -170,8 +170,12 @@ def stretch(vector,n,plot=False):
         tensor: stretched vector
 
     """
+    #print('before stretching: ', vector)
+    
+    # removing the start and stop tokens
+    n = n - 2
     if(len(vector) == 0):
-        return torch.zeros(1,n)
+        return torch.zeros(n)
 
     if(n<len(vector)):
         return vector
@@ -197,10 +201,14 @@ def stretch(vector,n,plot=False):
     # interpolate to new 
     newY = np.interp(newX,oldX,oldY)
 
+    # inserting zero as first element in vector, so that the hatevector only starts where the words start in the bert vector
+    newY = np.insert(newY, 0, 0, axis=0)
+
     if(plot):
         plt.plot(oldX,oldY)
         plt.plot(newX,newY)
-    return torch.Tensor(newY)
+
+    return torch.tensor(newY)
 
 if __name__ == "__main__":
     path = "coding/code/exchange_base/"

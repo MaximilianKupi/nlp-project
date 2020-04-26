@@ -7,6 +7,7 @@ import torch
 import pandas as pd
 import numpy as np
 import difflib
+import re
 
 # Defining the function
 
@@ -42,7 +43,10 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     averagevalue_of_offensiveness = hatebase_dic['average_offensiveness'].mean()
 
     # Splitting the tweets, storing each word in a list, and then a list of lists
-    tweet_split = str(data).split()
+    #tweet_split = str(data).split()
+    tweet_split = re.findall(r"[\w]+|[.,!?']", str(data))
+
+    #print(tweet_split)
 
     listoftweets = []
     for word in tweet_split:
@@ -104,6 +108,6 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     return HateTensor
 
 # Testing on an example
-#tweet = ("your wagon fish chief you retarded f*ggots")
+#tweet = ("you're wagon fish chief? *you are stupid*, retarded! fggots?!?")
 #hatesearch(data = tweet, verbose = False)
 

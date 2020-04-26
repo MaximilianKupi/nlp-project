@@ -27,16 +27,16 @@ from M2_1_CNN_2d_experiment import CNN_2d_experiment
 
 
 # # class to setup the dataloading, the training and the evaluation  
-from M2_0_NN_training_setup import *
+from M2_0_NN_setup import *
 
 
 # SETTING VARIABLES
 variables =	{
     "global" : {
         "platform": 'colab', # 'local' 'colab' # bitte anpassen, je nachdem, wo es läuft
-        "model_name" : "CNN_experiment_2D", # pro run bitte anpassen
-        "grid_search_name" : 'Final_long_training_2D_90_epochs', #pro run bitte anpassen
-        "dimension_of_model" : "2D", #2D, # bitte anpassen, je nachdem ob es 1D oder 2D sein soll
+        "model_name" : "CNN_experiment_1D", # pro run bitte anpassen
+        "grid_search_name" : 'Model_26_90epochs', #pro run bitte anpassen
+        "dimension_of_model" : "1D", #2D, # bitte anpassen, je nachdem ob es 1D oder 2D sein soll
         "seed" : 42
     },
     "optimizer" : {
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     # Running through the grid
     for run_number, current_params in enumerate(all_params):
         
-        if run_number not in [27]:
+        if run_number not in [26]:
             print('skipping', run_number)
         else:
             # printing current parameters

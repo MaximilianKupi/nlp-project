@@ -270,6 +270,9 @@ class NN_Training_Setup:
         total_step = len(self.dataset_loader)
 
         for epoch in range(self.variables["training"]["epochs"]):
+            # setting model into training mode
+            self.model.train()
+            
             correct = 0
             total = 0
             outputs_epoch = []
@@ -392,8 +395,11 @@ class NN_Training_Setup:
             The evaluation results.
         """ 
 
+        # setting model to evaluation mode
         self.model.eval()  # eval mode (batchnorm uses moving mean/variance instead of mini-batch mean/variance)
+        
         with torch.no_grad():
+            
             correct = 0
             total = 0
             outputs_epoch = []

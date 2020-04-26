@@ -15,45 +15,48 @@ from nltk.corpus import stopwords
 
 # Defining the cleaning function
 
-def clean_text(text, standard_twitter_cleaning = True, lower_casing = True, digits_removal = True, punct_removal = True, whitespace_removal = True):
-    """Cleans any string of text by performing standard Twitter cleaning (removing URLs, mentions, hashtags, reserved words, emojis and smileys), changing the text to lower case, and removing punctuation, whitespaces and standalone digits.
+def clean_text(text, standard_twitter_cleaning = True, hash_removal = True, lower_casing = True, digits_removal = True, symbol_removal = True, whitespace_removal = True):
+    """Cleans any string of text by performing standard Twitter cleaning (removing URLs, mentions, reserved words, emojis and smileys), changing the text to lower case, and removing punctuation, whitespaces and standalone digits.
 
     Args:
         text (str): The input text to clean.
       
         
         standard_twitter_cleaning (bool): Whether or not to use standard twitter cleaining package. Default: True. 
+        hash_removal (bool): Whether or not to remove hash infront of hashtags. Default: True.
         lower_casing (bool): Whether or not to lower case the words. Default: True.
         digits_removal (bool): Whether or not to remove digits. Default: True.
-        punct_removal (bool): Whether or not to remove anything but words. Default: True.
+        symbol_removal (bool): Whether or not to remove symbols. Default: True.
         whitespace_removal (bool): Whether or not to remove excessive white space in between words. Default: True.
 
     Returns:
         The cleaned text.
     """
     
-    # Removing emojis, smileys, URLs, mentions, hashtags and reserved words
-
+    # Removing emojis, smileys, URLs, mentions, and reserved words
     if standard_twitter_cleaning:
-        p.set_options(p.OPT.URL, p.OPT.MENTION, p.OPT.HASHTAG, p.OPT.RESERVED, p.OPT.EMOJI, p.OPT.SMILEY)
+        p.set_options(p.OPT.URL, p.OPT.MENTION, p.OPT.RESERVED, p.OPT.EMOJI, p.OPT.SMILEY)
         new_text = p.clean(text)
-    
+    else: 
+        new_text = text
+
+    # Removing hash infront of hashtag
+    if hash_removal:
+        new_text = re.sub(r"#", "", new_text)
+
     # Converting to lower case
     if lower_casing:
         new_text = new_text.lower()
 
     # Removing standalone digits
-    
     if digits_removal:
         new_text = re.sub(r"\b\d+\b", "", new_text)
 
-    # Removing punctuation
-
-    if punct_removal:
-        new_text = re.sub(r"[^\w\d'\s]+","",new_text)
+    # Removing symbols
+    if symbol_removal:
+        new_text = re.sub(r"[^\w\d'\s.,!?]+","",new_text)
 
     # Removing double spaces and whitespaces
-    
     if whitespace_removal:
         new_text = re.sub('\s+', ' ', new_text)
         new_text.strip()
@@ -107,7 +110,7 @@ if __name__ == "__main__":
     # output_file_name = "exchange_base/data_cleaned.csv"
     # 2. use exchange_base files
     path = "coding/code/exchange_base/"
-    output_file_path = path +  "data_cleaned.csv"
+    output_file_path = path +  "data_cleaned_wp.csv"
 
     # Saving the cleaned dataset
     data_cleaned.to_csv(output_file_path)

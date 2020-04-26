@@ -30,7 +30,7 @@ class TestingFunctions(unittest.TestCase):
         """
         original_tweet = "★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp"
         function_cleaned_tweet = clean_text(text = original_tweet)
-        ideal_cleaned_tweet = "the gateway "
+        ideal_cleaned_tweet = "the gateway bookboost asmsg kindle"
         self.assertEqual(function_cleaned_tweet, ideal_cleaned_tweet)
 
     def test_TextCleaning_NoLowerCasing(self):
@@ -38,7 +38,7 @@ class TestingFunctions(unittest.TestCase):
         """
         original_tweet = "★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp"
         function_cleaned_tweet = clean_text(text = original_tweet, lower_casing=False)
-        ideal_cleaned_tweet = "THE GATEWAY "
+        ideal_cleaned_tweet = "THE GATEWAY bookboost ASMSG kindle"
         self.assertEqual(function_cleaned_tweet, ideal_cleaned_tweet)
 
     def test_TextCleaning_NoDigitsRemoval(self):
@@ -46,22 +46,22 @@ class TestingFunctions(unittest.TestCase):
         """
         original_tweet = "★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp"
         function_cleaned_tweet = clean_text(text = original_tweet, digits_removal=False)
-        ideal_cleaned_tweet = "the gateway 2"
+        ideal_cleaned_tweet = "the gateway 2 bookboost asmsg kindle"
         self.assertEqual(function_cleaned_tweet, ideal_cleaned_tweet)
 
-    def test_TextCleaning_NoPunctRemoval(self):
+    def test_TextCleaning_NoSymbolRemoval(self):
         """Tests the setter for punct_removal in the clean_text function from M1_2_cleaning_data based on one example tweet.
         """
         original_tweet = 'Jamice caption this picture *shows a picture from show* ""So u dressed like Sherlock Holmes but im embarrassing u?"" Lmaooooo love her"'
-        function_cleaned_tweet = clean_text(text = original_tweet, punct_removal=False)
+        function_cleaned_tweet = clean_text(text = original_tweet, symbol_removal=False)
         ideal_cleaned_tweet = 'jamice caption this picture *shows a picture from show* ""so u dressed like sherlock holmes but im embarrassing u?"" lmaooooo love her"'
         self.assertEqual(function_cleaned_tweet, ideal_cleaned_tweet)
 
     def test_DataCleaning(self):
         """Tests the text_column setter of the data_cleaning function from M1_2_cleaning_data works, based on an example dataframe.
         """
-        original_df = pd.DataFrame({"text":"★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp", "label":2}, {"text":"Hey #Sweden how you liking those immigrants now? #Stockholm Wonder how many will say it's not radical islamic terro… https://t.co/7V9UWL3S5f", "label":0})
-        ideal_cleaned_df = pd.DataFrame({"text":"the gateway ", "label":2}, {"text":"hey how you liking those immigrants now wonder how many will say it's not radical islamic terro", "label":0})
+        original_df = pd.DataFrame({"text" : ["★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp","Hey #Sweden how you liking those immigrants now? #Stockholm Wonder how many will say it's not radical islamic terro… https://t.co/7V9UWL3S5f"], "label":[2,0]})
+        ideal_cleaned_df = pd.DataFrame({"text":["the gateway bookboost asmsg kindle", "hey sweden how you liking those immigrants now? stockholm wonder how many will say it's not radical islamic terro"],'label':[2,0]})
         function_cleaned_df = data_cleaning(data=original_df, text_column='text')
         self.assertTrue(function_cleaned_df.equals(ideal_cleaned_df))
 
@@ -80,6 +80,7 @@ class TestingFunctions(unittest.TestCase):
         function_output = hatesearch(data = input_tweet)
         ideal_output = torch.tensor([ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000, 87.58489525909593,  0.0000,  0.0000,
         85.0000, 25.0000,  0.0000,  0.0000,  0.0000])
+        #print(ideal_output)
         self.assertTrue(torch.equal(function_output, ideal_output))
 
     def test_VectoriserDimensions1D(self):
@@ -97,10 +98,10 @@ class TestingFunctions(unittest.TestCase):
         original_df = pd.DataFrame([["★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp",2]], columns=['tweet', 'label'])
         function_embeddings, function_labels = vectorize2D(original_df)
         ideal_embeddings, ideal_labels = torch.tensor([np.random.randint(0, 9, (2,120))]), torch.tensor([2])  
-        print(function_embeddings.size())
-        print(ideal_embeddings.size())
-        print(function_labels.size())
-        print(ideal_labels.size())
+        #print(function_embeddings.size())
+        #print(ideal_embeddings.size())
+        #print(function_labels.size())
+        #print(ideal_labels.size())
         self.assertTrue(ideal_embeddings.size()==function_embeddings.size())
         self.assertTrue(function_labels.size() == ideal_labels.size())
 
