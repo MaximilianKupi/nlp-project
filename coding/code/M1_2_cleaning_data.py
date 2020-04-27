@@ -20,8 +20,6 @@ def clean_text(text, standard_twitter_cleaning = True, hash_removal = True, lowe
 
     Args:
         text (str): The input text to clean.
-      
-        
         standard_twitter_cleaning (bool): Whether or not to use standard twitter cleaining package. Default: True. 
         hash_removal (bool): Whether or not to remove hash infront of hashtags. Default: True.
         lower_casing (bool): Whether or not to lower case the words. Default: True.
@@ -76,11 +74,11 @@ def data_cleaning(data = None, text_column ='tweet', standard_twitter_cleaning =
         standard_twitter_cleaning (bool): Whether or not to use standard twitter cleaning package. Default: True. (will be passed on to the clean_text function)
         lower_casing (bool): Whether or not to lower case the words. Default: True. (will be passed on to the clean_text function)
         digits_removal (bool): Whether or not to remove digits. Default: True. (will be passed on to the clean_text function)
-        punct_removal (bool): Whether or not to remove anything but words. Default: True. (will be passed on to the clean_text function)
+        symbol_removal (bool): Whether or not to remove symbols. Default: True. (will be passed on to the clean_text function)
         whitespace_removal (bool): Whether or not to remove excessive white space in between words. Default: True. (will be passed on to the clean_text function)
 
     Returns:
-        The cleaned data frame.
+        The cleaned dataframe.
     """
 
     # Setting the exchange_base link from where to get the data
@@ -110,7 +108,7 @@ if __name__ == "__main__":
     # output_file_name = "exchange_base/data_cleaned.csv"
     # 2. use exchange_base files
     path = "coding/code/exchange_base/"
-    output_file_path = path +  "data_cleaned_wp.csv"
+    output_file_path = path +  "data_cleaned.csv"
 
     # Saving the cleaned dataset
     data_cleaned.to_csv(output_file_path)

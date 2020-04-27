@@ -32,20 +32,65 @@
             
   <div class="section" id="module-M4_1_testing_functions">
 <span id="m4-1-testing-functions-module"></span><h1>M4_1_testing_functions module<a class="headerlink" href="#module-M4_1_testing_functions" title="Permalink to this headline">¶</a></h1>
-<p>This is the script to test some of our functions</p>
+<p>This is the script to test the most important of our pre-processing functions.</p>
 <dl class="py class">
 <dt id="M4_1_testing_functions.TestingFunctions">
 <em class="property">class </em><code class="sig-prename descclassname">M4_1_testing_functions.</code><code class="sig-name descname">TestingFunctions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">methodName</span><span class="o">=</span><span class="default_value">'runTest'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#M4_1_testing_functions.TestingFunctions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">unittest.case.TestCase</span></code></p>
+<p>Sets up various unittests.</p>
 <dl class="py method">
 <dt id="M4_1_testing_functions.TestingFunctions.test_DataCleaning">
 <code class="sig-name descname">test_DataCleaning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M4_1_testing_functions.TestingFunctions.test_DataCleaning" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Tests the text_column setter of the data_cleaning function from M1_2_cleaning_data works, based on an example dataframe.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt id="M4_1_testing_functions.TestingFunctions.test_HateSearch">
 <code class="sig-name descname">test_HateSearch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M4_1_testing_functions.TestingFunctions.test_HateSearch" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Tests the hatesearch function from M1_5_dictionary_approach_tweetlevel creates correct tensors based on one example.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="M4_1_testing_functions.TestingFunctions.test_SplitData">
+<code class="sig-name descname">test_SplitData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M4_1_testing_functions.TestingFunctions.test_SplitData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the exception error in the split_data function from M1_3_splitting_datasets in case percentages are set to sum up to more than one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="M4_1_testing_functions.TestingFunctions.test_TextCleaning">
+<code class="sig-name descname">test_TextCleaning</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M4_1_testing_functions.TestingFunctions.test_TextCleaning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the clean_text function from M1_2_cleaning_data based on one example tweet.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="M4_1_testing_functions.TestingFunctions.test_TextCleaning_NoDigitsRemoval">
+<code class="sig-name descname">test_TextCleaning_NoDigitsRemoval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M4_1_testing_functions.TestingFunctions.test_TextCleaning_NoDigitsRemoval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the setter for digits_removal in the clean_text function from M1_2_cleaning_data based on one example tweet.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="M4_1_testing_functions.TestingFunctions.test_TextCleaning_NoLowerCasing">
+<code class="sig-name descname">test_TextCleaning_NoLowerCasing</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M4_1_testing_functions.TestingFunctions.test_TextCleaning_NoLowerCasing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the setter for lower_casing in the clean_text function from M1_2_cleaning_data based on one example tweet.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="M4_1_testing_functions.TestingFunctions.test_TextCleaning_NoSymbolRemoval">
+<code class="sig-name descname">test_TextCleaning_NoSymbolRemoval</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M4_1_testing_functions.TestingFunctions.test_TextCleaning_NoSymbolRemoval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the setter for punct_removal in the clean_text function from M1_2_cleaning_data based on one example tweet.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="M4_1_testing_functions.TestingFunctions.test_VectoriserDimensions1D">
+<code class="sig-name descname">test_VectoriserDimensions1D</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M4_1_testing_functions.TestingFunctions.test_VectoriserDimensions1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the correct output dimensions of the vectorize function from M1_4_vectorisation_1d.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="M4_1_testing_functions.TestingFunctions.test_VectoriserDimensions2D">
+<code class="sig-name descname">test_VectoriserDimensions2D</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#M4_1_testing_functions.TestingFunctions.test_VectoriserDimensions2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the correct output dimensions of the vectorize function from M1_4_vectorisation_2d.</p>
+</dd></dl>
 
 </dd></dl>
 

@@ -43,7 +43,10 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
     averagevalue_of_offensiveness = hatebase_dic['average_offensiveness'].mean()
 
     # Splitting the tweets, storing each word in a list, and then a list of lists
+    # for the normal version
     #tweet_split = str(data).split()
+
+    # for the version where standard sentence punctuation has been left in 
     tweet_split = re.findall(r"[\w]+|[.,!?']", str(data))
 
     #print(tweet_split)
@@ -110,4 +113,3 @@ def hatesearch(data = None, dictionary = None, verbose = False, average_hate = T
 # Testing on an example
 #tweet = ("you're wagon fish chief? *you are stupid*, retarded! fggots?!?")
 #hatesearch(data = tweet, verbose = False)
-

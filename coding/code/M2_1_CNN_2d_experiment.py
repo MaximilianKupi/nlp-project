@@ -13,7 +13,6 @@ from torch.nn.modules.batchnorm import BatchNorm2d
 from torch.nn.modules.activation import ReLU
 from torch.nn.modules.pooling import MaxPool2d
 from torch.nn.modules.linear import Linear
-from torch.optim.adam import Adam
 from torch.nn.modules.loss import CrossEntropyLoss
 import torch.nn as nn
 import torch.nn.functional as F
@@ -42,7 +41,6 @@ class CNN_2d_experiment(nn.Module):
             nn.ReLU(),
             #nn.MaxPool2d(kernel_size=2, stride=2)
         )
-        # TODO: Do we need dropout in the convolution layers to make model more stable?
         print(self.layer1)
 
         self.layer2 = nn.Sequential(

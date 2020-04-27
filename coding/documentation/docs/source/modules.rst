@@ -10,7 +10,7 @@ code
    M1_4_vectorisation_1d
    M1_4_vectorisation_2d
    M1_5_dictionary_approach_tweetlevel
-   M2_0_NN_training_setup
+   M2_0_NN_setup
    M2_1_CNN_1d_experiment
    M2_1_CNN_2d_experiment
    M3_1_data_preprocessing

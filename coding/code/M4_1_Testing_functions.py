@@ -1,4 +1,4 @@
-"""This is the script to test the most important of our pre-processing functions
+"""This is the script to test the most important of our pre-processing functions.
 """
 
 
@@ -78,9 +78,8 @@ class TestingFunctions(unittest.TestCase):
         """
         input_tweet = "how could i be a fag but i like bitches please tell me"
         function_output = hatesearch(data = input_tweet)
-        ideal_output = torch.tensor([ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000, 87.58489525909593,  0.0000,  0.0000,
+        ideal_output = torch.tensor([ 0.0000,  0.0000,  0.0000,  0.0000,  0.0000, 87.60187224669603,  0.0000,  0.0000,
         85.0000, 25.0000,  0.0000,  0.0000,  0.0000])
-        #print(ideal_output)
         self.assertTrue(torch.equal(function_output, ideal_output))
 
     def test_VectoriserDimensions1D(self):
@@ -98,10 +97,6 @@ class TestingFunctions(unittest.TestCase):
         original_df = pd.DataFrame([["★THE GATEWAY 2★ ✔https://t.co/SSmqhC8rBA https://t.co/8jSwD7zC61 @Spokenamos #bookboost #ASMSG #kindle https://t.co/OdoRyxfrtp",2]], columns=['tweet', 'label'])
         function_embeddings, function_labels = vectorize2D(original_df)
         ideal_embeddings, ideal_labels = torch.tensor([np.random.randint(0, 9, (2,120))]), torch.tensor([2])  
-        #print(function_embeddings.size())
-        #print(ideal_embeddings.size())
-        #print(function_labels.size())
-        #print(ideal_labels.size())
         self.assertTrue(ideal_embeddings.size()==function_embeddings.size())
         self.assertTrue(function_labels.size() == ideal_labels.size())
 

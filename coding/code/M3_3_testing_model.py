@@ -31,13 +31,13 @@ from M2_0_NN_setup import *
 # keeping script from running while documenting
 if __name__ == "__main__":
     # SETTING VARIABLES
-    path_of_the_model_to_test = "/Users/mxm/Google Drive/Masterstudium/Inhalte/4th Semester/NLP/nlp-project/coding/code/exchange_base/Model_Results/Training_26_27_28_2D_60_epochs/26_CNN_experiment_2D_optimizer_Adam_lr_01_epochs_60_batchsize_16_samplerTclassweightsF_False_scheduler_True/Model_epoch_35.pt"
+    path_of_the_model_to_test = ""
 
     variables =	{
         "global" : {
             "platform": 'local', # 'local' 'colab'
-            "model_name" : "CNN_experiment_2D", 
-            "grid_search_name" : "final_2D_gs26",
+            "model_name" : "CNN_experiment_2D", # please specify
+            "grid_search_name" : "NAME_OF_TESTING", # please specify
             "dimension_of_model" : "2D" #2D
         },
         "optimizer" : {

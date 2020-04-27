@@ -15,7 +15,7 @@ def split_data(data=None, train_p=0.7, val_p=0.15, test_p=0.15, random_state=42,
     """Gets the cleaned dataset and splits it into train, validation and test set based on scikit learn's StratifiedShuffleSplit.
 
     Args:
-        data (variable name of the dataframe): Specify the input data frame. If nothing is specified, the function will get the data from our exchange base folder. 
+        data (dataframe): Specify the input data frame. If nothing is specified, the function will get the data from our exchange base folder. 
         random_state (int): Specify the seed for randomness in the shuffle split.
         y (str): Sets the the column in the dataframe, where the labels are stored and which will be used as reference for the stratified sampling method. Default: 'label'.
         train_p (float): Specify the proportion of the training split. Default: 0.7.
@@ -36,7 +36,7 @@ def split_data(data=None, train_p=0.7, val_p=0.15, test_p=0.15, random_state=42,
         raise Exception('train_p + val_p + test_p should sum up to 1, however they sum up to: {}'.format(x))
 
     # setting the exchange_base link from where to get the data
-    path_data_cleaned = 'coding/code/exchange_base/data_cleaned_wp.csv'
+    path_data_cleaned = 'coding/code/exchange_base/data_cleaned.csv'
 
     # reading the data in case it is not here already (since it will later all be applied in one pipeline)
     if data is None:
@@ -74,6 +74,6 @@ if __name__ == "__main__":
     train_set, val_set, test_set = split_data()
 
     # saving the dataframes
-    train_set.to_csv("coding/code/exchange_base/train_set_wp.csv")
-    val_set.to_csv("coding/code/exchange_base/val_set_wp.csv")
-    test_set.to_csv("coding/code/exchange_base/test_set_wp.csv")
+    train_set.to_csv("coding/code/exchange_base/train_set.csv")
+    val_set.to_csv("coding/code/exchange_base/val_set.csv")
+    test_set.to_csv("coding/code/exchange_base/test_set.csv")

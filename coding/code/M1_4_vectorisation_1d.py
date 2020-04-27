@@ -1,6 +1,6 @@
 """This is the script to define the 1D vectorisation without our dictionary approach.
 """
-# %%
+
 # loading packages
 import pandas as pd
 import numpy as np
@@ -8,23 +8,22 @@ import transformers
 import torch
 import tqdm
 
-# %%
 def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label", pretrainedModel="bert-base-uncased", verbose=True, randomSeed=42):
     """ Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs two tensors.
     One containing the vectorized entries of the column and one containing the associated labels.
 
     Parameters:
-        data (dataframe): The dataset from which the data should be extracted
-        textColumn (str): The name of the column in the dataframe data containing the tweets
-        labelColumn (str): The name of the column in the dataframe data contianing the labels
-        pretrainedModel (str): The name of the model to be used from the transformers package
-        verbose (str): Whether or not the script should output stats information about the input data: average, median, max, min of word count in tweets
-        randomSeed (str): Random seed to ensure that results are reproducable
-        TODO Is random seed really necessary in this script?
+        data (dataframe): The dataset from which the data should be extracted.
+        maxVectorLength (int): The length of the vector embedding. Will be padded with zeros if shorter. Default: 120.
+        textColumn (str): The name of the column in the dataframe data containing the tweets. Default: 'tweet'.
+        labelColumn (str): The name of the column in the dataframe data contianing the labels. Default: 'label'.
+        pretrainedModel (str): The name of the model to be used from the transformers package. Default: 'bert-based-uncased'.
+        verbose (bool): Whether or not the script should output stats information about the input data: average, median, max, min of word count in tweets. Default: False.
+        randomSeed (int): Random seed to ensure that results are reproducable. Default: 42. 
 
     Returns:
-        torch.tensor:The vectorized column of the dataframe data
-        torch.tensor:The Label Vector for the associated vectorized column  
+        vector (torch tensor): The vectorized column of the dataframe data.
+        label (torch tensor): The label Vector for the associated vectorized column.
 
     """
 
@@ -86,9 +85,9 @@ def createTensors(path,stage):
         stage (str): prefix of the file
 
     """
-    input_file = path + stage + "_set_wp.csv"
-    output_file_name_vectorized = path + stage +  "_vectorized_1d_wp.pt"
-    output_file_name_labels = path + stage +  "_labels_1d_wp.pt"
+    input_file = path + stage + "_set.csv"
+    output_file_name_vectorized = path + stage +  "_vectorized_1d.pt"
+    output_file_name_labels = path + stage +  "_labels_1d.pt"
     # loading data
     data = pd.read_csv(input_file)
 

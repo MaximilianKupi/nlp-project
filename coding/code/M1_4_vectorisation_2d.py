@@ -5,6 +5,7 @@
 import pandas as pd
 import numpy as np
 import transformers
+import matplotlib.pyplot as plt
 import torch
 import torch.nn.functional as F
 from M1_5_dictionary_approach_tweetlevel import hatesearch
@@ -17,43 +18,29 @@ import timeit
 
 import sys, os
 
-def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textColumn="tweet", labelColumn="label", pretrainedModel="bert-base-uncased", verbose=False, randomSeed=42):
-    """ Vectorizes each row of a specific dataframe column using a Bert pretrained model and outputs a two tensors.
-    One containing the vectorized entries of the column and one containing the associated labels.
+def vectorize(data, maxVectorLength=120, textColumn="tweet", labelColumn="label", pretrainedModel="bert-base-uncased", verbose=False, randomSeed=42):
+    """ Vectorizes each row of a specific dataframe column using a Bert pretrained model and our dictionary approach and outputs two tensors.
+    One containing the embedded entries of the column and one containing the associated labels.
 
     Args:
-        data (dataframe): The dataset from which the data should be extracted
-        maxVectorLength (int): The length of the vector embedding. Will be padded with zeros if shorter
-        matrixColumns (int): Vector embedding will be reshaped to matrix with this column amount
-        matrixRows (int): Vector embedding will be reshaped to matrix with this row amount
-        textColumn (str): The name of the column in the dataframe data containing the tweets
-        labelColumn (str): The name of the column in the dataframe data contianing the labels
-        pretrainedModel (str): The name of the model to be used from the transformers package
-        verbose (str): Whether or not the script should output stats information about the input data: average, median, max, min of word count in tweets
-        randomSeed (str): Random seed to ensure that results are reproducable
-        TODO Is random seed really necessary in this script?
+        data (dataframe): The dataset from which the data should be extracted.
+        maxVectorLength (int): The length of the vector embedding. Will be padded with zeros if shorter. Default: 120.
+        textColumn (str): The name of the column in the dataframe data containing the tweets. Default: 'tweet'.
+        labelColumn (str): The name of the column in the dataframe data contianing the labels. Default: 'label'.
+        pretrainedModel (str): The name of the model to be used from the transformers package. Default: 'bert-based-uncased'.
+        verbose (bool): Whether or not the script should output stats information about the input data: average, median, max, min of word count in tweets. Default: False.
+        randomSeed (int): Random seed to ensure that results are reproducable. Default: 42. 
 
     Returns:
-        torch.tensor:The vectorized column of the dataframe data
-        torch.tensor:The Label Vector for the associated vectorized column  
-
+        embedings (torch tensor): The embedded texts from the textcolumn of the dataframe data.
+        labels (torch tensors): The label vector for the associated embedded column.  
     """
     startTime = datetime.now()
     ### Settings
     # setting seed for reproducability
     np.random.seed(randomSeed)
 
-    ### Algorithm
-
-    # Summary of the used transformers Package:
-    # 🤗Transformers (formerly known as pytorch-transformers and 
-    # pytorch-pretrained-bert) provides state-of-the-art general-purpose
-    # architectures (BERT, GPT-2, RoBERTa, XLM, DistilBert, XLNet, 
-    # CTRL...) for Natural Language Understanding (NLU) and Natural
-    # Language Generation (NLG) with over 32+ pretrained models in
-    # 100+ languages and deep interoperability between TensorFlow 2.0
-    # and PyTorch.
-
+   
     # Load pretrained Tokenizer
     tokenizer = transformers.BertTokenizer.from_pretrained(pretrainedModel)
 
@@ -78,7 +65,18 @@ def vectorize(data, maxVectorLength=120, matrixColumns=10, matrixRows=12, textCo
     return embeddings, labels
 
 def createMatrix(tweetText,tokenizer,maxVectorLength,pretrainedModel,hatebase_dic):
+    """Creates a matrix of word embeddings based on the embeddings of BERT and the dictionary approach.
+
+    Args: 
+        tweetText (str): The tweet as string.
+        tokenizer (object): The instantiated tokenizer of the specific pretrained BERT model.
+        maxVectorLength (int): The specified maximum vector length of the embeddings. 
+        pretrainedModel (str): To specify which pretrained Bert model to use.
+        hatebase_dic (dataframe): The hatebase dictionary as pandas dataframe.
     
+    Returns: 
+        matrix (torch tensor): The twodimensional matrix with BERT embeddings on the first and our dictionary approach on the second dimension. 
+    """
     if(isinstance(tweetText, float)): #empty value is interpreted as nan
             print("Float tweet found in data: \""+str(tweetText)+"\" --> interpreting it as string with str(tweet)")
         
@@ -107,7 +105,7 @@ def createMatrix(tweetText,tokenizer,maxVectorLength,pretrainedModel,hatebase_di
 # output_file_name = "exchange_base/train_vec.pt"
 # 2. use exchange_base files
 def padWithZeros(vector,n):
-    """Adds zeros to the end of a vector until a certain size is reached
+    """Adds zeros to the end of a vector until a certain size is reached.
 
     Args:
         vector (tensor): The input vector that should be padded
@@ -129,14 +127,14 @@ def createTensors(path,stage):
     - path + stage +  "_vectorized.pt"
     - path + stage +  "_labels.pt"
 
-    Parameters:
+    Args:
         path (str): the path wheere the dataset is and the tensors will be saved to
         stage (str): prefix of the file
 
     """
-    input_file = path + stage + "_set_wp.csv"
-    output_file_name_vectorized = path + stage +  "_vectorized_2d_wp.pt"
-    output_file_name_labels = path + stage +  "_labels_2d_wp.pt"
+    input_file = path + stage + "_set.csv"
+    output_file_name_vectorized = path + stage +  "_vectorized_2d.pt"
+    output_file_name_labels = path + stage +  "_labels_2d.pt"
     
     # loading data
     data = pd.read_csv(input_file)
@@ -153,21 +151,15 @@ def createTensors(path,stage):
     # Use torch.save(tensor, 'file.pt') and torch.load('file.pt') to save Tensors to file
 
 def stretch(vector,n,plot=False):
-    """Stretches Vectors to desired length by interpolating values
-
-
-    Example
-    stretch([0,0,0,0,20,0,0,1],15)
-
-    with plotting
-    stretch([0,0,0,0,20,0,0,1],15,True)
+    """Stretches Vectors to desired length by interpolating values.
 
     Args:
         vector (array(float)): The input vector that should be stretched
         n (int): The length of the output vector after stretching
-
+        plot (bool): Whether or not to plot the vectors.
+    
     Returns:
-        tensor: stretched vector
+        tensor: The stretched vector.
 
     """
     #print('before stretching: ', vector)
