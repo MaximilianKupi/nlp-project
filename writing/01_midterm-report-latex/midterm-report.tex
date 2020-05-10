@@ -145,6 +145,7 @@ The hyperparameters that can be set in order to define how the CNN will work are
 Furthermore, an extra layer, called the pooling layer, can be added after each convolutional layer. The pooling layer further reduces the size of the convolved matrix, producing significant gains in computational efficiency and a reduction in the risk of overfitting \cite{jacovi-etal-2018-understanding}. It “summarises” the convolved matrix by pooling values of the matrix and generating a new matrix with the summary values, usually the maximum values of the pools \cite{Newatia2019}. In the case of text classification, pooling has to be considered carefully, since the redundancy of information in text is lesser than in images.
 
 The final output matrix is flattened into a vector and fed into a multi-layer perceptron, which receives the extracted features and calculates the values for final classification \cite{Newatia2019}. The loss is computed by comparing the predicted and the true labels, in our case, using a multi-class cross-entropy loss function. Finally, the weights of the kernel are adapted based on the loss through backpropagation. This is how the network "learns" \cite{Khan2019}.\par
+
 \paragraph{Convolution - mathematics in 1D:} \label{Subsection 1.3} 
 The following explanation is based on the master documentation of PyTorch \cite{PyTorch2019}.
 
