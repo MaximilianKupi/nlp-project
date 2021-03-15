@@ -106,4 +106,4 @@ ujson==1.35
 urllib3==1.25.8
 wcwidth==0.1.8
 Werkzeug==1.0.0
-wrapt==10.11.*
+wrapt==1.12.1
