@@ -29,7 +29,7 @@ ipython==7.13.0
 ipython-genutils==0.2.0
 isort==4.3.21
 jedi==0.16.0
-Jinja2==2.11.1
+Jinja2==2.11.3
 jmespath==0.9.5
 joblib==0.14.1
 jupyter-client==6.0.0
