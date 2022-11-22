@@ -52,7 +52,7 @@ parso==0.6.2
 pdfrw==0.4
 pexpect==4.8.0
 pickleshare==0.7.5
-Pillow==7.0.0
+Pillow==9.3.0
 plac==0.9.6
 preshed==1.0.1
 prompt-toolkit==3.0.3
